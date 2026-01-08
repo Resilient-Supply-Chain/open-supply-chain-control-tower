@@ -45,7 +45,11 @@ def find_smes_by_location(
     entries = _load_registry(registry_path)
     affected: List[AffectedSME] = []
     for entry in entries:
-        if entry.county.lower() in normalized_location:
+        county_lower = entry.county.lower()
+        # Match either:
+        # - full county string contained in the location, or
+        # - location token (e.g., "monterey") contained in the county name.
+        if county_lower in normalized_location or normalized_location in county_lower:
             affected.append(
                 AffectedSME(
                     sme_id=entry.sme_id,

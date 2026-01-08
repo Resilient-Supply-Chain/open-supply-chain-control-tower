@@ -69,21 +69,105 @@ Version **v0.0.1** focuses narrowly on a minimal but realistic end-to-end path:
   - RAG over statutory and regulatory texts (e.g., S.257, related statutes, executive orders, and agency guidance).
   - Sector-specific playbooks for critical infrastructure, logistics, agriculture, healthcare, etc.
 
+### Local Setup
+
+This project uses Python 3.8+ and requires a virtual environment to isolate dependencies. Follow these steps to set up your local development environment:
+
+#### Prerequisites
+
+- Python 3.8 or higher (check with `python3 --version`)
+- `pip` package manager (usually included with Python)
+
+#### Step 1: Create Virtual Environment
+
+On **macOS** (and most Unix-like systems):
+
+```bash
+# Navigate to the project root
+cd open-supply-chain-control-tower
+
+# Create a virtual environment in .venv directory
+python3 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+```
+
+You should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
+
+> **Note**: Always activate the virtual environment before working on the project. If you open a new terminal, run `source .venv/bin/activate` again.
+
+#### Step 2: Install Dependencies
+
+With the virtual environment activated:
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs:
+- `pydantic>=2.0` - Type-safe data validation
+- `pydantic-ai` - AI agent orchestration framework
+- `logfire` - Observability and structured logging
+- `python-dotenv` - Environment variable management
+
+#### Step 3: Configure Environment Variables
+
+1. Copy the example environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your Anthropic API key:
+
+   ```
+   ANTHROPIC_API_KEY=your_actual_api_key_here
+   ```
+
+   > Get your API key from [Anthropic Console](https://console.anthropic.com/)
+
+3. The `.env` file is gitignored and will not be committed to version control.
+
+#### Step 4: Verify Installation
+
+Run the v0.0.1 execution flow:
+
+```bash
+python main.py
+```
+
+You should see:
+- A HIGH-priority Markdown "Supply Chain Alert" printed to the console
+- A report file generated at `outputs/monterey_risk_report_v001.md`
+
+If you encounter `ModuleNotFoundError`, ensure:
+1. The virtual environment is activated (`source .venv/bin/activate`)
+2. Dependencies are installed (`pip install -r requirements.txt`)
+3. You're running Python from within the activated environment
+
 ### Getting Started (Developer Preview)
 
 > Note: v0.0.1 is a **developer preview** and assumes access to Claude 3.5 Sonnet via PydanticAI configuration in your environment.
 
-1. **Install dependencies** (example):
+After completing the Local Setup steps above:
+
+1. **Run the sample risk analysis**:
 
    ```bash
-   pip install -r requirements.txt
+   python main.py
    ```
 
-2. **Run a sample risk analysis** (placeholder CLI / notebook to be added in later versions):
+   This executes the v0.0.1 demo:
+   - Constructs a `RiskSignal` with `risk_score=0.95` (high-priority soil saturation event in Monterey County)
+   - Uses the geo tool to find affected SMEs from `data/sme_registry.json`
+   - Generates a Markdown "Supply Chain Alert" aligned with S.257 and E.O. 14123
+   - Saves the report to `outputs/monterey_risk_report_v001.md`
 
-   - Construct a `RiskSignal` (e.g., port disruption, extreme weather in Monterey County).
-   - Invoke the `resilience_agent` to generate a Markdown alert.
-   - Review the structured `Report` object and rendered Markdown.
+2. **Review the generated report**:
+
+   - Check the console output for the Markdown alert
+   - Open `outputs/monterey_risk_report_v001.md` to see the persisted report
 
 ### Roadmap (Beyond v0.0.1)
 

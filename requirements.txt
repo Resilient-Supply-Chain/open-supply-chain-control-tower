@@ -1,0 +1,15 @@
+# AI Control Tower for U.S. Supply-Chain Resilience (v0.0.1)
+# Core dependencies for type-safe risk signal processing and resilience reporting
+
+# Pydantic for type-safe data validation and models
+pydantic>=2.0
+
+# PydanticAI for AI agent orchestration (Claude 3.5 Sonnet backend)
+# Version 0.0.13+ uses model strings (e.g., 'anthropic:claude-3-5-sonnet-latest')
+pydantic-ai>=0.0.13
+
+# Logfire for observability and structured logging
+logfire
+
+# python-dotenv for environment variable management
+python-dotenv

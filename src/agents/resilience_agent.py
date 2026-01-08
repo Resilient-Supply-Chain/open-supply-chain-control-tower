@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 
 from pydantic import BaseModel, Field
-from pydantic_ai import Agent, Model
+from pydantic_ai import Agent
 
 from src.models.report import AffectedSME, ResilienceReport
 from src.models.signal import AlertPriority, RiskSignal
@@ -16,9 +16,15 @@ class AgentConfig(BaseModel):
 
     In real deployments, the model configuration (e.g., Claude 3.5 Sonnet) would
     be injected here via environment variables or higher-level orchestration.
+    
+    The model parameter accepts a model string identifier (e.g., 'anthropic:claude-3-5-sonnet-latest')
+    following the PydanticAI model specification format.
     """
 
-    model: Model = Field(..., description="Underlying PydanticAI model backend.")
+    model: str = Field(
+        default="anthropic:claude-3-5-sonnet-latest",
+        description="PydanticAI model identifier (e.g., 'anthropic:claude-3-5-sonnet-latest').",
+    )
     sme_registry_path: Path = Field(
         ..., description="Filesystem path to the local SME registry JSON file.",
     )
@@ -62,6 +68,34 @@ def _render_markdown_alert(
     return "\n\n".join([header, summary, sme_block]) + guidance
 
 
+def process_risk_signal(
+    *, signal: RiskSignal, sme_registry_path: Path
+) -> ResilienceReport:
+    """Process a RiskSignal and generate a ResilienceReport.
+
+    This is the core deterministic processing logic used by both the standalone
+    function (for v0.0.1) and the PydanticAI agent (for future RAG-enhanced versions).
+    """
+
+    # Tool: find affected SMEs based on location.
+    affected_smes = find_smes_by_location(
+        registry_path=sme_registry_path, location=signal.location
+    )
+
+    priority = _derive_priority(signal.risk_score)
+    markdown_alert = _render_markdown_alert(
+        priority=priority, signal=signal, affected_smes=affected_smes
+    )
+
+    report = ResilienceReport(
+        priority=priority,
+        risk_signal=signal,
+        affected_smes=affected_smes,
+        markdown_alert=markdown_alert,
+    )
+    return report
+
+
 def build_resilience_agent(config: AgentConfig) -> Agent[RiskSignal, ResilienceReport]:
     """Construct a PydanticAI agent that maps RiskSignal -> ResilienceReport.
 
@@ -69,29 +103,17 @@ def build_resilience_agent(config: AgentConfig) -> Agent[RiskSignal, ResilienceR
     deterministic logic plus a Markdown narrative. In later versions, the
     `model` provided in `AgentConfig` can be used to co-generate the narrative
     with deeper policy and sector grounding via RAG.
+
+    Note: For v0.0.1, the agent structure is prepared but the actual processing
+    uses `process_risk_signal()` directly. Future versions will leverage the
+    LLM model for enhanced narrative generation and RAG-based policy grounding.
     """
 
-    async def _handler(signal: RiskSignal) -> ResilienceReport:  # type: ignore[override]
-        # Tool: find affected SMEs based on location.
-        affected_smes = find_smes_by_location(
-            registry_path=config.sme_registry_path, location=signal.location
-        )
-
-        priority = _derive_priority(signal.risk_score)
-        markdown_alert = _render_markdown_alert(
-            priority=priority, signal=signal, affected_smes=affected_smes
-        )
-
-        report = ResilienceReport(
-            priority=priority,
-            risk_signal=signal,
-            affected_smes=affected_smes,
-            markdown_alert=markdown_alert,
-        )
-        return report
-
     # In v0.0.1 we primarily use PydanticAI for type-safe orchestration; the
-    # `model` hook enables easy extension to Claude 3.5 Sonnet.
+    # `model` parameter accepts a model string (e.g., 'anthropic:claude-3-5-sonnet-latest')
+    # which enables easy extension to Claude 3.5 Sonnet or other providers.
+    # The agent structure is set up for future RAG integration where the LLM
+    # will enhance the markdown generation with policy context.
     return Agent[RiskSignal, ResilienceReport](
         model=config.model,
         system_prompt=(
@@ -101,9 +123,9 @@ def build_resilience_agent(config: AgentConfig) -> Agent[RiskSignal, ResilienceR
             "E.O. 14123. Prioritize clarity, auditability, and conservative "
             "risk communication."
         ),
-        handler=_handler,
+        result_type=ResilienceReport,
     )
 
 
-__all__ = ["AgentConfig", "build_resilience_agent"]
+__all__ = ["AgentConfig", "build_resilience_agent", "process_risk_signal"]
 
