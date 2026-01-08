@@ -1,0 +1,20 @@
+[
+  {
+    "sme_id": "MON-AG-001",
+    "name": "Monterey Valley Produce Co.",
+    "county": "Monterey County",
+    "sector": "Agriculture"
+  },
+  {
+    "sme_id": "MON-LOG-001",
+    "name": "Central Coast Logistics LLC",
+    "county": "Monterey County",
+    "sector": "Logistics"
+  },
+  {
+    "sme_id": "MON-MFG-001",
+    "name": "Salinas Precision Manufacturing",
+    "county": "Monterey County",
+    "sector": "Manufacturing"
+  }
+]

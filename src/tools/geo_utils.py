@@ -1,0 +1,61 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import List
+
+import json
+from pydantic import BaseModel, Field, ValidationError, constr
+
+from src.models.report import AffectedSME
+
+
+class SMERegistryEntry(BaseModel):
+    """Internal representation of an SME in the local registry."""
+
+    sme_id: constr(strip_whitespace=True, min_length=1) = Field(...)
+    name: constr(strip_whitespace=True, min_length=1) = Field(...)
+    county: constr(strip_whitespace=True, min_length=1) = Field(...)
+    sector: constr(strip_whitespace=True, min_length=1) = Field(...)
+
+
+def _load_registry(registry_path: Path) -> List[SMERegistryEntry]:
+    raw = json.loads(registry_path.read_text(encoding="utf-8"))
+    if not isinstance(raw, list):  # pragma: no cover - simple guard
+        raise ValueError("sme_registry.json must contain a list of SME entries")
+    entries: List[SMERegistryEntry] = []
+    for item in raw:
+        try:
+            entries.append(SMERegistryEntry.model_validate(item))
+        except ValidationError as exc:  # pragma: no cover - logging hook
+            # In a fuller implementation, we would log this and continue.
+            raise exc
+    return entries
+
+
+def find_smes_by_location(
+    *, registry_path: Path, location: str
+) -> List[AffectedSME]:
+    """Find SMEs whose county string is contained in the provided location.
+
+    This is a deliberately simple v0.0.1 heuristic suitable for a Monterey County
+    sandbox. Future versions can use geocoding, ZIP code, census tracts, etc.
+    """
+
+    normalized_location = location.lower()
+    entries = _load_registry(registry_path)
+    affected: List[AffectedSME] = []
+    for entry in entries:
+        if entry.county.lower() in normalized_location:
+            affected.append(
+                AffectedSME(
+                    sme_id=entry.sme_id,
+                    name=entry.name,
+                    county=entry.county,
+                    sector=entry.sector,
+                )
+            )
+    return affected
+
+
+__all__ = ["SMERegistryEntry", "find_smes_by_location"]
+
