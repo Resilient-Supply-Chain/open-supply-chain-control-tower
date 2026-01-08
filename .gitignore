@@ -1,32 +1,284 @@
-# Python
+# ==============================================================================
+# AI Control Tower for U.S. Supply-Chain Resilience - .gitignore
+# ==============================================================================
+# This file ensures security, repository cleanliness, and proper environment
+# isolation for Python 3.13 + PydanticAI + Pydantic V2 development on macOS.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Python Standard Artifacts
+# ------------------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-*.egg-info/
-dist/
-build/
 
-# Virtual Environment
-.venv/
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff (if applicable)
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff (if applicable)
+instance/
+.webassets-cache
+
+# Scrapy stuff (if applicable)
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
 venv/
 ENV/
-env/
+env.bak/
+venv.bak/
 
-# Environment variables
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# ------------------------------------------------------------------------------
+# Security: Environment Variables & Secrets
+# ------------------------------------------------------------------------------
+# CRITICAL: Ignore .env files containing API keys and secrets
 .env
+.env.local
+.env.*.local
+*.env
+*.key
+*.pem
+*.p12
+*.pfx
 
-# IDE
+# Explicitly track .env.example (this is a template, not a secret)
+# Note: .env.example should be committed to version control
+!.env.example
+
+# ------------------------------------------------------------------------------
+# macOS System Files
+# ------------------------------------------------------------------------------
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ------------------------------------------------------------------------------
+# IDE & Editor Configuration
+# ------------------------------------------------------------------------------
+# Visual Studio Code
 .vscode/
+*.code-workspace
+
+# Cursor IDE (based on VS Code)
+.cursor/
+
+# PyCharm / IntelliJ IDEA
 .idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
 *.swp
 *.swo
 *~
+.netrwhist
 
-# Outputs (generated reports)
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ------------------------------------------------------------------------------
+# Project-Specific Outputs
+# ------------------------------------------------------------------------------
+# Generated resilience reports (Markdown alerts)
 outputs/
+*.md
+!README.md
 
-# OS
-.DS_Store
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# ------------------------------------------------------------------------------
+# Logs & Debugging
+# ------------------------------------------------------------------------------
+*.log
+logs/
+*.log.*
+
+# ------------------------------------------------------------------------------
+# OS-Specific (Windows)
+# ------------------------------------------------------------------------------
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ------------------------------------------------------------------------------
+# OS-Specific (Linux)
+# ------------------------------------------------------------------------------
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ------------------------------------------------------------------------------
+# Miscellaneous
+# ------------------------------------------------------------------------------
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
