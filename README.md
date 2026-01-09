@@ -1,183 +1,111 @@
-## AI Control Tower for U.S. Supply-Chain Resilience (v0.0.1)
+# 🤖 AI Control Tower: U.S. Supply-Chain Resilience (v0.0.1)
 
-An **AI-driven nerve center for proactive supply chain defense**, focused on protecting U.S. small and medium-sized enterprises (SMEs) from cascading disruptions.
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/)
+[![Pydantic v2](https://img.shields.io/badge/Pydantic-v2-orange.svg)](https://docs.pydantic.dev/)
+[![Security: Verified](https://img.shields.io/badge/Commit-Verified-green.svg)](https://github.com/Resilient-Supply-Chain/open-supply-chain-control-tower/commits/main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### Vision
+> **"Quantifying fragility, orchestrating defense."** 🛡️
 
-- **AI control tower**: Continuously ingests structured risk signals, maps them to real-world SME exposure, and generates **actionable, human-readable resilience reports**.
-- **Defense-first orientation**: Prioritizes early warning, triage, and mitigations for SMEs that are often downstream in complex multi-tier supply chains.
-- **Extensible by design**: Built to plug in regulatory, logistics, and climate intelligence via future RAG (retrieval-augmented generation) modules.
+The **AI Control Tower** is a technical reference implementation architected to operationalize the **S.257 (Promoting Resilient Supply Chains Act of 2025)**. This system acts as a proactive "nerve center" for U.S. supply-chain defense, specifically focused on protecting **Small and Medium-Sized Enterprises (SMEs)** from cascading disruptions through automated risk signal interpretation and reporting.
 
-### Policy & Legislative Alignment
+---
 
-This project is explicitly designed to support and operationalize recent U.S. supply-chain resilience policy:
+## 🏗️ v0.0.1 Foundation: Structural Integrity
 
-- **S.257 – Resilient Supply Chains Act**: Provides an analytical and monitoring backbone for identifying vulnerabilities, prioritizing critical sectors, and tracking the impact of disruptions on U.S. SMEs.
-- **H.R.6571 (context)**: Aligns with congressional intent to **strengthen supply-chain transparency, monitoring, and risk mitigation** across critical and strategic sectors.
-- **Executive Order 14123 – Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence**: Implements AI-driven analytics and decision support in a manner consistent with **safety, robustness, transparency, and accountability**.
+The **v0.0.1** release establishes the core end-to-end telemetry and reasoning loop. It transforms raw environmental or logistical signals into policy-aligned, structured resilience reports.
 
-The control tower is envisioned as a **policy-aligned technical reference implementation** that federal, state, and regional partners could adapt to:
+### 🧩 Core Capabilities
+* **📡 Type-Safe Risk Ingestion**: Implements strict `RiskSignal` validation using **Pydantic V2**, ensuring data integrity from diverse sources such as climate events, port closures, or cyber-physical threats.
+* **🛰️ Geospatial SME Triage**: A deterministic toolset that maps physical disruption coordinates (e.g., Monterey Hwy 68) to firm-level exposure recorded in the `sme_registry.json`.
+* **🧠 Cognitive Synthesis (Baseline)**: An agentic framework powered by **PydanticAI** that interprets risk vectors (e.g., Soil Saturation) and generates structured Markdown alerts prioritized by impact severity.
 
-- Monitor sectoral and geographic risk to SMEs.
-- Translate upstream disruptions (ports, weather, geopolitical events, cyber incidents) into downstream business impacts.
-- Generate **auditable, text-first resilience briefings** suitable for policymakers, economic development agencies, and SME coalitions.
+### 📐 Design Philosophy
+As a **PhD-led** project, our engineering choices prioritize mathematical rigor and auditability over generic automation:
+1.  **Determinism over Hallucination**: LLMs are strictly utilized for narrative synthesis. Critical logic—such as geographic mapping and financial impact thresholding—is handled by deterministic Python tools.
+2.  **Standardized Telemetry**: All incoming risk signals are normalized to a consistent $[0, 1]$ risk scoring model, allowing for cross-vector analysis (e.g., comparing a cyber-attack to a flood event).
+3.  **Security-First Development**: Every contribution is cryptographically signed via SSH/GPG to ensure the integrity of the software supply chain.
 
-### v0.0.1 Scope
+---
 
-Version **v0.0.1** focuses narrowly on a minimal but realistic end-to-end path:
+## ⚖️ Policy & Legislative Alignment
 
-1. **Type-safe Risk Signal Ingestion (Pydantic)**
-   - Define a strict `RiskSignal` model for external risk events.
-   - Enforce schema, type safety, and validation for incoming signals.
+This project is built to move the "Promoting Resilient Supply Chains Act" from legislative text into a functional deployment.
 
-2. **Local SME Geography Mapping (Mock Data)**
-   - Load a local `sme_registry.json` containing a small registry of SMEs (initially **Monterey County, CA** as a testbed geography).
-   - Provide a reusable `geo_utils` tool to map risk locations to potentially affected SMEs.
+* **S.257 (Promoting Resilient Supply Chains Act of 2025)**: Directly operationalizes the "Early Warning" system and "Vulnerability Mapping" mandates currently being reviewed by the House.
+* **EO 14017 (America's Supply Chains)**: Aligns with the executive mandate to strengthen the resilience of critical supply chains, including high-capacity batteries and critical minerals.
+* **EO 14110 (Safe, Secure, and Trustworthy AI)**: Adheres to the latest standards for **AI Risk Management** in critical infrastructure, ensuring transparency and robustness in autonomous decision-support.
 
-3. **Automated Resilience Report Generation (Claude 3.5 Sonnet + PydanticAI)**
-   - Implement a `resilience_agent` powered by **PydanticAI** (backed by Claude 3.5 Sonnet in downstream deployments).
-   - The agent:
-     - Consumes a validated `RiskSignal`.
-     - Uses tools to lookup SMEs in the affected geography.
-     - Produces a **Markdown “Supply Chain Alert”** with structured recommendations.
-   - If `risk_score > 0.9`, the agent must generate a **High-Priority Supply Chain Alert**.
+---
 
-### Architecture Overview (v0.0.1)
+## 📊 Example Output: High-Priority Alert
 
-- **`src/models/`**
-  - `signal.py`: Pydantic model(s) for inbound risk signals.
-  - `report.py`: Pydantic model(s) describing structured alert / report outputs.
+When a critical event is detected (e.g., a high-saturation soil signal in Monterey), the tower generates a structured briefing for policy makers:
 
-- **`src/tools/`**
-  - `geo_utils.py`: Utility and tool functions to map a risk signal’s location to SMEs from the local registry (e.g., by county, city, or ZIP approximation).
+```markdown
+## ⚠️ Supply Chain Resilience Alert (HIGH)
 
-- **`src/agents/`**
-  - `resilience_agent.py`: PydanticAI-powered agent that orchestrates:
-    - Risk signal interpretation.
-    - SME lookup via tools.
-    - Policy-informed narrative generation (Markdown) for supply-chain resilience.
+- **Risk Score**: 0.95
+- **Location**: Monterey_Hwy68
+- **Primary Driver**: Critical Soil Saturation (Flood Risk)
+- **Estimated Impact**: $15M/Day (Local Logistics)
 
-- **`data/`**
-  - `sme_registry.json`: Minimal mocked registry of SMEs in Monterey County with sectors, sizes, and simple location metadata.
+### 📍 Potentially Affected SMEs:
+- **Monterey Valley Produce Co.** (`MON-AG-001`) — Agriculture
+- **Central Coast Logistics LLC** (`MON-LOG-001`) — Logistics
+- **Salinas Precision Manufacturing** (`MON-MFG-001`) — Manufacturing
 
-### Design Principles
+---
+*Generated by the AI Control Tower prototype aligned with S.257 and E.O. 14110.*
+---
+```
 
-- **Strict typing & Pydantic models**: All inputs/outputs are strongly typed to support monitoring, auditing, and safe extension.
-- **Tool-based agent design**: The core logic is decomposed into reusable tools (e.g., geographic mapping) so that future RAG modules for regulatory and sectoral intelligence can be added without rewriting the agent.
-- **Auditability**: Every generated alert is backed by explicit inputs (risk signals + SME registry entries) and a typed report structure.
-- **Policy extensibility**: Future versions can integrate:
-  - RAG over statutory and regulatory texts (e.g., S.257, related statutes, executive orders, and agency guidance).
-  - Sector-specific playbooks for critical infrastructure, logistics, agriculture, healthcare, etc.
 
-### Local Setup
+## 🚀 Local Setup (macOS)
+Follow these steps to initialize the developer preview on your local machine.
 
-This project uses Python 3.8+ and requires a virtual environment to isolate dependencies. Follow these steps to set up your local development environment:
+1. **Initialize Virtual Environment**
+Ensure you are using Python 3.13.2 for the latest performance and security patches.
 
-#### Prerequisites
-
-- Python 3.8 or higher (check with `python3 --version`)
-- `pip` package manager (usually included with Python)
-
-#### Step 1: Create Virtual Environment
-
-On **macOS** (and most Unix-like systems):
-
-```bash
-# Navigate to the project root
-cd open-supply-chain-control-tower
-
-# Create a virtual environment in .venv directory
+```
+# Create the local closure
 python3 -m venv .venv
 
-# Activate the virtual environment
+# Activate the environment
 source .venv/bin/activate
 ```
 
-You should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
+2. **Install Dependencies
+Sync with Pydantic v2 and the PydanticAI framework.
 
-> **Note**: Always activate the virtual environment before working on the project. If you open a new terminal, run `source .venv/bin/activate` again.
-
-#### Step 2: Install Dependencies
-
-With the virtual environment activated:
-
-```bash
+```
 pip install -r requirements.txt
 ```
 
-This installs:
-- `pydantic>=2.0` - Type-safe data validation
-- `pydantic-ai` - AI agent orchestration framework
-- `logfire` - Observability and structured logging
-- `python-dotenv` - Environment variable management
+3. **Run v0.0.1 Simulation**
+   
+Execute the baseline logic flow to generate your first resilience report.
 
-#### Step 3: Configure Environment Variables
-
-1. Copy the example environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Edit `.env` and add your Anthropic API key:
-
-   ```
-   ANTHROPIC_API_KEY=your_actual_api_key_here
-   ```
-
-   > Get your API key from [Anthropic Console](https://console.anthropic.com/)
-
-3. The `.env` file is gitignored and will not be committed to version control.
-
-#### Step 4: Verify Installation
-
-Run the v0.0.1 execution flow:
-
-```bash
-python main.py
 ```
+python3 main.py
+```
+   Note: In v0.0.1, the reasoning agent uses structural templates for reporting. Live API calls to Claude 3.5 Sonnet and integrated RAG modules are scheduled for the v0.1.0 milestone.
 
-You should see:
-- A HIGH-priority Markdown "Supply Chain Alert" printed to the console
-- A report file generated at `outputs/monterey_risk_report_v001.md`
+## 🗺️ Roadmap: The Path to v0.1.x
 
-If you encounter `ModuleNotFoundError`, ensure:
-1. The virtual environment is activated (`source .venv/bin/activate`)
-2. Dependencies are installed (`pip install -r requirements.txt`)
-3. You're running Python from within the activated environment
+**Target Milestone: v0.1.0 (The Knowledge Engine) 📅 Est. Release: February 2026**
 
-### Getting Started (Developer Preview)
+The next iteration transitions from structural verification to deep knowledge integration:
 
-> Note: v0.0.1 is a **developer preview** and assumes access to Claude 3.5 Sonnet via PydanticAI configuration in your environment.
+* [ ] **S.257 RAG Integration**: Ingest full legislative text to ground recommendations in specific federal assistance programs.
+* [ ] **Live Reasoning Core**: Enable high-fidelity impact analysis via live Claude 3.5 Sonnet API calls.
+* [ ] **Multi-Vector Signal Fusion**: Integrate real-time data feeds from **NOAA** (weather) and regional port operations (logistics).
+* [ ] **NAICS Expansion**: Update `sme_registry.json` to include 6-digit NAICS codes for granular sectoral risk mapping.
 
-After completing the Local Setup steps above:
+---
 
-1. **Run the sample risk analysis**:
+**Last Updated:** January 8, 2026
 
-   ```bash
-   python main.py
-   ```
+**Lead Architect:** Sebastian Sun (Yu Sun, PhD)
 
-   This executes the v0.0.1 demo:
-   - Constructs a `RiskSignal` with `risk_score=0.95` (high-priority soil saturation event in Monterey County)
-   - Uses the geo tool to find affected SMEs from `data/sme_registry.json`
-   - Generates a Markdown "Supply Chain Alert" aligned with S.257 and E.O. 14123
-   - Saves the report to `outputs/monterey_risk_report_v001.md`
-
-2. **Review the generated report**:
-
-   - Check the console output for the Markdown alert
-   - Open `outputs/monterey_risk_report_v001.md` to see the persisted report
-
-### Roadmap (Beyond v0.0.1)
-
-- **v0.1.x**: CLI & API endpoints; richer SME registry schema (NAICS, upstream/downstream linkages).
-- **v0.2.x**: RAG-based regulatory and policy grounding; sector-specific resilience templates.
-- **v0.3.x+**: Integration with live data feeds (BTS, NOAA, port operations, critical infrastructure notifications), dashboards, and multi-jurisdiction collaboration workflows.
-
-Contributions, design critiques, and policy feedback are welcome, especially from:
-
-- SME coalitions and regional economic development organizations.
-- Federal, state, and local agencies working on supply-chain resilience.
-- Researchers and practitioners in logistics, climate risk, and AI safety.
-
+**Status:** Alpha Developer Preview
