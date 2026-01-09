@@ -13,3 +13,15 @@ logfire
 
 # python-dotenv for environment variable management
 python-dotenv
+
+# LangChain core + community integrations for RAG (still available but no longer required for core TF-IDF RAG)
+langchain>=0.2
+langchain-community>=0.2
+
+# PDF parsing for legislative documents
+pypdf
+
+# Scikit-learn and joblib for local TF-IDF vectorization (no Torch/GPU required)
+scikit-learn
+joblib
+
