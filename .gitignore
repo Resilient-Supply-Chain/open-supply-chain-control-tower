@@ -233,6 +233,9 @@ outputs/
 *.md
 !README.md
 
+# Local vector store for legislative RAG (can be rebuilt)
+.vector_store/
+
 # Temporary files
 *.tmp
 *.temp

@@ -5,10 +5,13 @@ import asyncio
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
 from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
+from src.models.rag_models import PolicyQueryResult
 from src.models.report import ResilienceReport
 from src.models.signal import RiskSignal
 from src.tools.geo_utils import find_smes_by_location
+from src.tools.rag_engine import LegislationRAG, LegislationRAGConfig
 
 
 def load_risk_signal(signal_path: Path) -> RiskSignal:
@@ -55,10 +58,33 @@ async def run(signal_file: Path | None = None) -> None:
     risk_signal = load_risk_signal(signal_file)
     print(f"✓ Loaded risk signal from: {signal_file}")
 
-    # --- 2. Load SME registry from static data ---
+    # --- 2. Initialize Legislation RAG over S.257 ---
+    s257_pdf_path = (
+        project_root / "data" / "static" / "legislation" / "BILLS-119s257es.pdf"
+    )
+    rag_index_dir = project_root / ".vector_store" / "s257_faiss"
+    rag_config = LegislationRAGConfig(
+        pdf_path=s257_pdf_path,
+        index_dir=rag_index_dir,
+    )
+    rag_engine = LegislationRAG(rag_config)
+
+    # Formulate a policy-aware query grounded in the current risk signal.
+    policy_query = (
+        "Under S.257 (Promoting Resilient Supply Chains Act of 2025), which "
+        "sections or provisions are most relevant to a high-severity risk "
+        f"event driven by '{risk_signal.primary_driver}' in the location "
+        f"'{risk_signal.location}', particularly with respect to protecting "
+        "small and medium-sized enterprises (SMEs) and regional supply-chain "
+        "resilience?"
+    )
+    policy_result: PolicyQueryResult = rag_engine.query_policy(policy_query, k=4)
+    print(f"✓ Retrieved {len(policy_result.snippets)} policy snippets from S.257")
+
+    # --- 3. Load SME registry from static data ---
     registry_path = project_root / "data" / "static" / "sme_registry.json"
 
-    # --- 3. Use geo tool to map location to affected SMEs ---
+    # --- 4. Use geo tool to map location to affected SMEs ---
     # For v0.0.1 we map the broader Monterey geography (county-level).
     # Extract location token for matching (e.g., "Monterey" from "Monterey_Hwy68")
     location_token = risk_signal.location.split("_")[0] if "_" in risk_signal.location else risk_signal.location
@@ -67,13 +93,28 @@ async def run(signal_file: Path | None = None) -> None:
     )
     print(f"✓ Found {len(affected_smes)} potentially affected SMEs")
 
-    # --- 4. Derive alert priority and render Markdown alert ---
+    # --- 5. Derive alert priority and render Markdown alert ---
     priority = _derive_priority(risk_signal.risk_score)
     markdown_alert = _render_markdown_alert(
         priority=priority,
         signal=risk_signal,
         affected_smes=affected_smes,
     )
+
+    # Integrate policy context into the Markdown alert to make the report
+    # explicitly S.257-aware.
+    if policy_result.snippets:
+        policy_lines: list[str] = [
+            "",
+            "### Relevant S.257 Policy Context",
+            "The following passages are retrieved from "
+            "**S.257 – Promoting Resilient Supply Chains Act of 2025**:",
+        ]
+        for snippet in policy_result.snippets:
+            policy_lines.append(
+                f"- **Page {snippet.page}** — {snippet.text.strip()}"
+            )
+        markdown_alert = markdown_alert + "\n\n" + "\n".join(policy_lines)
 
     report = ResilienceReport(
         priority=priority,
@@ -82,7 +123,7 @@ async def run(signal_file: Path | None = None) -> None:
         markdown_alert=markdown_alert,
     )
 
-    # --- 5. Validation logic & outputs ---
+    # --- 6. Validation logic & outputs ---
     print("\n" + "=" * 80)
     print("SUPPLY CHAIN RESILIENCE ALERT")
     print("=" * 80 + "\n")
@@ -108,6 +149,9 @@ async def run(signal_file: Path | None = None) -> None:
 
 def main() -> None:
     """CLI entry point with argument parsing."""
+    # Load environment variables from .env (including HUGGINGFACEHUB_API_TOKEN,
+    # ANTHROPIC_API_KEY, etc.) before any networked tools (RAG, PydanticAI) run.
+    load_dotenv()
     parser = argparse.ArgumentParser(
         description="AI Control Tower for U.S. Supply-Chain Resilience (v0.0.1)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
