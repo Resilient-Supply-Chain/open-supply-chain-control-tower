@@ -20,6 +20,7 @@ langchain-community>=0.2
 
 # PDF parsing for legislative documents
 pypdf
+llama-parse
 
 # Scikit-learn and joblib for local TF-IDF vectorization (no Torch/GPU required)
 scikit-learn
