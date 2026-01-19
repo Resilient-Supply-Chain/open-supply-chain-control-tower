@@ -2,5 +2,10 @@
   "risk_score": 0.95,
   "location": "Monterey_Hwy68",
   "primary_driver": "Soil_Saturation_Critical",
-  "estimated_impact": "$15M_Day"
+  "estimated_impact": "$15M_Day",
+  "geo_center": {
+    "lat": 36.6002,
+    "lon": -121.8947,
+    "impact_radius_km": 15.0
+  }
 }

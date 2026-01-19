@@ -11,7 +11,7 @@ from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
 from src.models.rag_models import PolicyQueryResult
 from src.models.report import ResilienceReport
 from src.models.signal import RiskSignal
-from src.tools.geo_utils import find_smes_by_location
+from src.tools.geo_engine import generate_risk_map, get_smes_in_radius
 from src.tools.rag_engine import LegislationRAG, LegislationRAGConfig
 
 
@@ -94,14 +94,16 @@ async def run(signal_file: Path | None = None) -> None:
     # --- 3. Load SME registry from static data ---
     registry_path = project_root / "data" / "static" / "sme_registry.json"
 
-    # --- 4. Use geo tool to map location to affected SMEs ---
-    # For v0.0.1 we map the broader Monterey geography (county-level).
-    # Extract location token for matching (e.g., "Monterey" from "Monterey_Hwy68")
-    location_token = risk_signal.location.split("_")[0] if "_" in risk_signal.location else risk_signal.location
-    affected_smes = find_smes_by_location(
-        registry_path=registry_path, location=location_token
+    # --- 4. Use geo engine to map epicenter to affected SMEs ---
+    geo_center = risk_signal.geo_center
+    affected_smes, safe_smes = get_smes_in_radius(
+        registry_path=registry_path,
+        center=(geo_center.lat, geo_center.lon),
+        radius_km=geo_center.impact_radius_km,
     )
-    print(f"✓ Found {len(affected_smes)} potentially affected SMEs")
+    print(
+        f"✓ Found {len(affected_smes)} SMEs within {geo_center.impact_radius_km:.1f} km"
+    )
 
     # --- 5. Derive alert priority and render Markdown alert ---
     priority = _derive_priority(risk_signal.risk_score)
@@ -127,11 +129,26 @@ async def run(signal_file: Path | None = None) -> None:
             )
         policy_context = "\n".join(policy_lines)
 
+    geo_context = "\n".join(
+        [
+            "",
+            "### 🗺️ Geospatial Risk Visualization",
+            (
+                f"SMEs within **{geo_center.impact_radius_km:.1f} km** of the "
+                f"soil saturation epicenter at "
+                f"({geo_center.lat:.4f}, {geo_center.lon:.4f}) "
+                "are flagged for monitoring."
+            ),
+            "An interactive map has been generated at `outputs/risk_map.html`.",
+        ]
+    )
+
     markdown_alert = _render_markdown_alert(
         priority=priority,
         signal=risk_signal,
         affected_smes=affected_smes,
         policy_context=policy_context,
+        geo_context=geo_context,
     )
 
     report = ResilienceReport(
@@ -149,6 +166,17 @@ async def run(signal_file: Path | None = None) -> None:
 
     outputs_dir = project_root / "outputs"
     outputs_dir.mkdir(parents=True, exist_ok=True)
+    map_path = outputs_dir / "risk_map.html"
+    try:
+        generate_risk_map(
+            center=(geo_center.lat, geo_center.lon),
+            radius_km=geo_center.impact_radius_km,
+            affected=affected_smes,
+            safe=safe_smes,
+            output_path=map_path,
+        )
+    except RuntimeError as exc:
+        print(f"⚠ Map generation skipped: {exc}")
 
     # Generate output filename from signal file name
     signal_stem = signal_file.stem

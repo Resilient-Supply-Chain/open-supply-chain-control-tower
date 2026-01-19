@@ -8,7 +8,7 @@ from pydantic_ai import Agent
 
 from src.models.report import AffectedSME, ResilienceReport
 from src.models.signal import AlertPriority, RiskSignal
-from src.tools.geo_utils import find_smes_by_location
+from src.tools.geo_engine import get_smes_in_radius
 
 
 class AgentConfig(BaseModel):
@@ -44,6 +44,7 @@ def _render_markdown_alert(
     signal: RiskSignal,
     affected_smes: List[AffectedSME],
     policy_context: Optional[str] = None,
+    geo_context: Optional[str] = None,
 ) -> str:
     priority_icon = {"HIGH": "🚨", "MEDIUM": "⚠️", "LOW": "ℹ️"}.get(priority, "ℹ️")
     header = f"## {priority_icon} Supply Chain Alert ({priority})"
@@ -57,13 +58,19 @@ def _render_markdown_alert(
     if affected_smes:
         sme_lines = ["- 🏢 **Potentially affected SMEs:**"]
         for sme in affected_smes:
+            distance_note = (
+                f" (~{sme.distance_km:.1f} km from epicenter)"
+                if sme.distance_km is not None
+                else ""
+            )
             sme_lines.append(
-                f"  - 🔹 {sme.name} (`{sme.sme_id}`) — {sme.sector}, {sme.county}"
+                f"  - 🔹 {sme.name} (`{sme.sme_id}`) — {sme.sector}, {sme.county}{distance_note}"
             )
         sme_block = "\n".join(sme_lines)
     else:
         sme_block = "- 🏢 **Potentially affected SMEs:** None found in current registry."
 
+    geo_block = f"\n\n{geo_context.strip()}" if geo_context else ""
     context_block = f"\n\n{policy_context.strip()}" if policy_context else ""
     guidance = (
         "\n\n---\n\n"
@@ -71,11 +78,14 @@ def _render_markdown_alert(
         "S.257 and E.O. 14123 to support U.S. SME supply-chain resilience._"
     )
 
-    return "\n\n".join([header, summary, sme_block]) + context_block + guidance
+    return "\n\n".join([header, summary, sme_block]) + geo_block + context_block + guidance
 
 
 def process_risk_signal(
-    *, signal: RiskSignal, sme_registry_path: Path, policy_context: Optional[str] = None
+    *,
+    signal: RiskSignal,
+    sme_registry_path: Path,
+    policy_context: Optional[str] = None,
 ) -> ResilienceReport:
     """Process a RiskSignal and generate a ResilienceReport.
 
@@ -84,16 +94,35 @@ def process_risk_signal(
     """
 
     # Tool: find affected SMEs based on location.
-    affected_smes = find_smes_by_location(
-        registry_path=sme_registry_path, location=signal.location
+    affected_smes, _ = get_smes_in_radius(
+        registry_path=sme_registry_path,
+        center=(signal.geo_center.lat, signal.geo_center.lon),
+        radius_km=signal.geo_center.impact_radius_km,
     )
 
     priority = _derive_priority(signal.risk_score)
+    geo_context = (
+        "\n".join(
+            [
+                "### 🗺️ Geospatial Risk Visualization",
+                (
+                    f"SMEs within **{signal.geo_center.impact_radius_km:.1f} km** "
+                    f"of the soil saturation epicenter at "
+                    f"({signal.geo_center.lat:.4f}, {signal.geo_center.lon:.4f}) "
+                    "are prioritized for monitoring."
+                ),
+                "An interactive map is available at `outputs/risk_map.html`.",
+            ]
+        )
+        if signal.geo_center
+        else ""
+    )
     markdown_alert = _render_markdown_alert(
         priority=priority,
         signal=signal,
         affected_smes=affected_smes,
         policy_context=policy_context,
+        geo_context=geo_context,
     )
 
     report = ResilienceReport(
