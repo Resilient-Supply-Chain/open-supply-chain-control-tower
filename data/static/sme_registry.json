@@ -3,18 +3,72 @@
     "sme_id": "MON-AG-001",
     "name": "Monterey Valley Produce Co.",
     "county": "Monterey County",
-    "sector": "Agriculture"
+    "sector": "Agriculture",
+    "latitude": 36.6002,
+    "longitude": -121.8947
   },
   {
     "sme_id": "MON-LOG-001",
     "name": "Central Coast Logistics LLC",
     "county": "Monterey County",
-    "sector": "Logistics"
+    "sector": "Logistics",
+    "latitude": 36.7080,
+    "longitude": -121.6685
   },
   {
     "sme_id": "MON-MFG-001",
     "name": "Salinas Precision Manufacturing",
     "county": "Monterey County",
-    "sector": "Manufacturing"
+    "sector": "Manufacturing",
+    "latitude": 36.6777,
+    "longitude": -121.6555
+  },
+  {
+    "sme_id": "MON-COLD-002",
+    "name": "Pacific Grove Cold Storage",
+    "county": "Monterey County",
+    "sector": "Cold Storage",
+    "latitude": 36.6216,
+    "longitude": -121.9166
+  },
+  {
+    "sme_id": "MON-PKG-002",
+    "name": "Seaside Packaging Works",
+    "county": "Monterey County",
+    "sector": "Packaging",
+    "latitude": 36.6111,
+    "longitude": -121.8519
+  },
+  {
+    "sme_id": "MON-AG-002",
+    "name": "Castroville Agri Co-op",
+    "county": "Monterey County",
+    "sector": "Agriculture",
+    "latitude": 36.7644,
+    "longitude": -121.7579
+  },
+  {
+    "sme_id": "MON-FOOD-003",
+    "name": "Soledad Valley Foods",
+    "county": "Monterey County",
+    "sector": "Food Processing",
+    "latitude": 36.4247,
+    "longitude": -121.3263
+  },
+  {
+    "sme_id": "MON-AG-003",
+    "name": "King City AgroTech",
+    "county": "Monterey County",
+    "sector": "Agriculture Technology",
+    "latitude": 36.2127,
+    "longitude": -121.1260
+  },
+  {
+    "sme_id": "MON-LOG-002",
+    "name": "Marina Logistics Hub",
+    "county": "Monterey County",
+    "sector": "Logistics",
+    "latitude": 36.6844,
+    "longitude": -121.8022
   }
 ]

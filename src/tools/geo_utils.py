@@ -16,6 +16,8 @@ class SMERegistryEntry(BaseModel):
     name: constr(strip_whitespace=True, min_length=1) = Field(...)
     county: constr(strip_whitespace=True, min_length=1) = Field(...)
     sector: constr(strip_whitespace=True, min_length=1) = Field(...)
+    latitude: float = Field(..., description="Latitude of the SME location.")
+    longitude: float = Field(..., description="Longitude of the SME location.")
 
 
 def _load_registry(registry_path: Path) -> List[SMERegistryEntry]:
@@ -30,6 +32,12 @@ def _load_registry(registry_path: Path) -> List[SMERegistryEntry]:
             # In a fuller implementation, we would log this and continue.
             raise exc
     return entries
+
+
+def load_registry(registry_path: Path) -> List[SMERegistryEntry]:
+    """Public wrapper for loading registry entries."""
+
+    return _load_registry(registry_path)
 
 
 def find_smes_by_location(
@@ -56,10 +64,12 @@ def find_smes_by_location(
                     name=entry.name,
                     county=entry.county,
                     sector=entry.sector,
+                    latitude=entry.latitude,
+                    longitude=entry.longitude,
                 )
             )
     return affected
 
 
-__all__ = ["SMERegistryEntry", "find_smes_by_location"]
+__all__ = ["SMERegistryEntry", "find_smes_by_location", "load_registry"]
 

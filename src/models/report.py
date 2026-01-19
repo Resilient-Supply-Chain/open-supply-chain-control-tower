@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, constr
+from pydantic import BaseModel, Field, constr, confloat
 
 from .signal import AlertPriority, RiskSignal
 
@@ -22,6 +22,15 @@ class AffectedSME(BaseModel):
     )
     sector: constr(strip_whitespace=True, min_length=1) = Field(
         ..., description="Simple sector label (e.g., agriculture, logistics).",
+    )
+    latitude: confloat(ge=-90.0, le=90.0) | None = Field(
+        default=None, description="Latitude of the SME location.",
+    )
+    longitude: confloat(ge=-180.0, le=180.0) | None = Field(
+        default=None, description="Longitude of the SME location.",
+    )
+    distance_km: confloat(ge=0.0) | None = Field(
+        default=None, description="Distance in kilometers from the risk epicenter.",
     )
 
 

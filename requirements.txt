@@ -26,3 +26,6 @@ llama-parse
 scikit-learn
 joblib
 
+# Geospatial radius filtering + map visualization
+geopy
+folium

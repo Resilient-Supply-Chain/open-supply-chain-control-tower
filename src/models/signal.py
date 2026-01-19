@@ -5,6 +5,20 @@ from typing import Literal
 from pydantic import BaseModel, Field, confloat, constr
 
 
+class GeoCenter(BaseModel):
+    """Geospatial epicenter metadata for a risk signal."""
+
+    lat: confloat(ge=-90.0, le=90.0) = Field(
+        ..., description="Latitude of the epicenter.",
+    )
+    lon: confloat(ge=-180.0, le=180.0) = Field(
+        ..., description="Longitude of the epicenter.",
+    )
+    impact_radius_km: confloat(gt=0.0) = Field(
+        ..., description="Impact radius in kilometers.",
+    )
+
+
 class RiskSignal(BaseModel):
     """Type-safe representation of an external supply-chain risk signal.
 
@@ -24,6 +38,9 @@ class RiskSignal(BaseModel):
     )
     estimated_impact: constr(strip_whitespace=True, min_length=1) = Field(
         ..., description="Short narrative estimate of the potential supply-chain impact.",
+    )
+    geo_center: GeoCenter = Field(
+        ..., description="Geospatial epicenter and radius for the risk signal.",
     )
 
     class Config:
