@@ -113,10 +113,9 @@ Open the map in your browser:
 ```
 open outputs/V2_MONTEREY_MAP.html
 ```
-![Geo Alert Map Preview](assets/screenshots/example_html_v200.png)
+
 ### 🖼️ Visual Evidence (v2.0.0)
-![Geo Map Preview](assets/screenshots/v2.0.0_geo_map.png)
-_Replace this image with your v2.0.0 map screenshot._
+![Geo Alert Map Preview](assets/screenshots/example_html_v200.png)
 
 ## 🗺️ Roadmap: The Path Beyond v2.0.0
 
