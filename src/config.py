@@ -33,4 +33,7 @@ def load_rag_settings() -> RAGSettings:
     return RAGSettings(mode=mode, llama_cloud_api_key=api_key)
 
 
-__all__ = ["RagMode", "RAGSettings", "load_rag_settings"]
+PROJECT_VERSION = "2.0.0"
+
+
+__all__ = ["PROJECT_VERSION", "RagMode", "RAGSettings", "load_rag_settings"]

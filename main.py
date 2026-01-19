@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-from src.config import load_rag_settings
+from src.config import PROJECT_VERSION, load_rag_settings
 from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
 from src.models.rag_models import PolicyQueryResult
 from src.models.report import ResilienceReport
@@ -201,7 +201,7 @@ async def run(signal_file: Path | None = None) -> None:
 
     outputs_dir = project_root / "outputs"
     outputs_dir.mkdir(parents=True, exist_ok=True)
-    map_path = outputs_dir / "risk_map.html"
+    map_path = outputs_dir / "V2_MONTEREY_MAP.html"
     try:
         generate_risk_map(
             center=(geo_center.lat, geo_center.lon),
@@ -214,22 +214,29 @@ async def run(signal_file: Path | None = None) -> None:
             risk_radius_km=geo_center.impact_radius_km,
             label_colors=("#8B0000", "#006400"),
             segment_colors=("#FF6666", "#90EE90"),
+            label_offset=(0.002, 0.002),
         )
     except RuntimeError as exc:
         print(f"⚠ Map generation skipped: {exc}")
 
     # Generate output filename from signal file name
     signal_stem = signal_file.stem
-    output_path = outputs_dir / f"{signal_stem}_report_v001.md"
+    output_path = outputs_dir / "V2_MONTEREY_REPORT.md"
 
     if risk_signal.risk_score > 0.9:
         # Persist only high-priority alerts for v0.0.1
         output_path.write_text(report.markdown_alert, encoding="utf-8")
         print(f"\n✓ High-priority alert saved to: {output_path}")
+        print(
+            f"V{PROJECT_VERSION} Analysis Complete. Executive Map and Policy Brief generated."
+        )
     else:
         # Below threshold: treat as logged event without high-priority alert file.
         print(
             "\n⚠ Risk score below 0.9; event logged but no High Priority alert persisted."
+        )
+        print(
+            f"V{PROJECT_VERSION} Analysis Complete. Executive Map and Policy Brief generated."
         )
 
 

@@ -332,6 +332,7 @@ def generate_risk_map(
     risk_radius_km: float | None = None,
     label_colors: Tuple[str, str] = ("#8B0000", "#006400"),
     segment_colors: Tuple[str, str] = ("#FF6666", "#90EE90"),
+    label_offset: Tuple[float, float] = (0.002, 0.002),
 ) -> None:
     """Generate an interactive HTML map for the risk zone."""
 
@@ -397,11 +398,13 @@ def generate_risk_map(
     affected_color, safe_color = label_colors
     risky_segment_color, safe_segment_color = segment_colors
 
+    label_lat_offset, label_lon_offset = label_offset
+
     for sme in affected:
         if sme.latitude is None or sme.longitude is None:
             continue
         folium.Marker(
-            location=(sme.latitude, sme.longitude),
+            location=(sme.latitude + label_lat_offset, sme.longitude + label_lon_offset),
             tooltip=sme.name,
             popup=f"{sme.name} — {sme.sector} ({sme.distance_km} km)",
             icon=folium.DivIcon(
@@ -418,7 +421,7 @@ def generate_risk_map(
         if sme.latitude is None or sme.longitude is None:
             continue
         folium.Marker(
-            location=(sme.latitude, sme.longitude),
+            location=(sme.latitude + label_lat_offset, sme.longitude + label_lon_offset),
             tooltip=sme.name,
             popup=f"{sme.name} — {sme.sector} ({sme.distance_km} km)",
             icon=folium.DivIcon(
@@ -437,31 +440,22 @@ def generate_risk_map(
                 start = impact.waypoints[idx]
                 end = impact.waypoints[idx + 1]
                 segment_intersects = False
-                intersection_point = None
                 if risk_center and risk_radius_km is not None:
                     candidate = _closest_point_on_segment(start, end, risk_center)
                     distance_km = _distance_km(risk_center, candidate)
                     if distance_km <= risk_radius_km:
                         segment_intersects = True
-                        intersection_point = candidate
                 color = risky_segment_color if segment_intersects else safe_segment_color
-                weight = 5 if segment_intersects else 3
                 folium.PolyLine(
                     locations=[start, end],
                     color=color,
-                    weight=weight,
+                    weight=3,
                     opacity=0.85,
                     tooltip=(
                         f"Path: {impact.origin} ➔ {impact.destination} | "
                         f"Status: {'CRITICAL BLOCKAGE' if segment_intersects else 'CLEAR'}"
                     ),
                 ).add_to(map_view)
-                if segment_intersects and intersection_point:
-                    folium.Marker(
-                        location=intersection_point,
-                        tooltip="Route intersects risk zone",
-                        icon=folium.Icon(color="red", icon="warning-sign"),
-                    ).add_to(map_view)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     map_view.save(str(output_path))
