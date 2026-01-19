@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+from src.config import load_rag_settings
 from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
 from src.models.rag_models import PolicyQueryResult
 from src.models.report import ResilienceReport
@@ -59,13 +60,22 @@ async def run(signal_file: Path | None = None) -> None:
     print(f"✓ Loaded risk signal from: {signal_file}")
 
     # --- 2. Initialize Legislation RAG over S.257 ---
-    s257_pdf_path = (
+    rag_settings = load_rag_settings()
+    api_key_status = "present" if rag_settings.llama_cloud_api_key else "missing"
+    print(f"ℹ RAG mode resolved to: {rag_settings.mode} (LLAMA_CLOUD_API_KEY {api_key_status})")
+    preferred_pdf_path = project_root / "docs" / "S257_Act.pdf"
+    fallback_pdf_path = (
         project_root / "data" / "static" / "legislation" / "BILLS-119s257es.pdf"
     )
+    s257_pdf_path = preferred_pdf_path if preferred_pdf_path.exists() else fallback_pdf_path
     rag_index_dir = project_root / ".vector_store" / "s257_faiss"
+    markdown_cache_path = project_root / "data" / "processed" / "S257_Act.md"
     rag_config = LegislationRAGConfig(
         pdf_path=s257_pdf_path,
         index_dir=rag_index_dir,
+        rag_mode=rag_settings.mode,
+        markdown_cache_path=markdown_cache_path,
+        llama_cloud_api_key=rag_settings.llama_cloud_api_key,
     )
     rag_engine = LegislationRAG(rag_config)
 
@@ -95,26 +105,34 @@ async def run(signal_file: Path | None = None) -> None:
 
     # --- 5. Derive alert priority and render Markdown alert ---
     priority = _derive_priority(risk_signal.risk_score)
-    markdown_alert = _render_markdown_alert(
-        priority=priority,
-        signal=risk_signal,
-        affected_smes=affected_smes,
-    )
 
-    # Integrate policy context into the Markdown alert to make the report
-    # explicitly S.257-aware.
+    policy_context = ""
     if policy_result.snippets:
+        rag_mode_label = (
+            "ADVANCED (LlamaParse Markdown)"
+            if rag_settings.mode == "ADVANCED"
+            else "LEGACY (Local PDF parsing)"
+        )
+        locator_label = "Section" if rag_settings.mode == "ADVANCED" else "Page"
         policy_lines: list[str] = [
             "",
-            "### Relevant S.257 Policy Context",
+            "### 📚 Relevant S.257 Policy Context",
+            f"🔎 _RAG mode: **{rag_mode_label}**_",
             "The following passages are retrieved from "
             "**S.257 – Promoting Resilient Supply Chains Act of 2025**:",
         ]
         for snippet in policy_result.snippets:
             policy_lines.append(
-                f"- **Page {snippet.page}** — {snippet.text.strip()}"
+                f"- 📄 **{locator_label} {snippet.page}** — {snippet.text.strip()}"
             )
-        markdown_alert = markdown_alert + "\n\n" + "\n".join(policy_lines)
+        policy_context = "\n".join(policy_lines)
+
+    markdown_alert = _render_markdown_alert(
+        priority=priority,
+        signal=risk_signal,
+        affected_smes=affected_smes,
+        policy_context=policy_context,
+    )
 
     report = ResilienceReport(
         priority=priority,
@@ -151,7 +169,7 @@ def main() -> None:
     """CLI entry point with argument parsing."""
     # Load environment variables from .env (including HUGGINGFACEHUB_API_TOKEN,
     # ANTHROPIC_API_KEY, etc.) before any networked tools (RAG, PydanticAI) run.
-    load_dotenv()
+    load_dotenv(override=True)
     parser = argparse.ArgumentParser(
         description="AI Control Tower for U.S. Supply-Chain Resilience (v0.0.1)",
         formatter_class=argparse.RawDescriptionHelpFormatter,

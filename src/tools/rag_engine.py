@@ -5,11 +5,12 @@ from typing import List, Optional, Tuple
 
 import joblib
 from pydantic import BaseModel, Field, ValidationError
-from pypdf import PdfReader
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from src.models.rag_models import PolicyQueryResult, PolicySnippet
+from src.tools.pdf_parser import parse_legislation_text
+from src.config import RagMode
 
 
 class LegislationRAGConfig(BaseModel):
@@ -30,6 +31,18 @@ class LegislationRAGConfig(BaseModel):
     source_title: str = Field(
         default="S.257 – Promoting Resilient Supply Chains Act of 2025",
         description="Human-readable title for the source legislation.",
+    )
+    rag_mode: RagMode = Field(
+        default="LEGACY",
+        description="RAG parsing mode: LEGACY (local) or ADVANCED (LlamaParse).",
+    )
+    markdown_cache_path: Optional[Path] = Field(
+        default=None,
+        description="Optional cached Markdown path for ADVANCED parsing.",
+    )
+    llama_cloud_api_key: Optional[str] = Field(
+        default=None,
+        description="API key for LlamaParse when ADVANCED mode is enabled.",
     )
     class Config:
         frozen = True
@@ -78,28 +91,22 @@ class LegislationRAG:
         instead.
         """
 
-        if not self._config.pdf_path.exists():
-            raise FileNotFoundError(f"S.257 PDF not found at {self._config.pdf_path}")
+        snippets = parse_legislation_text(
+            pdf_path=self._config.pdf_path,
+            rag_mode=self._config.rag_mode,
+            cache_path=self._config.markdown_cache_path,
+            api_key=self._config.llama_cloud_api_key,
+        )
 
-        reader = PdfReader(str(self._config.pdf_path))
         texts: List[str] = []
         meta: List[Tuple[str, int]] = []
 
-        for page_index, page in enumerate(reader.pages):
-            try:
-                page_text = page.extract_text() or ""
-            except Exception as exc:  # pragma: no cover - defensive
-                raise RuntimeError(
-                    f"Failed to extract text from page {page_index + 1}: {exc}"
-                ) from exc
-
-            page_text = page_text.strip()
-            if not page_text:
+        for text, locator in snippets:
+            cleaned = text.strip()
+            if not cleaned:
                 continue
-
-            texts.append(page_text)
-            # store 1-based page number
-            meta.append((page_text, page_index + 1))
+            texts.append(cleaned)
+            meta.append((cleaned, locator))
 
         if not texts:
             raise RuntimeError("No text could be extracted from the S.257 PDF.")
@@ -158,7 +165,7 @@ class LegislationRAG:
 
         try:
             self._load_or_build_index()
-        except (FileNotFoundError, ValidationError) as exc:
+        except (FileNotFoundError, ValidationError, ValueError) as exc:
             raise RuntimeError(f"Failed to initialize legislative RAG index: {exc}") from exc
 
         if self._vectorizer is None or self._matrix is None:
