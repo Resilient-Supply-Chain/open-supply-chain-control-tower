@@ -96,7 +96,17 @@ Sync with Pydantic v2 and the PydanticAI framework.
 pip install -r requirements.txt
 ```
 
-3. **Run v2.0.0 Simulation**
+3. **Set Environment Variables**
+Copy the example file and replace dummy keys as needed:
+```
+cp .env.example .env
+```
+Key sources:
+- **LlamaParse**: https://cloud.llamaindex.ai/ (LLAMA_CLOUD_API_KEY)
+- **Anthropic**: https://console.anthropic.com/ (ANTHROPIC_API_KEY)
+- **Hugging Face**: https://huggingface.co/settings/tokens (HUGGINGFACEHUB_API_TOKEN)
+
+4. **Run v2.0.0 Simulation**
    
 Execute the baseline logic flow to generate your first resilience report.
 
