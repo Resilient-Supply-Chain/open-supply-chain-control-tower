@@ -11,7 +11,11 @@ from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
 from src.models.rag_models import PolicyQueryResult
 from src.models.report import ResilienceReport
 from src.models.signal import RiskSignal
-from src.tools.geo_engine import generate_risk_map, get_smes_in_radius
+from src.tools.geo_engine import (
+    analyze_supply_routes,
+    generate_risk_map,
+    get_smes_in_radius,
+)
 from src.tools.rag_engine import LegislationRAG, LegislationRAGConfig
 
 
@@ -105,6 +109,18 @@ async def run(signal_file: Path | None = None) -> None:
         f"✓ Found {len(affected_smes)} SMEs within {geo_center.impact_radius_km:.1f} km"
     )
 
+    corridors_path = project_root / "data" / "static" / "highway_corridors.json"
+    osrm_cache_path = project_root / "data" / "processed" / "osrm_cache.json"
+    route_impacts = analyze_supply_routes(
+        registry_path=registry_path,
+        corridors_path=corridors_path,
+        risk_center=(geo_center.lat, geo_center.lon),
+        radius_km=geo_center.impact_radius_km,
+        max_routes=3,
+        max_miles=30.0,
+        osrm_cache_path=osrm_cache_path,
+    )
+
     # --- 5. Derive alert priority and render Markdown alert ---
     priority = _derive_priority(risk_signal.risk_score)
 
@@ -143,12 +159,31 @@ async def run(signal_file: Path | None = None) -> None:
         ]
     )
 
+    interrupted_routes = [impact for impact in route_impacts if impact.interrupted]
+    if interrupted_routes:
+        logistics_lines = [
+            "",
+            "### 🚚 Logistics Infrastructure Impact",
+        ]
+        for impact in interrupted_routes:
+            logistics_lines.append(
+                (
+                    f"- Route {impact.sme_id} ({impact.origin} ➔ {impact.destination}) "
+                    "is severed at the Hwy 68 saturation segment, "
+                    "stopping 100% of Peninsula deliveries."
+                )
+            )
+        logistics_context = "\n".join(logistics_lines)
+    else:
+        logistics_context = ""
+
     markdown_alert = _render_markdown_alert(
         priority=priority,
         signal=risk_signal,
         affected_smes=affected_smes,
         policy_context=policy_context,
         geo_context=geo_context,
+        logistics_context=logistics_context,
     )
 
     report = ResilienceReport(
@@ -174,6 +209,11 @@ async def run(signal_file: Path | None = None) -> None:
             affected=affected_smes,
             safe=safe_smes,
             output_path=map_path,
+            route_impacts=route_impacts,
+            risk_center=(geo_center.lat, geo_center.lon),
+            risk_radius_km=geo_center.impact_radius_km,
+            label_colors=("#8B0000", "#006400"),
+            segment_colors=("#FF6666", "#90EE90"),
         )
     except RuntimeError as exc:
         print(f"⚠ Map generation skipped: {exc}")
