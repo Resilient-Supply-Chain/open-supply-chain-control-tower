@@ -285,3 +285,16 @@ $RECYCLE.BIN/
 *.bak
 *.backup
 *.old
+
+# ------------------------------------------------------------------------------
+# Node.js & Web Folder
+# ------------------------------------------------------------------------------
+web/node_modules/
+web/dist/
+web/.env
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/.npm/
+web/.cache/
+web/.parcel-cache/
