@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 
 import json
-from pydantic import BaseModel, Field, ValidationError, constr
+from pydantic import BaseModel, Field, ValidationError, confloat, constr
 
 from src.models.report import AffectedSME
 
@@ -18,6 +18,18 @@ class SMERegistryEntry(BaseModel):
     sector: constr(strip_whitespace=True, min_length=1) = Field(...)
     latitude: float = Field(..., description="Latitude of the SME location.")
     longitude: float = Field(..., description="Longitude of the SME location.")
+    delivery_routes: list["DeliveryRoute"] = Field(default_factory=list)
+
+
+class RouteWaypoint(BaseModel):
+    lat: confloat(ge=-90.0, le=90.0) = Field(...)
+    lon: confloat(ge=-180.0, le=180.0) = Field(...)
+
+
+class DeliveryRoute(BaseModel):
+    origin: constr(strip_whitespace=True, min_length=1) = Field(...)
+    destination: constr(strip_whitespace=True, min_length=1) = Field(...)
+    waypoints: list[RouteWaypoint] = Field(min_length=2)
 
 
 def _load_registry(registry_path: Path) -> List[SMERegistryEntry]:
@@ -71,5 +83,11 @@ def find_smes_by_location(
     return affected
 
 
-__all__ = ["SMERegistryEntry", "find_smes_by_location", "load_registry"]
+__all__ = [
+    "SMERegistryEntry",
+    "DeliveryRoute",
+    "RouteWaypoint",
+    "find_smes_by_location",
+    "load_registry",
+]
 

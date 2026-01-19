@@ -5,7 +5,20 @@
     "county": "Monterey County",
     "sector": "Agriculture",
     "latitude": 36.6002,
-    "longitude": -121.8947
+    "longitude": -121.8947,
+    "delivery_routes": [
+      {
+        "origin": "Salinas (36.677, -121.655)",
+        "destination": "Monterey Peninsula via Hwy 68",
+        "waypoints": [
+          {"lat": 36.6770, "lon": -121.6550},
+          {"lat": 36.6260, "lon": -121.6940},
+          {"lat": 36.6040, "lon": -121.7560},
+          {"lat": 36.5950, "lon": -121.8060},
+          {"lat": 36.6002, "lon": -121.8947}
+        ]
+      }
+    ]
   },
   {
     "sme_id": "MON-LOG-001",
@@ -13,7 +26,20 @@
     "county": "Monterey County",
     "sector": "Logistics",
     "latitude": 36.7080,
-    "longitude": -121.6685
+    "longitude": -121.6685,
+    "delivery_routes": [
+      {
+        "origin": "Monterey (36.600, -121.894)",
+        "destination": "San Jose via Hwy 101",
+        "waypoints": [
+          {"lat": 36.6000, "lon": -121.8940},
+          {"lat": 36.6770, "lon": -121.6550},
+          {"lat": 36.7700, "lon": -121.6450},
+          {"lat": 36.9100, "lon": -121.7580},
+          {"lat": 37.3382, "lon": -121.8863}
+        ]
+      }
+    ]
   },
   {
     "sme_id": "MON-MFG-001",
@@ -21,7 +47,19 @@
     "county": "Monterey County",
     "sector": "Manufacturing",
     "latitude": 36.6777,
-    "longitude": -121.6555
+    "longitude": -121.6555,
+    "delivery_routes": [
+      {
+        "origin": "Salinas (36.678, -121.655)",
+        "destination": "Port of Oakland via Hwy 101 / I-880",
+        "waypoints": [
+          {"lat": 36.6777, "lon": -121.6555},
+          {"lat": 36.9100, "lon": -121.7580},
+          {"lat": 37.5483, "lon": -121.9886},
+          {"lat": 37.8044, "lon": -122.2712}
+        ]
+      }
+    ]
   },
   {
     "sme_id": "MON-COLD-002",
