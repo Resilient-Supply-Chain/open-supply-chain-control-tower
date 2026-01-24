@@ -30,3 +30,8 @@ joblib
 geopy
 folium
 requests
+pyyaml
+gradio
+
+# System dependency (not a pip package):
+# Install Ollama from https://ollama.com/download
