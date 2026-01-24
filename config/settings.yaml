@@ -1,5 +1,16 @@
 mode: "demo"
+version: "2.0.0"
+
+llm:
+  provider: "local"  # local | api
+  local:
+    backend: "ollama"  # ollama | llama.cpp
+    model: "llama3.1:8b"
+    endpoint: "http://localhost:11434"
+  api:
+    provider: "anthropic"
+    model: "claude-3-5-sonnet-latest"
+
 rag:
   mode: "LEGACY"
   llama_cloud_api_key: "dummy_llama_cloud_key"
-version: "2.0.0"
