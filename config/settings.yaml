@@ -1,0 +1,5 @@
+mode: "demo"
+rag:
+  mode: "LEGACY"
+  llama_cloud_api_key: "dummy_llama_cloud_key"
+version: "2.0.0"

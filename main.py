@@ -6,11 +6,9 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-from src.config import PROJECT_VERSION, load_rag_settings
-from src.agents.resilience_agent import _derive_priority, _render_markdown_alert
-from src.models.rag_models import PolicyQueryResult
-from src.models.report import ResilienceReport
-from src.models.signal import RiskSignal
+from config.settings import PROJECT_VERSION, load_rag_settings
+from src.agents.refactor_agent import _derive_priority, _render_markdown_alert
+from src.tools.schema import PolicyQueryResult, ResilienceReport, RiskSignal
 from src.tools.geo_engine import (
     analyze_supply_routes,
     generate_risk_map,
@@ -51,14 +49,16 @@ async def run(signal_file: Path | None = None) -> None:
 
     Args:
         signal_file: Optional path to the risk signal JSON file.
-                    Defaults to data/signals/monterey_risk_event.json
+                    Defaults to data/input/signals/monterey_risk_event.json
     """
 
     project_root = Path(__file__).parent
 
     # --- 1. Load RiskSignal from JSON file (validated by Pydantic) ---
     if signal_file is None:
-        signal_file = project_root / "data" / "signals" / "monterey_risk_event.json"
+        signal_file = (
+            project_root / "data" / "input" / "signals" / "monterey_risk_event.json"
+        )
 
     risk_signal = load_risk_signal(signal_file)
     print(f"✓ Loaded risk signal from: {signal_file}")
@@ -69,11 +69,16 @@ async def run(signal_file: Path | None = None) -> None:
     print(f"ℹ RAG mode resolved to: {rag_settings.mode} (LLAMA_CLOUD_API_KEY {api_key_status})")
     preferred_pdf_path = project_root / "docs" / "S257_Act.pdf"
     fallback_pdf_path = (
-        project_root / "data" / "static" / "legislation" / "BILLS-119s257es.pdf"
+        project_root
+        / "data"
+        / "input"
+        / "static"
+        / "legislation"
+        / "BILLS-119s257es.pdf"
     )
     s257_pdf_path = preferred_pdf_path if preferred_pdf_path.exists() else fallback_pdf_path
     rag_index_dir = project_root / ".vector_store" / "s257_faiss"
-    markdown_cache_path = project_root / "data" / "processed" / "S257_Act.md"
+    markdown_cache_path = project_root / "data" / "output" / "processed" / "S257_Act.md"
     rag_config = LegislationRAGConfig(
         pdf_path=s257_pdf_path,
         index_dir=rag_index_dir,
@@ -96,7 +101,7 @@ async def run(signal_file: Path | None = None) -> None:
     print(f"✓ Retrieved {len(policy_result.snippets)} policy snippets from S.257")
 
     # --- 3. Load SME registry from static data ---
-    registry_path = project_root / "data" / "static" / "sme_registry.json"
+    registry_path = project_root / "data" / "input" / "static" / "sme_registry.json"
 
     # --- 4. Use geo engine to map epicenter to affected SMEs ---
     geo_center = risk_signal.geo_center
@@ -109,8 +114,8 @@ async def run(signal_file: Path | None = None) -> None:
         f"✓ Found {len(affected_smes)} SMEs within {geo_center.impact_radius_km:.1f} km"
     )
 
-    corridors_path = project_root / "data" / "static" / "highway_corridors.json"
-    osrm_cache_path = project_root / "data" / "processed" / "osrm_cache.json"
+    corridors_path = project_root / "data" / "input" / "static" / "highway_corridors.json"
+    osrm_cache_path = project_root / "data" / "output" / "processed" / "osrm_cache.json"
     route_impacts = analyze_supply_routes(
         registry_path=registry_path,
         corridors_path=corridors_path,
@@ -155,7 +160,7 @@ async def run(signal_file: Path | None = None) -> None:
                 f"({geo_center.lat:.4f}, {geo_center.lon:.4f}) "
                 "are flagged for monitoring."
             ),
-            "An interactive map has been generated at `outputs/risk_map.html`.",
+            "An interactive map has been generated at `data/output/V2_MONTEREY_MAP.html`.",
         ]
     )
 
@@ -199,7 +204,7 @@ async def run(signal_file: Path | None = None) -> None:
     print("=" * 80 + "\n")
     print(report.markdown_alert)
 
-    outputs_dir = project_root / "outputs"
+    outputs_dir = project_root / "data" / "output"
     outputs_dir.mkdir(parents=True, exist_ok=True)
     map_path = outputs_dir / "V2_MONTEREY_MAP.html"
     try:
@@ -251,14 +256,14 @@ def main() -> None:
         epilog=(
             "Example:\n"
             "  python main.py\n"
-            "  python main.py --signal data/signals/monterey_risk_event.json\n"
+            "  python main.py --signal data/input/signals/monterey_risk_event.json\n"
         ),
     )
     parser.add_argument(
         "--signal",
         type=Path,
         default=None,
-        help="Path to risk signal JSON file (default: data/signals/monterey_risk_event.json)",
+        help="Path to risk signal JSON file (default: data/input/signals/monterey_risk_event.json)",
     )
 
     args = parser.parse_args()

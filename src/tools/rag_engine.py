@@ -8,9 +8,9 @@ from pydantic import BaseModel, Field, ValidationError
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from src.models.rag_models import PolicyQueryResult, PolicySnippet
+from src.tools.schema import PolicyQueryResult, PolicySnippet
 from src.tools.pdf_parser import parse_legislation_text
-from src.config import RagMode
+from config.settings import RagMode
 
 
 class LegislationRAGConfig(BaseModel):

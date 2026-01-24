@@ -14,13 +14,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/js', express.static(path.join(__dirname, '../dist')));
 
 // Paths
-// Assuming we are in web/dist/server.js, the data is in ../../../data/signals
+// Assuming we are in web/dist/server.js, the data is in ../../../data/input/signals
 // But we run from web/ root, so process.cwd() is web/.
 // Let's rely on relative path from this file.
 // src/server.ts -> compiled to dist/server.js.
 // dist/ is one level deep in web/.
-// So ../../../data/signals from dist/server.js
-const SIGNALS_DIR = path.resolve(__dirname, '../../data/signals');
+// So ../../../data/input/signals from dist/server.js
+const SIGNALS_DIR = path.resolve(__dirname, '../../data/input/signals');
 
 interface GeoCenter {
     lat: number;
