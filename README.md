@@ -64,7 +64,7 @@ When a critical event is detected (e.g., a high-saturation soil signal in Monter
 
 ### 🗺️ Geospatial Risk Visualization
 SMEs within **15.0 km** of the soil saturation epicenter at (36.6100, -121.7800) are flagged for monitoring.
-An interactive map has been generated at `outputs/V2_MONTEREY_MAP.html`.
+An interactive map has been generated at `data/output/V2_MONTEREY_MAP.html`.
 
 ### 📚 Relevant S.257 Policy Context
 🔎 _RAG mode: **ADVANCED (LlamaParse Markdown)**_
@@ -116,12 +116,12 @@ python3 main.py
    Note: v2.0.0 includes OSRM road-network analysis and an interactive executive dashboard.
 
 ### 📦 Output Artifacts (v2.0.0)
-- **Markdown report**: `outputs/V2_MONTEREY_REPORT.md`
-- **Interactive map**: `outputs/V2_MONTEREY_MAP.html`
+- **Markdown report**: `data/output/V2_MONTEREY_REPORT.md`
+- **Interactive map**: `data/output/V2_MONTEREY_MAP.html`
 
 Open the map in your browser:
 ```
-open outputs/V2_MONTEREY_MAP.html
+open data/output/V2_MONTEREY_MAP.html
 ```
 
 ### 🖼️ Visual Evidence (v2.0.0)

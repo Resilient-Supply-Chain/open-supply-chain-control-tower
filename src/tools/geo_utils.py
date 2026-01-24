@@ -6,7 +6,7 @@ from typing import List
 import json
 from pydantic import BaseModel, Field, ValidationError, confloat, constr
 
-from src.models.report import AffectedSME
+from src.tools.schema import AffectedSME
 
 
 class SMERegistryEntry(BaseModel):

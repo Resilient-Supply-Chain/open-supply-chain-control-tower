@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 from pypdf import PdfReader
 
-from src.config import RagMode
+from config.settings import RagMode
 
 
 def _clean_markdown_text(markdown_text: str) -> str:

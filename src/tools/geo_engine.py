@@ -10,7 +10,7 @@ import requests
 
 from geopy.distance import geodesic
 
-from src.models.report import AffectedSME
+from src.tools.schema import AffectedSME
 from src.tools.geo_utils import DeliveryRoute, SMERegistryEntry, load_registry
 
 
