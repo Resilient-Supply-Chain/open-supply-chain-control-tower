@@ -57,7 +57,7 @@ async def run(signal_file: Path | None = None) -> None:
     # --- 1. Load RiskSignal from JSON file (validated by Pydantic) ---
     if signal_file is None:
         signal_file = (
-            project_root / "data" / "input" / "signals" / "monterey_risk_event.json"
+            project_root / "data" / "old_input" / "signals" / "monterey_risk_event.json"
         )
 
     risk_signal = load_risk_signal(signal_file)
@@ -71,7 +71,7 @@ async def run(signal_file: Path | None = None) -> None:
     fallback_pdf_path = (
         project_root
         / "data"
-        / "input"
+        / "old_input"
         / "static"
         / "legislation"
         / "BILLS-119s257es.pdf"
@@ -101,7 +101,7 @@ async def run(signal_file: Path | None = None) -> None:
     print(f"✓ Retrieved {len(policy_result.snippets)} policy snippets from S.257")
 
     # --- 3. Load SME registry from static data ---
-    registry_path = project_root / "data" / "input" / "static" / "sme_registry.json"
+    registry_path = project_root / "data" / "old_input" / "static" / "sme_registry.json"
 
     # --- 4. Use geo engine to map epicenter to affected SMEs ---
     geo_center = risk_signal.geo_center
@@ -114,7 +114,7 @@ async def run(signal_file: Path | None = None) -> None:
         f"✓ Found {len(affected_smes)} SMEs within {geo_center.impact_radius_km:.1f} km"
     )
 
-    corridors_path = project_root / "data" / "input" / "static" / "highway_corridors.json"
+    corridors_path = project_root / "data" / "old_input" / "static" / "highway_corridors.json"
     osrm_cache_path = project_root / "data" / "output" / "processed" / "osrm_cache.json"
     route_impacts = analyze_supply_routes(
         registry_path=registry_path,
@@ -204,7 +204,7 @@ async def run(signal_file: Path | None = None) -> None:
     print("=" * 80 + "\n")
     print(report.markdown_alert)
 
-    outputs_dir = project_root / "data" / "output"
+    outputs_dir = project_root / "data" / "output" / "old_output"
     outputs_dir.mkdir(parents=True, exist_ok=True)
     map_path = outputs_dir / "V2_MONTEREY_MAP.html"
     try:
@@ -256,14 +256,14 @@ def main() -> None:
         epilog=(
             "Example:\n"
             "  python main.py\n"
-            "  python old_main.py --signal data/input/signals/monterey_risk_event.json\n"
+            "  python old_main.py --signal data/old_input/signals/monterey_risk_event.json\n"
         ),
     )
     parser.add_argument(
         "--signal",
         type=Path,
         default=None,
-        help="Path to risk signal JSON file (default: data/input/signals/monterey_risk_event.json)",
+        help="Path to risk signal JSON file (default: data/old_input/signals/monterey_risk_event.json)",
     )
 
     args = parser.parse_args()
