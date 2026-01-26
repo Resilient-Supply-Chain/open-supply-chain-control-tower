@@ -4,11 +4,8 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-# --- Configuration ---
-# Update these paths if your folder structure changes
-# Corrected path to the Asset_Data_Team folder
-CSV_SOURCE_PATH = "file_path/combined_risk_and_impact_predictions.csv"
-JSON_OUTPUT_PATH = "../oact/app/data/data_series.json"
+DEFAULT_CSV_SOURCE = "file_path/combined_risk_and_impact_predictions.csv"
+DEFAULT_JSON_OUTPUT = "../oact/app/data/data_series.json"
 
 # Full FIPS Mapping for California Counties (Name -> GeoID)
 COUNTY_FIPS_MAP = {
@@ -50,23 +47,19 @@ def get_risk_type(score: float, row_data: dict) -> str:
     # For now, based on your CSV columns, 'Power Outage' is the primary implied risk
     return "Power Outage"
 
-def run_conversion():
-    # Resolve absolute paths based on where the script is located
-    base_dir = Path(__file__).resolve().parent
-    source_file = (base_dir / CSV_SOURCE_PATH).resolve()
-    dest_file = (base_dir / JSON_OUTPUT_PATH).resolve()
+def run_conversion(*, source_file: Path, dest_file: Path) -> str:
+    """Convert risk CSV into time-series JSON for UI consumption."""
 
     print(f"Reading from: {source_file}")
-    
+
     if not source_file.exists():
-        print(f"Error: Source file not found at {source_file}")
-        return
+        return f"Error: Source file not found at {source_file}"
 
     # Dictionary to store time series data
     # Key: Date String (YYYY-MM-DD), Value: List of County Objects
     time_series_data = {}
 
-    with open(source_file, mode='r', encoding='utf-8') as f:
+    with open(source_file, mode="r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         
         for row in reader:
@@ -111,9 +104,15 @@ def run_conversion():
     with open(dest_file, "w", encoding="utf-8") as f:
         json.dump(time_series_data, f, indent=2)
 
-    print(f"Conversion Complete!")
-    print(f"   Processed {len(time_series_data)} unique dates.")
-    print(f"   Saved to: {dest_file}")
+    return (
+        "Conversion Complete!\n"
+        f"   Processed {len(time_series_data)} unique dates.\n"
+        f"   Saved to: {dest_file}"
+    )
 
 if __name__ == "__main__":
-    run_conversion()
+    base_dir = Path(__file__).resolve().parent
+    source_file = (base_dir / DEFAULT_CSV_SOURCE).resolve()
+    dest_file = (base_dir / DEFAULT_JSON_OUTPUT).resolve()
+    result = run_conversion(source_file=source_file, dest_file=dest_file)
+    print(result)

@@ -8,6 +8,7 @@ from pydantic_ai import Agent
 
 from src.tools.schema import AffectedSME, AlertPriority, ResilienceReport, RiskSignal
 from src.tools.geo_engine import get_smes_in_radius
+from src.tools.data_bridge import run_conversion
 
 
 class AgentConfig(BaseModel):
@@ -191,4 +192,24 @@ def build_resilience_agent(config: AgentConfig) -> Agent[RiskSignal, ResilienceR
 
 
 __all__ = ["AgentConfig", "build_resilience_agent", "process_risk_signal"]
+
+
+def run_demo_conversion(*, project_root: Path) -> str:
+    """Run the data bridge conversion for demo mode."""
+
+    source_file = (
+        project_root
+        / "data"
+        / "input"
+        / "registered_provider"
+        / "OSCCT_risk_model"
+        / "power_outage"
+        / "dec2022_mar2023"
+        / "OSCCT_risk_predict_model.csv"
+    )
+    dest_file = project_root / "data" / "output" / "data_series.json"
+    return run_conversion(source_file=source_file, dest_file=dest_file)
+
+
+__all__.append("run_demo_conversion")
 

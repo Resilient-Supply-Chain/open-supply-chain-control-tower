@@ -8,6 +8,8 @@ import yaml
 import requests
 import subprocess
 
+from src.agents.refactor_agent import run_demo_conversion
+
 
 @dataclass(frozen=True)
 class ChatbotConfig:
@@ -112,6 +114,8 @@ def _ollama_healthcheck(*, endpoint: str, model: str, timeout: int = 5) -> str |
 def generate_reply(
     *, project_root: Path, user_message: str, model_override: str | None = None
 ) -> str:
+    if "demo" in user_message.lower():
+        return run_demo_conversion(project_root=project_root)
     config = load_chatbot_config(project_root)
     if config.provider != "local":
         return "API providers are disabled in the UI. Set llm.provider=local."

@@ -1,0 +1,116 @@
+{
+  "timestamp": "2023-01-12T14:30:00Z",
+  "decision_state": "NO-GO",
+  "risk_score": 87,
+  "risk_score_max": 100,
+  "risk_type": "Flood Closure",
+  "primary_driver": "River Cresting",
+  "location": {
+    "county": "Monterey County",
+    "corridor_impacted": "Hwy 68 (Salinas River)",
+    "coordinates": {
+      "lat": 36.6021,
+      "lng": -121.8944
+    }
+  },
+  "evidence_bundle": [
+    {
+      "id": "soil_moisture_01",
+      "source": "USGS",
+      "metric_name": "Soil Moisture",
+      "value": 98,
+      "unit": "%",
+      "status": "saturated",
+      "timestamp": "2023-01-12T14:00:00Z"
+    },
+    {
+      "id": "gage_height_01",
+      "source": "USGS",
+      "metric_name": "Gage Height",
+      "value": 8.5,
+      "unit": "ft",
+      "status": "High",
+      "threshold": 8.0,
+      "timestamp": "2023-01-12T14:00:00Z"
+    },
+    {
+      "id": "rainfall_01",
+      "source": "NWS",
+      "metric_name": "Rainfall",
+      "value": 2.5,
+      "unit": "in",
+      "forecast": "2 incoming",
+      "timestamp": "2023-01-12T14:30:00Z"
+    },
+    {
+      "id": "outage_01",
+      "source": "Caltrans",
+      "metric_name": "Power Outage",
+      "value": 1,
+      "unit": "county impacted",
+      "status": "Active",
+      "timestamp": "2023-01-12T14:15:00Z"
+    }
+  ],
+  "reasoning_trace": [
+    {
+      "stage": "INGEST",
+      "timestamp": "2023-01-12T14:30:00Z",
+      "action": "Data ingestion from NWS, USGS, Caltrans",
+      "details": "Collected real-time atmospheric and hydrological data",
+      "status": "completed"
+    },
+    {
+      "stage": "DETECT",
+      "timestamp": "2023-01-12T14:31:00Z",
+      "action": "Anomaly detection on sensor streams",
+      "details": "Detected river cresting conditions and elevated soil moisture levels",
+      "status": "completed"
+    },
+    {
+      "stage": "INVESTIGATE",
+      "timestamp": "2023-01-12T14:32:00Z",
+      "action": "Cross-correlation analysis of impact vectors",
+      "details": "Identified Hwy 68 as critical corridor with 87% closure probability",
+      "status": "completed"
+    },
+    {
+      "stage": "SCORE",
+      "timestamp": "2023-01-12T14:33:00Z",
+      "action": "Risk quantification (Bayesian model)",
+      "details": "Risk score: 87/100 - HIGH RISK classification",
+      "model_version": "v2.1",
+      "factors": [
+        "River cresting (weight: 40%)",
+        "Soil saturation (weight: 35%)",
+        "Rainfall forecast (weight: 15%)",
+        "Infrastructure impact (weight: 10%)"
+      ],
+      "status": "completed"
+    },
+    {
+      "stage": "RECOMMEND",
+      "timestamp": "2023-01-12T14:33:30Z",
+      "action": "Decision recommendation generation",
+      "details": "NO-GO decision recommended with Reroute action",
+      "decision_rationale": "Risk score exceeds 85 threshold with river cresting as primary driver",
+      "status": "completed"
+    },
+    {
+      "stage": "LOG",
+      "timestamp": "2023-01-12T14:34:00Z",
+      "action": "Report finalization and archival",
+      "details": "Logged to OACT system for operator review and action",
+      "report_id": "OACT_20230112_1430_01",
+      "status": "completed"
+    }
+  ],
+  "metadata": {
+    "model_version": "OACT v2.1",
+    "simulation_type": "Atmospheric River Event Simulation",
+    "event_date": "2023-01-12",
+    "event_time": "14:30 PST",
+    "operator_acknowledgment": false,
+    "action_taken": null
+  }
+}
