@@ -115,7 +115,18 @@ def generate_reply(
     *, project_root: Path, user_message: str, model_override: str | None = None
 ) -> str:
     if "demo" in user_message.lower():
-        return run_demo_conversion(project_root=project_root)
+        conversion_result = run_demo_conversion(project_root=project_root)
+        return "\n".join(
+            [
+                "### Demo Workflow",
+                "1. Locate relevant provider data based on the prompt.",
+                "2. Convert provider data into UI-ready JSON.",
+                "3. Send converted data to the UI layer.",
+                f"   - {conversion_result}",
+                "4. Open the dashboard:",
+                "   - https://oact-sepia.vercel.app/",
+            ]
+        )
     config = load_chatbot_config(project_root)
     if config.provider != "local":
         return "API providers are disabled in the UI. Set llm.provider=local."
