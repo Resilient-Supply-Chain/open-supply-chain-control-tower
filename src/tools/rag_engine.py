@@ -68,7 +68,11 @@ class LegislationRAG:
 
     @property
     def config(self) -> LegislationRAGConfig:
-        """Return immutable configuration used by this RAG engine."""
+        """Return immutable configuration used by this RAG engine.
+
+        Returns:
+            The immutable `LegislationRAGConfig` instance.
+        """
 
         return self._config
 
@@ -159,8 +163,7 @@ class LegislationRAG:
             k: Maximum number of snippets to return.
 
         Returns:
-            A `PolicyQueryResult` containing ordered snippets with page numbers
-            and traceable source metadata.
+            A `PolicyQueryResult` containing ordered snippets with scores and metadata.
         """
 
         try:

@@ -8,7 +8,7 @@ import yaml
 import requests
 import subprocess
 
-from src.agents.refactor_agent import run_demo_conversion
+from src.state import AgentState
 
 
 @dataclass(frozen=True)
@@ -111,22 +111,30 @@ def _ollama_healthcheck(*, endpoint: str, model: str, timeout: int = 5) -> str |
         return f"Ollama health check failed: {exc}"
 
 
+def _format_react_output(state: AgentState | dict) -> str:
+    if isinstance(state, dict):
+        thought_output = state.get("last_model_output")
+        final_answer = state.get("final_answer")
+    else:
+        thought_output = state.last_model_output
+        final_answer = state.final_answer
+
+    if thought_output and final_answer:
+        return f"{thought_output}\n\nFinal Answer: {final_answer}"
+    if thought_output:
+        return thought_output
+    if final_answer:
+        return str(final_answer)
+    return "No response generated."
+
+
 def generate_reply(
-    *, project_root: Path, user_message: str, model_override: str | None = None
+    *,
+    project_root: Path,
+    user_message: str,
+    agent_graph,
+    model_override: str | None = None,
 ) -> str:
-    if "demo" in user_message.lower():
-        conversion_result = run_demo_conversion(project_root=project_root)
-        return "\n".join(
-            [
-                "### Demo Workflow",
-                "1. Locate relevant provider data based on the prompt.",
-                "2. Convert provider data into UI-ready JSON.",
-                "3. Send converted data to the UI layer.",
-                f"   - {conversion_result}",
-                "4. Open the dashboard:",
-                "   - https://oact-sepia.vercel.app/",
-            ]
-        )
     config = load_chatbot_config(project_root)
     if config.provider != "local":
         return "API providers are disabled in the UI. Set llm.provider=local."
@@ -136,12 +144,8 @@ def generate_reply(
     health_error = _ollama_healthcheck(endpoint=config.endpoint, model=model)
     if health_error:
         return f"{health_error}"
-    return _ollama_chat(
-        endpoint=config.endpoint,
-        model=model,
-        system_prompt=config.system_prompt,
-        user_message=user_message,
-    )
+    response_state = agent_graph.invoke({"messages": [("user", user_message)]})
+    return _format_react_output(response_state)
 
 
 __all__ = ["generate_reply", "load_chatbot_config", "list_local_models"]

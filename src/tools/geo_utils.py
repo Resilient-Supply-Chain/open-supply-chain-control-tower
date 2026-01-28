@@ -47,7 +47,14 @@ def _load_registry(registry_path: Path) -> List[SMERegistryEntry]:
 
 
 def load_registry(registry_path: Path) -> List[SMERegistryEntry]:
-    """Public wrapper for loading registry entries."""
+    """Load SME registry entries from disk.
+
+    Args:
+        registry_path: Path to the SME registry JSON file.
+
+    Returns:
+        A list of validated SME registry entries.
+    """
 
     return _load_registry(registry_path)
 
@@ -55,10 +62,14 @@ def load_registry(registry_path: Path) -> List[SMERegistryEntry]:
 def find_smes_by_location(
     *, registry_path: Path, location: str
 ) -> List[AffectedSME]:
-    """Find SMEs whose county string is contained in the provided location.
+    """Find SMEs whose county matches the provided location token.
 
-    This is a deliberately simple v0.0.1 heuristic suitable for a Monterey County
-    sandbox. Future versions can use geocoding, ZIP code, census tracts, etc.
+    Args:
+        registry_path: Path to the SME registry JSON file.
+        location: Location token used for matching (e.g., county or city).
+
+    Returns:
+        A list of affected SMEs matching the location token.
     """
 
     normalized_location = location.lower()

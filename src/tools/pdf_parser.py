@@ -58,7 +58,14 @@ def _chunk_markdown(markdown_text: str, *, max_chars: int = 1500, overlap: int =
 
 
 def parse_pdf_legacy(pdf_path: Path) -> List[Tuple[str, int]]:
-    """Extract page-level text from PDF using the local parser."""
+    """Extract page-level text from a PDF using the local parser.
+
+    Args:
+        pdf_path: Path to the PDF file.
+
+    Returns:
+        A list of (text, page_number) tuples.
+    """
 
     if not pdf_path.exists():
         raise FileNotFoundError(f"PDF not found at {pdf_path}")
@@ -89,7 +96,16 @@ def parse_pdf_legacy(pdf_path: Path) -> List[Tuple[str, int]]:
 def parse_pdf_advanced(
     pdf_path: Path, *, cache_path: Path, api_key: str
 ) -> List[Tuple[str, int]]:
-    """Parse PDF with LlamaParse and return chunked Markdown text."""
+    """Parse PDF with LlamaParse and return chunked Markdown text.
+
+    Args:
+        pdf_path: Path to the PDF file.
+        cache_path: Path to a cached Markdown file.
+        api_key: LlamaParse API key.
+
+    Returns:
+        A list of (chunk_text, chunk_index) tuples.
+    """
 
     if cache_path.exists():
         markdown_text = cache_path.read_text(encoding="utf-8")
@@ -110,7 +126,17 @@ def parse_pdf_advanced(
 def parse_legislation_text(
     *, pdf_path: Path, rag_mode: RagMode, cache_path: Path | None, api_key: str | None
 ) -> List[Tuple[str, int]]:
-    """Route parsing based on RAG mode and return text snippets."""
+    """Route parsing based on RAG mode and return text snippets.
+
+    Args:
+        pdf_path: Path to the PDF file.
+        rag_mode: Parsing mode, either "LEGACY" or "ADVANCED".
+        cache_path: Optional cached Markdown file path.
+        api_key: Optional LlamaParse API key.
+
+    Returns:
+        A list of (text, locator) tuples.
+    """
 
     if rag_mode == "ADVANCED":
         if not api_key:

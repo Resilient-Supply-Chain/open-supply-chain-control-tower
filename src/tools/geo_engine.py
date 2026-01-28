@@ -15,10 +15,14 @@ from src.tools.geo_utils import DeliveryRoute, SMERegistryEntry, load_registry
 
 
 def _distance_km(origin: Tuple[float, float], dest: Tuple[float, float]) -> float:
+    """Compute geodesic distance in kilometers between two lat/lon points."""
+
     return float(geodesic(origin, dest).km)
 
 
 def _distance_miles(origin: Tuple[float, float], dest: Tuple[float, float]) -> float:
+    """Compute geodesic distance in miles between two lat/lon points."""
+
     return _distance_km(origin, dest) * 0.621371
 
 
@@ -27,7 +31,16 @@ def _closest_point_on_segment(
     end: Tuple[float, float],
     point: Tuple[float, float],
 ) -> Tuple[float, float]:
-    """Return closest point on line segment in lat/lon degree space."""
+    """Return closest point on a line segment in lat/lon degree space.
+
+    Args:
+        start: Start coordinate (lat, lon).
+        end: End coordinate (lat, lon).
+        point: Target coordinate (lat, lon).
+
+    Returns:
+        The closest point on the segment as (lat, lon).
+    """
 
     (x1, y1), (x2, y2) = start, end
     px, py = point
@@ -52,6 +65,15 @@ class RouteImpact:
 
 
 def load_highway_corridors(corridors_path: Path) -> dict[str, list[Tuple[float, float]]]:
+    """Load simplified highway corridors from a JSON file.
+
+    Args:
+        corridors_path: Path to the corridor JSON file.
+
+    Returns:
+        A mapping of corridor names to lists of (lat, lon) waypoints.
+    """
+
     raw = json.loads(corridors_path.read_text(encoding="utf-8"))
     corridors: dict[str, list[Tuple[float, float]]] = {}
     for name, points in raw.items():
@@ -86,7 +108,17 @@ def get_real_road_path(
     cache: dict[str, list[Tuple[float, float]]] | None = None,
     cache_path: Path | None = None,
 ) -> list[Tuple[float, float]]:
-    """Return dense road path between two points using OSRM."""
+    """Fetch a dense OSRM road path between two coordinates.
+
+    Args:
+        start_coords: Start coordinate (lat, lon).
+        end_coords: End coordinate (lat, lon).
+        cache: Optional cache dict for previously fetched routes.
+        cache_path: Optional path to persist the cache on disk.
+
+    Returns:
+        A list of (lat, lon) waypoints following the driving route.
+    """
 
     cache = cache or {}
     key = _cache_key(start_coords, end_coords)
@@ -122,6 +154,8 @@ def get_real_road_path(
 
 
 def _route_length_miles(route: list[Tuple[float, float]]) -> float:
+    """Compute total length of a polyline in miles."""
+
     total = 0.0
     for idx in range(len(route) - 1):
         total += _distance_miles(route[idx], route[idx + 1])
@@ -131,6 +165,7 @@ def _route_length_miles(route: list[Tuple[float, float]]) -> float:
 def _trim_route_by_miles(
     route: list[Tuple[float, float]], max_miles: float
 ) -> list[Tuple[float, float]]:
+    """Trim a polyline once it exceeds a maximum mileage."""
     if len(route) < 2:
         return route
     total = 0.0
@@ -148,6 +183,7 @@ def _trim_route_by_miles(
 def _downsample_route(
     route: list[Tuple[float, float]], max_points: int = 200
 ) -> list[Tuple[float, float]]:
+    """Downsample a polyline to a maximum number of points."""
     if len(route) <= max_points:
         return route
     step = max(1, len(route) // max_points)
@@ -161,6 +197,7 @@ def _nearest_point_on_corridor(
     corridor: list[Tuple[float, float]],
     point: Tuple[float, float],
 ) -> tuple[Tuple[float, float], int]:
+    """Find the closest point on a corridor to a target coordinate."""
     closest = corridor[0]
     closest_index = 0
     closest_distance = math.inf
@@ -182,6 +219,18 @@ def generate_realistic_routes(
     max_miles: float = 30.0,
     cache_path: Path | None = None,
 ) -> list[tuple[str, list[Tuple[float, float]]]]:
+    """Generate OSRM-backed routes near corridor segments.
+
+    Args:
+        sme_coords: SME coordinate (lat, lon).
+        corridors: Corridor map of name -> waypoints.
+        max_routes: Maximum number of routes to return.
+        max_miles: Maximum route length in miles.
+        cache_path: Optional path to OSRM cache file.
+
+    Returns:
+        A list of (corridor_name, route_waypoints) tuples.
+    """
     cache = _load_osrm_cache(cache_path) if cache_path else {}
     corridor_scores: list[tuple[str, float, int, Tuple[float, float]]] = []
     for name, points in corridors.items():
@@ -221,7 +270,16 @@ def get_smes_in_radius(
     center: Tuple[float, float],
     radius_km: float,
 ) -> tuple[list[AffectedSME], list[AffectedSME]]:
-    """Return SMEs inside/outside the radius with distance annotations."""
+    """Return SMEs inside/outside the radius with distance annotations.
+
+    Args:
+        registry_path: Path to the SME registry JSON file.
+        center: Epicenter coordinate (lat, lon).
+        radius_km: Radius in kilometers.
+
+    Returns:
+        A tuple of (affected_smes, safe_smes).
+    """
 
     entries: Iterable[SMERegistryEntry] = load_registry(registry_path)
     affected: list[AffectedSME] = []
@@ -252,7 +310,16 @@ def is_route_interrupted(
     risk_center: Tuple[float, float],
     radius_km: float,
 ) -> Tuple[bool, Tuple[float, float] | None]:
-    """Check if any segment passes within the risk radius."""
+    """Check if any segment passes within the risk radius.
+
+    Args:
+        route: Delivery route with waypoints.
+        risk_center: Epicenter coordinate (lat, lon).
+        radius_km: Risk radius in kilometers.
+
+    Returns:
+        A tuple of (is_interrupted, intersection_point).
+    """
 
     waypoints = [(wp.lat, wp.lon) for wp in route.waypoints]
     closest_point: Tuple[float, float] | None = None
@@ -280,6 +347,20 @@ def analyze_supply_routes(
     max_miles: float = 30.0,
     osrm_cache_path: Path | None = None,
 ) -> list[RouteImpact]:
+    """Analyze SME delivery routes for risk interruption.
+
+    Args:
+        registry_path: Path to the SME registry JSON file.
+        corridors_path: Path to the corridor definitions JSON file.
+        risk_center: Epicenter coordinate (lat, lon).
+        radius_km: Risk radius in kilometers.
+        max_routes: Maximum routes per SME.
+        max_miles: Maximum length per route in miles.
+        osrm_cache_path: Optional OSRM cache path.
+
+    Returns:
+        A list of route impact summaries.
+    """
     corridors = load_highway_corridors(corridors_path)
     impacts: list[RouteImpact] = []
     entries: Iterable[SMERegistryEntry] = load_registry(registry_path)
@@ -334,7 +415,24 @@ def generate_risk_map(
     segment_colors: Tuple[str, str] = ("#FF6666", "#90EE90"),
     label_offset: Tuple[float, float] = (0.002, 0.002),
 ) -> None:
-    """Generate an interactive HTML map for the risk zone."""
+    """Generate an interactive HTML map for the risk zone.
+
+    Args:
+        center: Map center coordinate (lat, lon).
+        radius_km: Risk radius in kilometers.
+        affected: Iterable of affected SMEs.
+        safe: Iterable of safe SMEs.
+        output_path: Destination HTML file path.
+        route_impacts: Optional route impact summaries.
+        risk_center: Epicenter coordinate (lat, lon).
+        risk_radius_km: Risk radius for segment coloring.
+        label_colors: Tuple of (affected_color, safe_color).
+        segment_colors: Tuple of (risk_color, safe_color).
+        label_offset: Offset for label placement (lat_delta, lon_delta).
+
+    Returns:
+        None. Writes an HTML file to output_path.
+    """
 
     try:
         import folium

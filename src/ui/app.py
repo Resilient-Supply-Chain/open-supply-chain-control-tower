@@ -7,7 +7,7 @@ import gradio as gr
 from src.agents.chatbot import generate_reply, list_local_models
 
 
-def launch_app() -> None:
+def launch_app(*, agent_graph) -> None:
     project_root = Path(__file__).resolve().parents[2]
 
     def respond(
@@ -18,6 +18,7 @@ def launch_app() -> None:
         reply = generate_reply(
             project_root=project_root,
             user_message=message,
+            agent_graph=agent_graph,
             model_override=selected_model or None,
         )
         history = history + [

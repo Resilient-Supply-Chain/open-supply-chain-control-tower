@@ -27,7 +27,14 @@ COUNTY_FIPS_MAP = {
 }
 
 def get_risk_level(score: float) -> str:
-    """Maps numerical score (0-1) to Frontend RiskLevel enum."""
+    """Map a numeric risk score to the frontend risk level label.
+
+    Args:
+        score: Risk score in the range [0.0, 1.0].
+
+    Returns:
+        A risk level string: "low", "moderate", or "high".
+    """
     if score >= 0.7:
         return "high"
     elif score >= 0.3:
@@ -36,9 +43,14 @@ def get_risk_level(score: float) -> str:
         return "low"
 
 def get_risk_type(score: float, row_data: dict) -> str:
-    """
-    Determines the type of risk.
-    Since the model predicts 'total_customers' (power), we default to Power Outage.
+    """Determine the risk type label for a given row.
+
+    Args:
+        score: Risk score in the range [0.0, 1.0].
+        row_data: Raw CSV row data used for contextual risk tagging.
+
+    Returns:
+        A risk type label inferred from the input row data.
     """
     if score < 0.3:
         return "No Risk"
@@ -48,7 +60,15 @@ def get_risk_type(score: float, row_data: dict) -> str:
     return "Power Outage"
 
 def run_conversion(*, source_file: Path, dest_file: Path) -> str:
-    """Convert risk CSV into time-series JSON for UI consumption."""
+    """Convert a provider CSV into time-series JSON for UI consumption.
+
+    Args:
+        source_file: Absolute path to the provider CSV file.
+        dest_file: Absolute path where the JSON output should be written.
+
+    Returns:
+        A human-readable summary of the conversion result.
+    """
 
     print(f"Reading from: {source_file}")
 
