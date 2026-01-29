@@ -34,4 +34,6 @@ pyyaml
 gradio
 
 # System dependency (not a pip package):
-# Install Ollama from https://ollama.com/download
+# Install Ollama from https://ollama.com/downloadpytz==2025.2
+aiosmtpd==1.4.6
+boto3==1.42.37

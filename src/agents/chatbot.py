@@ -8,7 +8,9 @@ import yaml
 import requests
 import subprocess
 
+import re
 from src.agents.refactor_agent import run_demo_conversion
+from src.tools.ses_mailer import broadcast_risk_alert_ses
 
 
 @dataclass(frozen=True)
@@ -69,7 +71,7 @@ def _ollama_chat(
     model: str,
     system_prompt: str,
     user_message: str,
-    timeout: int = 15,
+    timeout: int = 120,
 ) -> str:
     payload = {
         "model": model,
@@ -114,6 +116,14 @@ def _ollama_healthcheck(*, endpoint: str, model: str, timeout: int = 5) -> str |
 def generate_reply(
     *, project_root: Path, user_message: str, model_override: str | None = None
 ) -> str:
+    # Pattern match for "today is YYYY-MM-DD" (e.g., "today is 2023-01-04, check risks")
+    date_match = re.search(r"today is (\d{4}-\d{2}-\d{2})", user_message.lower())
+    if date_match:
+        target_date = date_match.group(1)
+        # In a real scenario, these keys would come from the user or env vars
+        # For now, we call it without keys, relying on env vars or error handling
+        return broadcast_risk_alert_ses(target_date=target_date)
+
     if "demo" in user_message.lower():
         conversion_result = run_demo_conversion(project_root=project_root)
         return "\n".join(
