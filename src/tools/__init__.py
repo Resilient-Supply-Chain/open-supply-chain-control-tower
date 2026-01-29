@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .data_bridge import get_risk_level, get_risk_type, run_conversion
+from .demo_runner import react_run_demo, run_demo_presentation
 from .geo_engine import (
     analyze_supply_routes,
     generate_realistic_routes,
@@ -23,6 +24,8 @@ __all__ = [
     "get_risk_level",
     "get_risk_type",
     "get_smes_in_radius",
+    "react_run_demo",
+    "run_demo_presentation",
     "is_route_interrupted",
     "load_highway_corridors",
     "load_registry",

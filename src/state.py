@@ -2,22 +2,26 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, List, Tuple
+from typing import Any, Annotated, List, Literal, Tuple, TypedDict
+
+from langgraph.graph.message import add_messages
 
 
-@dataclass
-class AgentState:
-    """Mutable state container for a ReAct loop."""
+class AgentState(TypedDict, total=False):
+    """Typed state container for a ReAct loop."""
 
-    intermediate_steps: List[Tuple[Any, Any]] = field(default_factory=list)
-    thought_history: List[str] = field(default_factory=list)
-    iteration_count: int = 0
-    final_answer: str | dict[str, Any] | None = None
-    pending_action: str | None = None
-    pending_action_input: dict[str, Any] | None = None
-    last_model_output: str | None = None
-    messages: List[Tuple[str, str]] = field(default_factory=list)
+    messages: Annotated[List[Any], add_messages]
+    intermediate_steps: List[Tuple[Any, Any]]
+    thought_history: List[str]
+    iteration_count: int
+    final_answer: str | dict[str, Any] | None
+    pending_action: str | None
+    pending_action_input: dict[str, Any] | None
+    last_model_output: str | None
+    model_name: str | None
+    intent: Literal["chat", "task"] | None
+    start_time: float | None
+    followup_count: int
 
 
 __all__ = ["AgentState"]
