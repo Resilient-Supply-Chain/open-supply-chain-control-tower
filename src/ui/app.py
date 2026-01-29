@@ -45,6 +45,12 @@ def launch_app(*, agent_graph) -> None:
             yield "", history
             return
 
+        if mode_state == "react":
+            working_msg = "⏳ Working on your request..."
+            history = history + [{"role": "assistant", "content": working_msg}]
+            yield "", history
+            history.pop()
+
         reply, intent, thoughts = generate_reply(
             project_root=project_root,
             user_message=message,

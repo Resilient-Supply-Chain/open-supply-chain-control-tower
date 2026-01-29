@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .data_bridge import get_risk_level, get_risk_type, run_conversion
+from .code_reader import analyze_code_logic
 from .demo_runner import react_run_demo, run_demo_presentation
 from .geo_engine import (
     analyze_supply_routes,
@@ -17,6 +18,7 @@ from .rag_engine import LegislationRAG, LegislationRAGConfig
 
 __all__ = [
     "analyze_supply_routes",
+    "analyze_code_logic",
     "find_smes_by_location",
     "generate_realistic_routes",
     "generate_risk_map",

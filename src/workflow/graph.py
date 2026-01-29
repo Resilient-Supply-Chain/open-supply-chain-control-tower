@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import time
 from pathlib import Path
 from typing import Any, Callable
@@ -135,6 +136,210 @@ def _tool_registry() -> dict[str, Callable[..., Any]]:
     return registry
 
 
+def _sanitize_path(value: str) -> str:
+    return value.strip().strip("`'\"“”").rstrip(".,;:)]}>\n\t ")
+
+
+def _extract_path_from_text(text: str) -> str | None:
+    if not text:
+        return None
+    # Prefer quoted/backticked paths first
+    for pattern in (r'"([^"]+)"', r"'([^']+)'", r"`([^`]+)`", r"“([^”]+)”"):
+        match = re.search(pattern, text)
+        if match:
+            return _sanitize_path(match.group(1))
+    # Look for explicit .ipynb/.py paths
+    match = re.search(r"(/[^ \n\t]+?\.(?:ipynb|py))", text)
+    if match:
+        return _sanitize_path(match.group(1))
+    # Fallback to absolute path detection
+    match = re.search(r"(/[^ \n\t]+)", text)
+    if match:
+        return _sanitize_path(match.group(1))
+    return None
+
+
+def _valid_target_path(path: str | None) -> bool:
+    if not path:
+        return False
+    return Path(path).expanduser().exists()
+
+
+def _should_analyze_code(message: str) -> bool:
+    if not message:
+        return False
+    lowered = message.lower()
+    keywords = [
+        "analyze",
+        "understand",
+        "explain",
+        "logic",
+        "model",
+        "pipeline",
+        "generate",
+        "report",
+        "prediction",
+    ]
+    return any(key in lowered for key in keywords)
+
+
+def _format_code_analysis_result(state: AgentState, result: dict[str, Any]) -> str:
+    language = _detect_user_language(state)
+    steps = result.get("steps", [])
+    files = result.get("files", [])
+    notes = result.get("notes", "")
+    deep = result.get("deep_dive", {})
+    snippets = result.get("snippets", [])
+    core_logic = result.get("core_logic", [])
+    ordered_cells = result.get("ordered_cells", [])
+    data_sources = deep.get("data_sources", [])
+    feature_sets = deep.get("feature_sets", [])
+    target_vars = deep.get("target_variables", [])
+    model_defs = deep.get("model_definitions", [])
+    pipeline_steps = deep.get("pipeline_steps", [])
+    training_calls = deep.get("training_calls", [])
+    prediction_calls = deep.get("prediction_calls", [])
+    evaluation_calls = deep.get("evaluation_calls", [])
+    report_outputs = deep.get("report_outputs", [])
+
+    def _infer_features_from_cells(cells: list[dict[str, Any]]) -> tuple[str, str]:
+        if not cells:
+            return "Unknown", "Evidence: (no ordered cells)"
+        evidence = ""
+        features = "Unknown"
+        for cell in cells:
+            snippet = (cell.get("snippet") or "").lower()
+            if "drop_cols" in snippet or "drop(" in snippet:
+                features = (
+                    "It drops identifier/time columns and uses the remaining columns "
+                    "as features (categorical and numeric)."
+                )
+                evidence = f"Evidence: {cell.get('file')} :: cell {cell.get('cell_index')}"
+                break
+        if features == "Unknown":
+            for cell in cells:
+                snippet = (cell.get("snippet") or "").lower()
+                if "cat_cols" in snippet or "num_cols" in snippet:
+                    features = (
+                        "It splits features into categorical and numeric, then encodes "
+                        "categorical values and keeps numeric values."
+                    )
+                    evidence = f"Evidence: {cell.get('file')} :: cell {cell.get('cell_index')}"
+                    break
+        if not evidence and cells:
+            evidence = f"Evidence: {cells[0].get('file')} :: cell {cells[0].get('cell_index')}"
+        return features, evidence
+
+    def _describe_models(models: list[str]) -> tuple[str, str]:
+        if not models:
+            return "Unknown", "Evidence: (no model definitions found)"
+        descriptions: list[str] = []
+        for name in models:
+            lowered = name.lower()
+            if "xgb" in lowered or "xgboost" in lowered:
+                descriptions.append("XGBoost (gradient-boosted decision trees)")
+            elif "ridge" in lowered:
+                descriptions.append("Ridge regression (linear model with L2 regularization)")
+            elif "randomforest" in lowered:
+                descriptions.append("Random forest (bagged decision trees)")
+            elif "lgbm" in lowered or "lightgbm" in lowered:
+                descriptions.append("LightGBM (gradient-boosted decision trees)")
+            else:
+                descriptions.append(name)
+        evidence = f"Evidence: {models[0]}"
+        return ", ".join(_dedupe_preserve_order(descriptions)), evidence
+
+    def _describe_output(outputs: list[str]) -> tuple[str, str]:
+        if not outputs:
+            return "Unknown", "Evidence: (no output calls found)"
+        return "Predictions are written to files (e.g., CSV export).", f"Evidence: {outputs[0]}"
+
+    header = "Model summary (Yu Sun's 4 Pillars):"
+    steps_block = "\n".join([f"- {step}" for step in steps]) or "- (no steps)"
+    files_block = ", ".join(files) if files else "(none)"
+    notes_block = notes or "(none)"
+    feature_source = "Unknown"
+    feature_source_evidence = "Evidence: (no data sources found)"
+    if data_sources:
+        feature_source = "Data is loaded from local files (CSV or similar)."
+        feature_source_evidence = f"Evidence: {data_sources[0]}"
+    features, features_evidence = _infer_features_from_cells(ordered_cells)
+    model_structure, model_evidence = _describe_models(model_defs)
+    output_desc, output_evidence = _describe_output(report_outputs)
+    snippet_block = ""
+    core_block = ""
+    if core_logic:
+        core_lines = []
+        for item in core_logic[:5]:
+            core_lines.append(f"{item.get('file')} :: {item.get('symbol')}")
+            core_lines.append(item.get("snippet", ""))
+        core_block = "\n\nCore train/predict logic:\n" + "\n".join(core_lines)
+    elif snippets:
+        snippet_lines = []
+        for item in snippets[:5]:
+            snippet_lines.append(f"{item.get('file')} :: {item.get('symbol')}")
+            snippet_lines.append(item.get("snippet", ""))
+        snippet_block = "\n\nRelevant function snippets:\n" + "\n".join(snippet_lines)
+    cell_block = ""
+    if ordered_cells:
+        cell_lines = []
+        for item in ordered_cells[:5]:
+            cell_lines.append(f"{item.get('file')} :: cell {item.get('cell_index')}")
+            cell_lines.append(item.get("snippet", ""))
+        cell_block = "\n\nNotebook execution order (selected cells):\n" + "\n".join(cell_lines)
+
+    details_items = [
+        ("Data sources", data_sources),
+        ("Feature sets", feature_sets),
+        ("Target variables", target_vars),
+        ("Model definitions", model_defs),
+        ("Pipeline steps", pipeline_steps),
+        ("Training calls", training_calls),
+        ("Prediction calls", prediction_calls),
+        ("Evaluation calls", evaluation_calls),
+        ("Report outputs", report_outputs),
+    ]
+    details_block = "\n\n<details>\n<summary>Raw technical details</summary>\n\n"
+    for title, items in details_items:
+        lines = "\n".join([f"- {item}" for item in items]) if items else "- (none)"
+        details_block += f"{title}:\n{lines}\n\n"
+    if core_logic:
+        details_block += "Core train/predict logic:\n"
+        for item in core_logic[:5]:
+            details_block += f"- {item.get('file')} :: {item.get('symbol')}\n"
+            details_block += f"{item.get('snippet', '')}\n"
+        details_block += "\n"
+    if snippets:
+        details_block += "Function snippets:\n"
+        for item in snippets[:5]:
+            details_block += f"- {item.get('file')} :: {item.get('symbol')}\n"
+            details_block += f"{item.get('snippet', '')}\n"
+        details_block += "\n"
+    if ordered_cells:
+        details_block += "Notebook cells:\n"
+        for item in ordered_cells[:5]:
+            details_block += f"- {item.get('file')} :: cell {item.get('cell_index')}\n"
+            details_block += f"{item.get('snippet', '')}\n"
+        details_block += "\n"
+    details_block += "</details>"
+
+    return (
+        f"{header}\n"
+        f"- Feature Source: {feature_source}\n"
+        f"  {feature_source_evidence}\n"
+        f"- Features: {features}\n"
+        f"  {features_evidence}\n"
+        f"- Model Structure: {model_structure}\n"
+        f"  {model_evidence}\n"
+        f"- Output: {output_desc}\n"
+        f"  {output_evidence}\n\n"
+        f"Pipeline summary:\n{steps_block}\n\n"
+        f"Files scanned: {files_block}\nNotes: {notes_block}"
+        + cell_block
+        + details_block
+    )
+
+
 def _handle_timeout_or_followup(state: AgentState) -> AgentState:
     recent_user = _collect_user_messages(state, limit=3)
     combined_query = " | ".join(recent_user) if recent_user else ""
@@ -173,15 +378,24 @@ def _check_runtime_limit(state: AgentState) -> bool:
     start_time = state.get("start_time")
     if start_time is None:
         state["start_time"] = time.monotonic()
-        return False
-    return (time.monotonic() - start_time) > 10
+    return False
 
 
 def call_model(state: AgentState) -> AgentState:
     project_root = Path(__file__).resolve().parents[2]
     print("🤖 Node: call_model")
+    if state.get("final_answer"):
+        return state
     if _check_runtime_limit(state):
         return _handle_timeout_or_followup(state)
+    recent_user = _collect_user_messages(state, limit=1)
+    user_message = recent_user[-1] if recent_user else ""
+    candidate_path = _extract_path_from_text(user_message)
+    if candidate_path and _valid_target_path(candidate_path) and _should_analyze_code(user_message):
+        state["pending_action"] = "analyze_code_logic"
+        state["pending_action_input"] = {"path": candidate_path}
+        state["final_answer"] = None
+        return state
     prompt = _load_prompt(project_root)
     context = _render_state_context(state)
     model_output = _call_local_llm(
@@ -289,6 +503,9 @@ def execute_tool(state: AgentState) -> AgentState:
     try:
         result = tool_fn(**action_input)
         state.setdefault("intermediate_steps", []).append((action, result))
+        if action == "analyze_code_logic" and isinstance(result, dict):
+            state["final_answer"] = _format_code_analysis_result(state, result)
+            return state
         if isinstance(result, dict) and result.get("demo_url"):
             state["final_answer"] = (
                 f"{result.get('message')}\n"
