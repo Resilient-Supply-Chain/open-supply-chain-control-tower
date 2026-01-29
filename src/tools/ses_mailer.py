@@ -15,8 +15,8 @@ def broadcast_risk_alert_ses(
     aws_access_key: Optional[str] = os.getenv("AWS_ACCESS_KEY_ID"),
     aws_secret_key: Optional[str] = os.getenv("AWS_SECRET_ACCESS_KEY"),
     aws_region: str = os.getenv("AWS_REGION", "us-east-1"),
-    sender_email: str = "ysun258@wisc.edu",
-    placeholder_recipient: str = "zshzbg@gmail.com"
+    sender_email: str = "zshzbg@gmail.com",
+    placeholder_recipient: str = "ysun258@wisc.edu"
 ) -> str:
     """
     Scans the processed data for a specific date, identifies high-risk regions,
