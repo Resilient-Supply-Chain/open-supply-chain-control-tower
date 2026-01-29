@@ -20,6 +20,7 @@ An AI-powered control tower for U.S. SME supply-chain resilience aligned with **
 
 ### 🧩 Key Features (v2.3.0)
 * **Multi-Agent Chatbot**: A controller agent that routes tasks to specialized agents on demand.
+* **AWS SES Resilience Alerts**: Automated, high-risk broadcast system capable of aggregating regional threats into consolidated reports for government stakeholders.
 * **Demo-Mode Orchestration**: Currently supports demo mode only, with deterministic, auditable outputs.
 * **Provider Data Conversion**: Converts registered provider CSV data into UI-ready JSON for Vercel.
 * **Mathematical Foundation**: Haversine and geodesic distance calculations remain available for legacy workflows.
@@ -85,6 +86,7 @@ Key sources:
 - **LlamaParse**: https://cloud.llamaindex.ai/ (LLAMA_CLOUD_API_KEY)
 - **Anthropic**: https://console.anthropic.com/ (ANTHROPIC_API_KEY)
 - **Hugging Face**: https://huggingface.co/settings/tokens (HUGGINGFACEHUB_API_TOKEN)
+- **AWS SES**: Configure `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `.env` or your virtual environment to enable email alerts.
 
 4. **Run v2.3.0 Chatbot**
    
