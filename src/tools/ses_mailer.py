@@ -112,22 +112,12 @@ def broadcast_risk_alert_ses(
                 }
             }
         )
-        return f"✅ Consolidated alert sent to {placeholder_recipient} covering {count} high-risk regions."
-
-    except NoCredentialsError:
-            return "AWS Credentials not found. Please configure AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY."
-    except ClientError as e:
-        return f"❌ SES Error: {e.response['Error']['Message']}"
-    except Exception as e:
-        return f"❌ Unexpected error: {str(e)}"
-
-    # 5. Summary Report
-    if sent_count > 0:
+        
         # Log to Dashboard File
         try:
             alert_log_path = Path("data/output/alerts.json")
             new_entry = {
-                "timestamp": target_date,  # Use the simulation date as timestamp context
+                "timestamp": target_date,
                 "location": f"{count} Regions (Consolidated)",
                 "score": "HIGH",
                 "recipient": placeholder_recipient,
@@ -147,8 +137,11 @@ def broadcast_risk_alert_ses(
             print(f"Dashboard logging failed: {log_err}")
 
         return f"✅ Consolidated alert sent to {placeholder_recipient} covering {count} high-risk regions."
-    elif errors:
-         return f"❌ Failed to send alerts. Errors: {errors[:2]}"
-    else:
-        return "Process completed but no emails sent (unexpected state)."
+
+    except NoCredentialsError:
+            return "AWS Credentials not found. Please configure AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY."
+    except ClientError as e:
+        return f"❌ SES Error: {e.response['Error']['Message']}"
+    except Exception as e:
+        return f"❌ Unexpected error: {str(e)}"
 
