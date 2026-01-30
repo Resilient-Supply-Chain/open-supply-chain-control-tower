@@ -40,7 +40,7 @@ bibliography: paper.bib
 
 # Summary
 
-The Open Analytics Control Tower (OACT) is an open-source, reproducible decision-support system designed to operationalize supply chain resilience using strictly public data. Unlike consumer routing tools that primarily display discrete closures, OACT models *compound risk*—such as storm sequencing and antecedent soil saturation—to anticipate infrastructure disruption (e.g., washouts, power outages) and translate model outputs into operator-ready “Go / Monitor / No-Go” decision support [@zscheischler2018]. OACT is built to be local-first and auditable: each output is intended to be traceable to an evidence bundle containing source provenance, timestamps, and model versions.
+The Open Analytics Control Tower (OACT) is an open-source, reproducible decision-support system designed to operationalize supply chain resilience using strictly public data [@oact]. Unlike consumer routing tools that primarily display discrete closures, OACT models *compound risk*—such as storm sequencing and antecedent soil saturation—to anticipate infrastructure disruption (e.g., washouts, power outages) and translate model outputs into operator-ready “Go / Monitor / No-Go” decision support [@zscheischler2018]. OACT is built to be local-first and auditable: each output is intended to be traceable to an evidence bundle containing source provenance, timestamps, and model versions.
 
 # Statement of Need
 
@@ -52,7 +52,7 @@ OACT follows a standard likelihood–consequence formulation aligned with widely
 
 $$Risk = \hat{P}(x) \times I(x)$$
 
-where $\hat{P}(x)$ is the predicted probability of a disruption event (e.g., county-level power outage) and $I(x)$ is the conditional impact estimate (e.g., customers affected). The v0.1 reference implementation focuses on **county-level power disruption risk** using supervised learning on a county-by-day panel (“Dataset X”) derived from public environmental signals and infrastructure context (e.g., NOAA storm events, USGS hydrology, ERA5 reanalysis variables) [@noaa; @usgs; @era5]. To mitigate class imbalance in rare disruption events, the pipeline may apply Synthetic Minority Over-sampling Technique (SMOTE) [@smote].
+where $\hat{P}(x)$ is the predicted probability of a disruption event (e.g., county-level power outage) and $I(x)$ is the conditional impact estimate (e.g., customers affected) using event-correlated outage labels and publicly released outage datasets [@pnnl]. The v0.1 reference implementation focuses on **county-level power disruption risk** using supervised learning on a county-by-day panel (“Dataset X”) derived from public environmental signals and infrastructure context (e.g., NOAA storm events, USGS hydrology, ERA5 reanalysis variables) [@noaa; @usgs; @era5]. To mitigate class imbalance in rare disruption events, the pipeline may apply Synthetic Minority Over-sampling Technique (SMOTE) [@smote].
 
 # Implementation & Architecture
 
