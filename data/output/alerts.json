@@ -1,5 +1,19 @@
 [
   {
+    "timestamp": "2023-01-08",
+    "location": "32 Regions (Consolidated)",
+    "score": "HIGH",
+    "recipient": "ysun258@wisc.edu",
+    "status": "SENT (SES V2)"
+  },
+  {
+    "timestamp": "2023-01-08",
+    "location": "32 Regions (Consolidated)",
+    "score": "HIGH",
+    "recipient": "ysun258@wisc.edu",
+    "status": "SENT (SES V2)"
+  },
+  {
     "timestamp": "2023-01-02",
     "location": "1 Regions (Consolidated)",
     "score": "HIGH",
