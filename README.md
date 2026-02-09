@@ -1,5 +1,5 @@
 # 🤖 AI Control Tower: U.S. Supply-Chain Resilience (v2.3.0)
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18530096.svg)](https://doi.org/10.5281/zenodo.18530096)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/)
 [![Pydantic v2](https://img.shields.io/badge/Pydantic-v2-orange.svg)](https://docs.pydantic.dev/)
 [![Security: Verified](https://img.shields.io/badge/Commit-Verified-green.svg)](https://github.com/Resilient-Supply-Chain/open-supply-chain-control-tower/commits/main)
