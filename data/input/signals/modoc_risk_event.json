@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.19,
+  "location": "Modoc_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 41.5888,
+    "lon": -120.7254,
+    "impact_radius_km": 8
+  }
+}

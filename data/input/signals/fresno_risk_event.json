@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.96,
+  "location": "Fresno_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 36.7378,
+    "lon": -119.7871,
+    "impact_radius_km": 30
+  }
+}

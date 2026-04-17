@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.52,
+  "location": "Colusa_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 39.1776,
+    "lon": -122.2375,
+    "impact_radius_km": 15
+  }
+}

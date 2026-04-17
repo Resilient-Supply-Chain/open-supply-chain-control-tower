@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.11,
+  "location": "Siskiyou_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 41.5926,
+    "lon": -122.54,
+    "impact_radius_km": 8
+  }
+}

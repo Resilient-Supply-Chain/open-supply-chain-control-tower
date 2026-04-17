@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.69,
+  "location": "Marin_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.0834,
+    "lon": -122.7633,
+    "impact_radius_km": 15
+  }
+}

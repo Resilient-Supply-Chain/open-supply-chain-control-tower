@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.1,
+  "location": "Lassen_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 40.6736,
+    "lon": -120.5917,
+    "impact_radius_km": 8
+  }
+}

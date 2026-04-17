@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.45,
+  "location": "Humboldt_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 40.745,
+    "lon": -123.8695,
+    "impact_radius_km": 15
+  }
+}

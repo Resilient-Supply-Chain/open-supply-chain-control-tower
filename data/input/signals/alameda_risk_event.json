@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.51,
+  "location": "Alameda_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.6017,
+    "lon": -121.7195,
+    "impact_radius_km": 15
+  }
+}

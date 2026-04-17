@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.86,
+  "location": "Sierra_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 39.5774,
+    "lon": -120.5219,
+    "impact_radius_km": 30
+  }
+}

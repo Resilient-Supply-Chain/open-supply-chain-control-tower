@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.44,
+  "location": "Plumas_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 40.0036,
+    "lon": -120.8394,
+    "impact_radius_km": 15
+  }
+}

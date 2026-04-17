@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.17,
+  "location": "San_Diego_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 32.7157,
+    "lon": -117.1611,
+    "impact_radius_km": 8
+  }
+}

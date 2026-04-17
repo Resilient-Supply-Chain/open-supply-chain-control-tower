@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.88,
+  "location": "Madera_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 37.2519,
+    "lon": -119.7627,
+    "impact_radius_km": 30
+  }
+}

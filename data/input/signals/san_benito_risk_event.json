@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.83,
+  "location": "San_Benito_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 36.6058,
+    "lon": -121.075,
+    "impact_radius_km": 30
+  }
+}

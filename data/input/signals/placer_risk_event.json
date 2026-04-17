@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.95,
+  "location": "Placer_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 39.0916,
+    "lon": -120.718,
+    "impact_radius_km": 30
+  }
+}

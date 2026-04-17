@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.14,
+  "location": "Tulare_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 36.2274,
+    "lon": -118.7815,
+    "impact_radius_km": 8
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.9,
+  "location": "Tuolumne_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 38.0282,
+    "lon": -119.9537,
+    "impact_radius_km": 30
+  }
+}

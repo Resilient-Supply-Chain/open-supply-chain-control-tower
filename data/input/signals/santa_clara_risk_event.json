@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.95,
+  "location": "Santa_Clara_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 37.3541,
+    "lon": -121.9552,
+    "impact_radius_km": 30
+  }
+}

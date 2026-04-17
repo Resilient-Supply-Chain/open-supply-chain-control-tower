@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.19,
+  "location": "Kern_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 35.3733,
+    "lon": -118.9965,
+    "impact_radius_km": 8
+  }
+}

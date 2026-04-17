@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.52,
+  "location": "Kings_County",
+  "primary_driver": "Storm_Damage",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 36.0988,
+    "lon": -119.8815,
+    "impact_radius_km": 15
+  }
+}

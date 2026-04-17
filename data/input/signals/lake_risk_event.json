@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.52,
+  "location": "Lake_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 39.084,
+    "lon": -122.8084,
+    "impact_radius_km": 15
+  }
+}

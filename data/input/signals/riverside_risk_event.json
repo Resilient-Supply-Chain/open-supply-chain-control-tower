@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.26,
+  "location": "Riverside_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 33.7438,
+    "lon": -115.994,
+    "impact_radius_km": 8
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.41,
+  "location": "Yuba_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 39.2888,
+    "lon": -121.3502,
+    "impact_radius_km": 15
+  }
+}

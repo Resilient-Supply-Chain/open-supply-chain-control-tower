@@ -3,102 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supply Chain Risk Map</title>
+    <title>Open Supply Chain Control Tower</title>
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body, html {
-            height: 100%;
-            margin: 0;
+            height: 100%; width: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            box-sizing: border-box;
+            background: #ffffff; color: #1f2328;
         }
-        *, *:before, *:after {
-            box-sizing: inherit;
+        .app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* === HEADER === */
+        .header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 20px; background: #f6f8fa; border-bottom: 1px solid #d0d7de;
         }
-        .dashboard {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+        .header-icon { font-size: 1.2rem; color: #656d76; }
+        .header h1 { font-size: 0.95rem; font-weight: 600; color: #1f2328; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* === MAIN CONTENT === */
+        .main-content { display: flex; flex: 1; overflow: hidden; }
+
+        /* Map area */
+        .map-section { flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
+        .map-legend {
+            position: absolute; bottom: 20px; right: 20px; background: rgba(255,255,255,0.95);
+            border: 1px solid #d0d7de; border-radius: 8px; padding: 12px 16px; z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        .sidebar {
-            width: 350px;
-            background-color: #f8f9fa;
-            border-right: 1px solid #dee2e6;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex-shrink: 0;
+        .map-legend h4 { font-size: 0.7rem; color: #656d76; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 0.78rem; color: #1f2328; }
+        .legend-color { width: 18px; height: 12px; border-radius: 2px; }
+
+        /* === RIGHT PANEL === */
+        .right-panel {
+            width: 320px; flex-shrink: 0; background: #f6f8fa; border-left: 1px solid #d0d7de;
+            overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;
         }
-        .sidebar h2 {
-            margin-top: 0;
-            color: #343a40;
-            font-size: 1.5rem;
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 10px;
+        .panel-section { background: #ffffff; border: 1px solid #d0d7de; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .panel-section h3 { font-size: 0.78rem; color: #656d76; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+
+        .score-ring-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+        .score-ring { position: relative; width: 80px; height: 80px; }
+        .score-ring svg { width: 100%; height: 100%; }
+        .score-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; line-height: 1;
         }
-        .risk-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+        .score-num { font-size: 1.6rem; font-weight: 700; color: #1f2328; }
+        .score-denom { display: block; font-size: 0.65rem; color: #656d76; }
+        .score-title { font-size: 0.85rem; font-weight: 600; color: #1f2328; }
+        .score-level { font-size: 0.75rem; font-weight: 700; margin-top: 2px; }
+        .score-level.critical { color: #dc2626; }
+        .score-level.moderate { color: #ca8a04; }
+        .score-level.low { color: #16a34a; }
+
+        .rec-detail { margin-bottom: 10px; }
+        .rec-label { font-size: 0.7rem; color: #656d76; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 3px; }
+        .rec-value { font-size: 0.82rem; color: #1f2328; }
+        .text-red { color: #dc2626; font-weight: 600; }
+        .text-yellow { color: #ca8a04; font-weight: 600; }
+        .text-green { color: #16a34a; font-weight: 600; }
+
+        .action-buttons { display: flex; gap: 6px; margin-top: 6px; }
+        .action-btn {
+            padding: 5px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+            border: 1px solid #d0d7de; background: #f6f8fa; color: #656d76; cursor: pointer;
         }
-        .risk-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .action-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+        .action-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .action-btn.active:hover { color: #fff; }
+
+        .rec-narrative { font-size: 0.78rem; color: #656d76; line-height: 1.5; margin-top: 12px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
+
+        .county-detail h3 { color: #1f2328; font-size: 0.9rem; }
+        .county-stats { font-size: 0.8rem; color: #1f2328; }
+        .county-stats .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
+        .county-stats .stat-label { color: #656d76; }
+
+        /* === BOTTOM PANELS === */
+        .bottom-panels {
+            display: flex; height: 180px; flex-shrink: 0;
+            border-top: 1px solid #d0d7de; background: #f6f8fa;
         }
-        .risk-card h3 {
-            margin: 0 0 10px 0;
-            color: #d32f2f;
-            font-size: 1.1rem;
+        .bottom-left {
+            flex: 1; padding: 12px 16px; overflow-x: auto; border-right: 1px solid #d0d7de;
         }
-        .risk-detail {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: #555;
+        .bottom-left h3 { font-size: 0.75rem; color: #656d76; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .bottom-left h3 .sub { color: #8b949e; }
+        .evidence-cards { display: flex; gap: 10px; height: calc(100% - 30px); }
+        .ev-card {
+            min-width: 180px; max-width: 200px; background: #ffffff; border: 1px solid #d0d7de;
+            border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        .risk-detail strong {
-            color: #333;
+        .ev-card.warn { border-color: #ca8a04; }
+        .ev-card.decision { border-color: #dc2626; }
+        .ev-icon { font-size: 1rem; }
+        .ev-title { font-size: 0.7rem; font-weight: 700; color: #1f2328; text-transform: uppercase; }
+        .ev-body { font-size: 0.72rem; color: #656d76; line-height: 1.4; flex: 1; }
+        .ev-source { font-size: 0.62rem; color: #8b949e; }
+
+        .bottom-right { width: 300px; padding: 12px 16px; flex-shrink: 0; }
+        .bottom-right h3 { font-size: 0.75rem; color: #656d76; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .bottom-right h3 .sub { color: #8b949e; }
+        .audit-list { display: flex; flex-direction: column; gap: 8px; }
+        .audit-row { font-size: 0.78rem; color: #1f2328; }
+        .audit-label { color: #656d76; font-weight: 600; margin-right: 6px; }
+
+        /* Info window */
+        .info-window { padding: 4px; max-width: 220px; }
+        .info-window h4 { margin: 0 0 6px; color: #1f2328; font-size: 0.9rem; }
+        .info-window p { margin: 2px 0; font-size: 0.8rem; color: #424a53; }
+
+        /* Highway labels */
+        .hwy-label {
+            background: rgba(255,255,255,0.9); color: #2563eb; font-size: 0.65rem; font-weight: 700;
+            padding: 2px 6px; border-radius: 3px; border: 1px solid #d0d7de;
+            white-space: nowrap; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .map-container {
-            flex-grow: 1;
-            position: relative;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        .info-window {
-            padding: 5px;
-            max-width: 200px;
-        }
-        .info-window h4 {
-            margin: 0 0 5px 0;
-            color: #d32f2f;
-        }
-    </style>
+</style>
 </head>
 <body>
-    <div class="dashboard">
-        <aside class="sidebar">
-            <h2>Risk Monitor</h2>
-            <div id="risk-list">
-                <!-- Risk cards will be injected here -->
-                <p style="color: #888; font-style: italic;">Loading high-risk signals...</p>
-            </div>
-        </aside>
-        <main class="map-container">
-            <div id="map"></div>
-        </main>
+<div class="app">
+    <!-- Header -->
+    <div class="header">
+        <h1>Open Supply Chain Control Tower</h1>
     </div>
 
-    <!-- 
-      TODO: Replace YOUR_API_KEY with a valid Google Maps API Key.
-      Ensure the Maps JavaScript API is enabled in your Google Cloud Console.
-    -->
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Map -->
+        <div class="map-section">
+            <div id="map"></div>
+            <div class="map-legend">
+                <h4>Risk Level:</h4>
+                <div class="legend-item"><div class="legend-color" style="background:rgba(34,139,34,0.45)"></div> Low</div>
+                <div class="legend-item"><div class="legend-color" style="background:rgba(230,160,0,0.45)"></div> Moderate</div>
+                <div class="legend-item"><div class="legend-color" style="background:rgba(220,38,38,0.45)"></div> High</div>
+            </div>
+        </div>
+
+        <!-- Right Panel: GO/NO-GO -->
+        <div class="right-panel" id="right-panel">
+            <div class="panel-section recommendation-panel">
+                <h3>GO / NO-GO RECOMMENDATION</h3>
+                <div class="score-ring-row">
+                    <div class="score-ring" id="score-ring">
+                        <svg viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="34" fill="none" stroke="#e1e4e8" stroke-width="6"/>
+                            <circle cx="40" cy="40" r="34" fill="none" stroke="#dc2626" stroke-width="6"
+                                stroke-dasharray="213.6" stroke-dashoffset="27" stroke-linecap="round"
+                                transform="rotate(-90 40 40)"/>
+                        </svg>
+                        <div class="score-text">
+                            <span class="score-num" id="score-num">88</span>
+                            <span class="score-denom">/ 100</span>
+                        </div>
+                    </div>
+                    <div class="score-label">
+                        <div class="score-title">RISK SCORE</div>
+                        <div class="score-level critical" id="score-level">CRITICAL RISK</div>
+                    </div>
+                </div>
+
+                <div class="rec-detail">
+                    <div class="rec-label">PRIMARY ROUTE:</div>
+                    <div class="rec-value" id="primary-route">US-101 (Current Status: <span class="text-red">High Risk</span>)</div>
+                </div>
+                <div class="rec-detail">
+                    <div class="rec-label">ALTERNATIVE:</div>
+                    <div class="rec-value" id="alt-route">I-5 (Current Status: <span class="text-yellow">Moderate Risk</span>)</div>
+                </div>
+
+                <div class="rec-detail">
+                    <div class="rec-label">RECOMMENDED ACTION:</div>
+                    <div class="action-buttons" id="action-buttons">
+                        <button class="action-btn active" data-action="reroute">✅ REROUTE</button>
+                        <button class="action-btn" data-action="stage">◎ STAGE</button>
+                        <button class="action-btn" data-action="hold">◎ HOLD</button>
+                    </div>
+                </div>
+
+                <p class="rec-narrative" id="rec-narrative">
+                    Based on imminent flood closure risk for US-101 at Salinas River, immediate rerouting via I-5 is advised. Stage assets at Fresno and Bakersfield.
+                </p>
+            </div>
+
+            <!-- Selected county detail (shown on click) -->
+            <div class="panel-section county-detail" id="county-detail" style="display:none;">
+                <h3 id="county-name">—</h3>
+                <div class="county-stats" id="county-stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Panels -->
+    <div class="bottom-panels">
+        <div class="bottom-left">
+            <h3>AGENT CHAIN-OF-EVIDENCE <span class="sub">(Map → Monitor → Model)</span></h3>
+            <div class="evidence-cards" id="evidence-cards">
+                <div class="ev-card">
+                    <div class="ev-icon">📊</div>
+                    <div class="ev-title">USGS GAGE HEIGHT</div>
+                    <div class="ev-body">Gage #112233 (Salinas R.) above flood stage at 35ft.</div>
+                    <div class="ev-source">(Source: USGS Water Data, Jan 19, 13:45 PST)</div>
+                </div>
+                <div class="ev-card">
+                    <div class="ev-icon">🛰️</div>
+                    <div class="ev-title">SMAP SOIL MOISTURE</div>
+                    <div class="ev-body">Satellite data indicates >95% saturation in key central coast counties.</div>
+                    <div class="ev-source">(Source: NASA SMAP, Jan 19, 10:00 PST)</div>
+                </div>
+                <div class="ev-card">
+                    <div class="ev-icon">🌧️</div>
+                    <div class="ev-title">RAINFALL FORECAST</div>
+                    <div class="ev-body">Sustained heavy rain forecasted for next 24h (>4 inches).</div>
+                    <div class="ev-source">(Source: NWS, Jan 19, 14:00 PST)</div>
+                </div>
+                <div class="ev-card warn">
+                    <div class="ev-icon">⚠️</div>
+                    <div class="ev-title">OUTAGE REPORT</div>
+                    <div class="ev-body">Confirmed utility & road closures reported by local authorities.</div>
+                    <div class="ev-source">(Source: Local Reports, Jan 20, 08:15 PST)</div>
+                </div>
+                <div class="ev-card decision">
+                    <div class="ev-icon">🧠</div>
+                    <div class="ev-title">DECISION (MODEL OUTPUT)</div>
+                    <div class="ev-body">AI Model predicts >90% probability of prolonged supply chain disruption at Hwy 68</div>
+                    <div class="ev-source">(Source: Risk Model v2.1, Jan 20, 08:30 PST)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-right">
+            <h3>EVIDENCE BUNDLE <span class="sub">(AUDIT TRAIL)</span></h3>
+            <div class="audit-list" id="audit-list">
+                <div class="audit-row"><span class="audit-label">Timestamp:</span> <span id="audit-ts">2026-01-20 08:37:16 PST</span></div>
+                <div class="audit-row"><span class="audit-label">Sources:</span> <span>USGS, NASA SMAP, NWS, Local Reports</span></div>
+                <div class="audit-row"><span class="audit-label">Model Version:</span> <span>Risk Model v2.1</span></div>
+                <div class="audit-row"><span class="audit-label">Decision ID:</span> <span>#550021</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script>
         (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
           key: "YOUR_API_KEY",

@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.72,
+  "location": "Merced_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.1948,
+    "lon": -120.722,
+    "impact_radius_km": 15
+  }
+}

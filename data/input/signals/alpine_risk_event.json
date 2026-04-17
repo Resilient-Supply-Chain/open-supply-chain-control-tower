@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.87,
+  "location": "Alpine_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 38.5941,
+    "lon": -119.8207,
+    "impact_radius_km": 30
+  }
+}

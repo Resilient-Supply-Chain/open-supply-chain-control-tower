@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.47,
+  "location": "Santa_Cruz_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.0454,
+    "lon": -122.058,
+    "impact_radius_km": 15
+  }
+}

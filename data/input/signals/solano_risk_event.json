@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.37,
+  "location": "Solano_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.2668,
+    "lon": -121.94,
+    "impact_radius_km": 15
+  }
+}

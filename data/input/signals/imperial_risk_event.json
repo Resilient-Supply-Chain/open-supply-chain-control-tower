@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.19,
+  "location": "Imperial_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 33.0114,
+    "lon": -115.4734,
+    "impact_radius_km": 8
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.47,
+  "location": "San_Mateo_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.4337,
+    "lon": -122.4014,
+    "impact_radius_km": 15
+  }
+}

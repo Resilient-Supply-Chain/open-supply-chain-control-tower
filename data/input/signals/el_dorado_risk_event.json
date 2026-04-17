@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.84,
+  "location": "El_Dorado_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 38.7786,
+    "lon": -120.5246,
+    "impact_radius_km": 30
+  }
+}

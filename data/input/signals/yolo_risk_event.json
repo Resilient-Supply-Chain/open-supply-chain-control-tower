@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.42,
+  "location": "Yolo_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.6864,
+    "lon": -121.9018,
+    "impact_radius_km": 15
+  }
+}

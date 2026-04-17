@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.17,
+  "location": "Mono_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 37.9391,
+    "lon": -118.8864,
+    "impact_radius_km": 8
+  }
+}

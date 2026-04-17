@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.62,
+  "location": "Napa_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.5025,
+    "lon": -122.2654,
+    "impact_radius_km": 15
+  }
+}

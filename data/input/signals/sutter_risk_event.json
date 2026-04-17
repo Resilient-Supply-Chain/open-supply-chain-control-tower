@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.26,
+  "location": "Sutter_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 39.0346,
+    "lon": -121.6947,
+    "impact_radius_km": 8
+  }
+}

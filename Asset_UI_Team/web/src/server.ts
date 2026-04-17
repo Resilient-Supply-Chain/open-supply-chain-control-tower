@@ -20,7 +20,7 @@ app.use('/js', express.static(path.join(__dirname, '../dist')));
 // src/server.ts -> compiled to dist/server.js.
 // dist/ is one level deep in web/.
 // So ../../../data/input/signals from dist/server.js
-const SIGNALS_DIR = path.resolve(__dirname, '../../data/input/signals');
+const SIGNALS_DIR = path.resolve(__dirname, '../../../data/input/signals');
 
 interface GeoCenter {
     lat: number;
@@ -36,7 +36,7 @@ interface RiskSignal {
     geo_center: GeoCenter;
 }
 
-// API Endpoint
+// API Endpoint: Risk signals
 app.get('/api/risks', async (req, res) => {
     try {
         console.log(`Scanning for signals in: ${SIGNALS_DIR}`);
@@ -50,10 +50,7 @@ app.get('/api/risks', async (req, res) => {
             const content = await fs.readFile(filePath, 'utf-8');
             try {
                 const data = JSON.parse(content) as RiskSignal;
-                // Requirement: Filter where Risk Score is strictly greater than 0.8
-                if (data.risk_score > 0.8) {
-                    risks.push(data);
-                }
+                risks.push(data);
             } catch (parseError) {
                 console.error(`Error parsing ${file}:`, parseError);
             }
@@ -66,7 +63,31 @@ app.get('/api/risks', async (req, res) => {
     }
 });
 
+// API Endpoint: Highways
+const HIGHWAYS_PATH = path.resolve(__dirname, '../../../data/input/highways.json');
+
+app.get('/api/highways', async (req, res) => {
+    try {
+        const content = await fs.readFile(HIGHWAYS_PATH, 'utf-8');
+        res.json(JSON.parse(content));
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to load highway data' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
     console.log(`Serving static files from public/ and dist/`);
+});
+
+// API Endpoint: Evidence / decision template
+const TEMPLATE_PATH = path.resolve(__dirname, '../../../data/output/ui_output_template.json');
+
+app.get('/api/evidence', async (req, res) => {
+    try {
+        const content = await fs.readFile(TEMPLATE_PATH, 'utf-8');
+        res.json(JSON.parse(content));
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to load evidence data' });
+    }
 });

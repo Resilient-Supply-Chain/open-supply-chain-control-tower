@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.59,
+  "location": "Shasta_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 40.5865,
+    "lon": -122.3917,
+    "impact_radius_km": 15
+  }
+}

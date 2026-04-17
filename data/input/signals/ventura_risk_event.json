@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.67,
+  "location": "Ventura_County",
+  "primary_driver": "Storm_Damage",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 34.3705,
+    "lon": -119.1391,
+    "impact_radius_km": 15
+  }
+}

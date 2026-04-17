@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.94,
+  "location": "Amador_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 38.4466,
+    "lon": -120.6533,
+    "impact_radius_km": 30
+  }
+}

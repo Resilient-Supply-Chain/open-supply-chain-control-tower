@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.94,
+  "location": "Mariposa_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 37.5848,
+    "lon": -119.9662,
+    "impact_radius_km": 30
+  }
+}

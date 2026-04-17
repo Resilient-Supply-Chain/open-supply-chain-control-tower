@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.56,
+  "location": "Stanislaus_County",
+  "primary_driver": "Storm_Damage",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.5591,
+    "lon": -120.9876,
+    "impact_radius_km": 15
+  }
+}

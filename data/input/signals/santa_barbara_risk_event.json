@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.98,
+  "location": "Santa_Barbara_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 34.7083,
+    "lon": -120.0339,
+    "impact_radius_km": 30
+  }
+}

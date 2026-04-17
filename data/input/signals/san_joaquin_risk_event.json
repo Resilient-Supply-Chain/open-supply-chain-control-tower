@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.66,
+  "location": "San_Joaquin_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 37.9349,
+    "lon": -121.2713,
+    "impact_radius_km": 15
+  }
+}

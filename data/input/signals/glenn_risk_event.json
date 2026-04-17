@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.05,
+  "location": "Glenn_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 39.5985,
+    "lon": -122.3927,
+    "impact_radius_km": 8
+  }
+}

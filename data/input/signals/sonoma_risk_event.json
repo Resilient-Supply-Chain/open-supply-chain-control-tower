@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.41,
+  "location": "Sonoma_County",
+  "primary_driver": "Wildfire_Shutoff",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.578,
+    "lon": -122.9888,
+    "impact_radius_km": 15
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.9,
+  "location": "Nevada_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 39.3013,
+    "lon": -120.7688,
+    "impact_radius_km": 30
+  }
+}

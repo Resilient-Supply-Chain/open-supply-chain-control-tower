@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.47,
+  "location": "Sacramento_County",
+  "primary_driver": "Storm_Damage",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 38.5816,
+    "lon": -121.4944,
+    "impact_radius_km": 15
+  }
+}

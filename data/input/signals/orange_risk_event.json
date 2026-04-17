@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.2,
+  "location": "Orange_County",
+  "primary_driver": "Stable_Operations",
+  "estimated_impact": "$1M_Day",
+  "geo_center": {
+    "lat": 33.7175,
+    "lon": -117.8311,
+    "impact_radius_km": 8
+  }
+}

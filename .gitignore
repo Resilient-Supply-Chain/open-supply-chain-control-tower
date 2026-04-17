@@ -298,3 +298,8 @@ web/yarn-error.log*
 web/.npm/
 web/.cache/
 web/.parcel-cache/
+
+# Global node_modules and dist
+node_modules/
+**/node_modules/
+**/dist/

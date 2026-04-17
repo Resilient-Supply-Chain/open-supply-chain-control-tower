@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.91,
+  "location": "Calaveras_County",
+  "primary_driver": "Equipment_Aging",
+  "estimated_impact": "$25M_Day",
+  "geo_center": {
+    "lat": 38.1964,
+    "lon": -120.5544,
+    "impact_radius_km": 30
+  }
+}

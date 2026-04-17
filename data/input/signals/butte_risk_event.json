@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.58,
+  "location": "Butte_County",
+  "primary_driver": "Grid_Overload",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 39.6667,
+    "lon": -121.6008,
+    "impact_radius_km": 15
+  }
+}

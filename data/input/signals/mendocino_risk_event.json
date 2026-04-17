@@ -1,0 +1,11 @@
+{
+  "risk_score": 0.63,
+  "location": "Mendocino_County",
+  "primary_driver": "Transmission_Failure",
+  "estimated_impact": "$8M_Day",
+  "geo_center": {
+    "lat": 39.438,
+    "lon": -123.3907,
+    "impact_radius_km": 15
+  }
+}
