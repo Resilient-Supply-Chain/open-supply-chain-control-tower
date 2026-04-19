@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.05,
+  "risk_score": 0.86,
   "location": "Glenn_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Downed_Trees_on_Lines",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T20:00:00Z",
   "geo_center": {
-    "lat": 39.5985,
-    "lon": -122.3927,
-    "impact_radius_km": 8
+    "lat": 39.5982,
+    "lon": -122.3928,
+    "impact_radius_km": 15
   }
 }

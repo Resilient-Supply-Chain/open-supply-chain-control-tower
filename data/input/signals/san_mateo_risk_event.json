@@ -1,8 +1,10 @@
 {
-  "risk_score": 0.47,
+  "risk_score": 0.86,
   "location": "San_Mateo_County",
-  "primary_driver": "Grid_Overload",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T08:00:00Z",
   "geo_center": {
     "lat": 37.4337,
     "lon": -122.4014,

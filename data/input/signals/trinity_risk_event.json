@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.13,
+  "risk_score": 0.89,
   "location": "Trinity_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Downed_Trees_on_Lines",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T11:00:00Z",
   "geo_center": {
-    "lat": 40.6514,
-    "lon": -123.1136,
-    "impact_radius_km": 8
+    "lat": 40.6502,
+    "lon": -123.1102,
+    "impact_radius_km": 15
   }
 }

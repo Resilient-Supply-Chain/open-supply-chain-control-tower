@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.86,
+  "risk_score": 0.48,
   "location": "Sierra_County",
-  "primary_driver": "Grid_Overload",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T14:00:00Z",
   "geo_center": {
-    "lat": 39.5774,
-    "lon": -120.5219,
-    "impact_radius_km": 30
+    "lat": 39.578,
+    "lon": -120.5148,
+    "impact_radius_km": 15
   }
 }

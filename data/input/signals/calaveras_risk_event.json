@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.91,
+  "risk_score": 0.51,
   "location": "Calaveras_County",
-  "primary_driver": "Equipment_Aging",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T02:00:00Z",
   "geo_center": {
-    "lat": 38.1964,
-    "lon": -120.5544,
-    "impact_radius_km": 30
+    "lat": 38.196,
+    "lon": -120.554,
+    "impact_radius_km": 15
   }
 }

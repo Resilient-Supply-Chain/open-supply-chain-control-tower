@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.11,
+  "risk_score": 0.81,
   "location": "Siskiyou_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T00:00:00Z",
   "geo_center": {
-    "lat": 41.5926,
-    "lon": -122.54,
-    "impact_radius_km": 8
+    "lat": 41.5929,
+    "lon": -122.5406,
+    "impact_radius_km": 15
   }
 }

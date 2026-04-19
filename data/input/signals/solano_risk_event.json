@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.37,
+  "risk_score": 0.89,
   "location": "Solano_County",
-  "primary_driver": "Equipment_Aging",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Downed_Trees_on_Lines",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T20:00:00Z",
   "geo_center": {
-    "lat": 38.2668,
-    "lon": -121.94,
+    "lat": 38.2676,
+    "lon": -121.9401,
     "impact_radius_km": 15
   }
 }

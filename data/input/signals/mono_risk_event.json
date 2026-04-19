@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.17,
+  "risk_score": 0.15,
   "location": "Mono_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Isolated_Feeder_Fault",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Schedule preventive maintenance",
+  "timestamp": "2023-01-07T01:00:00Z",
   "geo_center": {
-    "lat": 37.9391,
-    "lon": -118.8864,
-    "impact_radius_km": 8
+    "lat": 37.9219,
+    "lon": -118.8987,
+    "impact_radius_km": 15
   }
 }

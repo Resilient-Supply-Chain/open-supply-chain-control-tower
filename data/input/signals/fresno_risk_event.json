@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.96,
+  "risk_score": 0.11,
   "location": "Fresno_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Scheduled_Maintenance",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Continue routine monitoring",
+  "timestamp": "2023-01-07T21:00:00Z",
   "geo_center": {
     "lat": 36.7378,
     "lon": -119.7871,
-    "impact_radius_km": 30
+    "impact_radius_km": 15
   }
 }

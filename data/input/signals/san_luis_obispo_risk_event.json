@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.89,
+  "risk_score": 0.47,
   "location": "San_Luis_Obispo_County",
-  "primary_driver": "Equipment_Aging",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Localized_Flooding",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T19:00:00Z",
   "geo_center": {
-    "lat": 35.3102,
-    "lon": -120.3993,
-    "impact_radius_km": 30
+    "lat": 35.385,
+    "lon": -120.4472,
+    "impact_radius_km": 15
   }
 }

@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph Developer
+        DEV["Local Dev"]
+    end
+
+    subgraph GitHub
+        PR["Pull Request"]
+        CR["Code Review\n1+ Approval"]
+        MERGE["Merge to\nopen-demo"]
+        GA["GitHub Actions"]
+    end
+
+    subgraph AWS
+        ECR["ECR Private\nDocker Registry"]
+        AR["App Runner\n:3000"]
+    end
+
+    subgraph Users
+        BROWSER["Browser Access"]
+    end
+
+    DEV -->|"git push feature branch"| PR
+    PR -->|"require"| CR
+    CR -->|"approve + merge"| MERGE
+    MERGE -->|"trigger"| GA
+    GA -->|"docker build + push"| ECR
+    ECR -->|"pull image"| AR
+    AR -->|"HTTPS"| BROWSER
+
+    style CR fill:#f9a825,color:#000
+    style AR fill:#2563eb,color:#fff
+    style ECR fill:#e76f00,color:#fff

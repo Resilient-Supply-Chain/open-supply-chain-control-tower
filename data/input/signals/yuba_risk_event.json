@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.41,
+  "risk_score": 0.51,
   "location": "Yuba_County",
-  "primary_driver": "Grid_Overload",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T17:00:00Z",
   "geo_center": {
-    "lat": 39.2888,
-    "lon": -121.3502,
+    "lat": 39.2686,
+    "lon": -121.3528,
     "impact_radius_km": 15
   }
 }

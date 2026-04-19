@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.19,
+  "risk_score": 0.5,
   "location": "Kern_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Gusty_Winds",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T16:00:00Z",
   "geo_center": {
-    "lat": 35.3733,
-    "lon": -118.9965,
-    "impact_radius_km": 8
+    "lat": 35.3433,
+    "lon": -118.7276,
+    "impact_radius_km": 15
   }
 }

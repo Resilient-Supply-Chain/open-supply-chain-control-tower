@@ -3,7 +3,8 @@
 interface GeoCenter { lat: number; lon: number; impact_radius_km: number; }
 interface RiskSignal {
     risk_score: number; location: string; primary_driver: string;
-    estimated_impact: string; geo_center: GeoCenter;
+    estimated_impact: string; recommendation: string; timestamp: string;
+    geo_center: GeoCenter;
 }
 
 function getRiskLevel(score: number): 'high' | 'moderate' | 'low' {
@@ -36,25 +37,25 @@ function buildRiskMap(risks: RiskSignal[]): Map<string, RiskSignal> {
     return map;
 }
 
-// Recommendations per risk level
+// Recommendations per risk level (power outage focused)
 const recommendations: Record<string, { action: string; narrative: string; primary: string; alt: string }> = {
     high: {
         action: 'reroute',
-        primary: 'Current corridor status: <span class="text-red">High Risk</span>',
-        alt: 'Alternate route status: <span class="text-yellow">Moderate Risk</span>',
-        narrative: 'Immediate rerouting recommended. Critical infrastructure disruption detected. Stage emergency assets at nearest distribution hub and notify downstream stakeholders.'
+        primary: 'Grid: <span class="text-red">Critical Outage</span>',
+        alt: 'Backup: <span class="text-yellow">Limited</span>',
+        narrative: 'Activate backup generators. Reroute operations away from affected zones.'
     },
     moderate: {
         action: 'stage',
-        primary: 'Current corridor status: <span class="text-yellow">Moderate Risk</span>',
-        alt: 'Alternate route status: <span class="text-green">Low Risk</span>',
-        narrative: 'Elevated risk detected. Pre-stage contingency assets and monitor conditions. Prepare reroute plan if risk escalates within next 12 hours.'
+        primary: 'Grid: <span class="text-yellow">Degraded</span>',
+        alt: 'Backup: <span class="text-green">Available</span>',
+        narrative: 'Pre-position crews. Prepare load-shedding if conditions escalate.'
     },
     low: {
         action: 'hold',
-        primary: 'Current corridor status: <span class="text-green">Low Risk</span>',
-        alt: 'No alternate route needed',
-        narrative: 'Conditions nominal. Continue standard operations. Next automated assessment in 6 hours.'
+        primary: 'Grid: <span class="text-green">Stable</span>',
+        alt: 'No backup needed',
+        narrative: 'Normal operations. Next assessment in 6 hours.'
     }
 };
 
@@ -65,31 +66,31 @@ function getEvidenceCards(risk: RiskSignal, countyName: string): EvidenceCard[] 
     const level = getRiskLevel(risk.risk_score);
     const driver = fmt(risk.primary_driver);
     const score = risk.risk_score;
-    const now = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    const eventTime = risk.timestamp ? new Date(risk.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
 
     if (level === 'high') {
         return [
-            { icon: '🔴', title: 'RISK DETECTION', body: `${countyName} County flagged at ${score} risk score. Primary driver: ${driver}. Threshold exceeded (>0.8).`, source: `(Risk Engine, ${now})` },
-            { icon: '📊', title: 'IMPACT ANALYSIS', body: `Estimated economic impact: ${risk.estimated_impact.replace(/_/g, ' ')}. Affected radius: ${risk.geo_center.impact_radius_km} km. Critical supply routes compromised.`, source: `(Impact Model v2.1, ${now})` },
-            { icon: '⚠️', title: 'INFRASTRUCTURE STATUS', body: `${driver} conditions confirmed in ${countyName} region. Local utility and transport disruptions reported. Grid capacity at critical levels.`, source: `(Infrastructure Monitor, ${now})`, cls: 'warn' },
-            { icon: '🔄', title: 'SUPPLY CHAIN IMPACT', body: `Downstream SMEs in ${countyName} at risk of delivery delays. Recommend activating contingency suppliers and alternate logistics corridors.`, source: `(Supply Chain Analyzer, ${now})`, cls: 'warn' },
-            { icon: '🧠', title: 'RECOMMENDATION', body: `REROUTE immediately. Divert shipments away from ${countyName} corridor. Stage emergency inventory at nearest unaffected distribution hub.`, source: `(Decision Engine v2.1, ${now})`, cls: 'decision' },
+            { icon: '⚡', title: 'OUTAGE DETECTION', body: `${countyName}: score ${score}. Driver: ${driver}. Critical threshold exceeded (>0.8).`, source: `(Grid Monitor, ${eventTime})` },
+            { icon: '📊', title: 'IMPACT ANALYSIS', body: `${risk.estimated_impact.replace(/_/g, ' ')}. Radius: ${risk.geo_center.impact_radius_km} km. Prolonged outage likely.`, source: `(Impact Model v2.1, ${eventTime})` },
+            { icon: '🔌', title: 'GRID STATUS', body: `${driver} on distribution feeders. Transmission stressed; cascading risk.`, source: `(Utility SCADA, ${eventTime})`, cls: 'warn' },
+            { icon: '🏭', title: 'SUPPLY CHAIN IMPACT', body: `Cold-chain & manufacturing at risk. Reroute loads; activate site backups.`, source: `(Supply Chain Analyzer, ${eventTime})`, cls: 'warn' },
+            { icon: '🧠', title: 'RECOMMENDATION', body: `${risk.recommendation || 'Dispatch crews to clear fallen trees; coordinate mutual aid.'}`, source: `(Decision Engine v2.1, ${eventTime})`, cls: 'decision' },
         ];
     } else if (level === 'moderate') {
         return [
-            { icon: '🟡', title: 'RISK DETECTION', body: `${countyName} County at ${score} risk score. Primary driver: ${driver}. Elevated but below critical threshold.`, source: `(Risk Engine, ${now})` },
-            { icon: '📊', title: 'IMPACT ANALYSIS', body: `Estimated impact: ${risk.estimated_impact.replace(/_/g, ' ')}. Monitoring radius: ${risk.geo_center.impact_radius_km} km. Partial disruption possible within 24h.`, source: `(Impact Model v2.1, ${now})` },
-            { icon: '📡', title: 'MONITORING STATUS', body: `${driver} conditions developing in ${countyName}. Sensors indicate gradual escalation. No confirmed outages yet.`, source: `(Sensor Network, ${now})` },
-            { icon: '📦', title: 'SUPPLY CHAIN STATUS', body: `Pre-stage contingency assets for ${countyName} corridor. Notify tier-1 suppliers of potential delays. Review backup routes.`, source: `(Supply Chain Analyzer, ${now})` },
-            { icon: '🧠', title: 'RECOMMENDATION', body: `STAGE assets and monitor. Prepare reroute plan for ${countyName} if conditions escalate. Re-assess in 12 hours.`, source: `(Decision Engine v2.1, ${now})` },
+            { icon: '⚠️', title: 'OUTAGE RISK ELEVATED', body: `${countyName}: score ${score}. Driver: ${driver}. Below critical threshold.`, source: `(Grid Monitor, ${eventTime})` },
+            { icon: '📊', title: 'IMPACT ANALYSIS', body: `${risk.estimated_impact.replace(/_/g, ' ')}. Radius: ${risk.geo_center.impact_radius_km} km. Partial outage possible <24h.`, source: `(Impact Model v2.1, ${eventTime})` },
+            { icon: '📡', title: 'GRID MONITORING', body: `${driver} developing. Vegetation & feeder stress indicators rising.`, source: `(Sensor Network, ${eventTime})` },
+            { icon: '🔋', title: 'BACKUP READINESS', body: `Verify backup power at critical sites. Pre-stage tree-trimming crews.`, source: `(Facility Manager, ${eventTime})` },
+            { icon: '🧠', title: 'RECOMMENDATION', body: `${risk.recommendation || 'Pre-position tree-trimming crews; increase line patrols.'}`, source: `(Decision Engine v2.1, ${eventTime})` },
         ];
     } else {
         return [
-            { icon: '🟢', title: 'RISK DETECTION', body: `${countyName} County at ${score} risk score. No significant risk drivers detected. All systems nominal.`, source: `(Risk Engine, ${now})` },
-            { icon: '📊', title: 'IMPACT ANALYSIS', body: `Minimal estimated impact: ${risk.estimated_impact.replace(/_/g, ' ')}. No disruption expected in the ${risk.geo_center.impact_radius_km} km monitoring zone.`, source: `(Impact Model v2.1, ${now})` },
-            { icon: '✅', title: 'INFRASTRUCTURE STATUS', body: `All infrastructure in ${countyName} operating within normal parameters. Grid stable, transport corridors clear.`, source: `(Infrastructure Monitor, ${now})` },
-            { icon: '📦', title: 'SUPPLY CHAIN STATUS', body: `Supply routes through ${countyName} fully operational. No action required for current logistics plans.`, source: `(Supply Chain Analyzer, ${now})` },
-            { icon: '🧠', title: 'RECOMMENDATION', body: `HOLD current operations. ${countyName} corridor is clear. Next automated assessment in 6 hours.`, source: `(Decision Engine v2.1, ${now})` },
+            { icon: '✅', title: 'GRID STABLE', body: `${countyName}: score ${score}. No storm-related drivers. Grid normal.`, source: `(Grid Monitor, ${eventTime})` },
+            { icon: '📊', title: 'IMPACT ANALYSIS', body: `${risk.estimated_impact.replace(/_/g, ' ')}. No disruption in ${risk.geo_center.impact_radius_km} km zone.`, source: `(Impact Model v2.1, ${eventTime})` },
+            { icon: '🔌', title: 'INFRASTRUCTURE STATUS', body: `Feeders & substations nominal; no alerts.`, source: `(Utility SCADA, ${eventTime})` },
+            { icon: '📦', title: 'SUPPLY CHAIN STATUS', body: `Facilities fully powered. No backup needed.`, source: `(Facility Manager, ${eventTime})` },
+            { icon: '🧠', title: 'RECOMMENDATION', body: `${risk.recommendation || 'Continue routine monitoring.'}`, source: `(Decision Engine v2.1, ${eventTime})` },
         ];
     }
 }
@@ -101,8 +102,7 @@ function updateEvidencePanel(risk: RiskSignal, countyName: string) {
 
     container.innerHTML = cards.map(c =>
         `<div class="ev-card ${c.cls || ''}">
-            <div class="ev-icon">${c.icon}</div>
-            <div class="ev-title">${c.title}</div>
+            <div class="ev-head"><div class="ev-icon">${c.icon}</div><div class="ev-title">${c.title}</div></div>
             <div class="ev-body">${c.body}</div>
             <div class="ev-source">${c.source}</div>
         </div>`
@@ -112,15 +112,16 @@ function updateEvidencePanel(risk: RiskSignal, countyName: string) {
     const level = getRiskLevel(risk.risk_score);
     const auditTs = document.getElementById('audit-ts');
     const auditList = document.getElementById('audit-list');
-    if (auditTs) auditTs.textContent = new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' });
+    const eventTimestamp = risk.timestamp ? new Date(risk.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+    if (auditTs) auditTs.textContent = eventTimestamp;
     if (auditList) {
         const decisionId = '#' + Math.floor(100000 + Math.random() * 900000);
         auditList.innerHTML = `
             <div class="audit-row"><span class="audit-label">Region:</span> <span>${countyName} County</span></div>
-            <div class="audit-row"><span class="audit-label">Timestamp:</span> <span>${new Date().toLocaleString()}</span></div>
+            <div class="audit-row"><span class="audit-label">Event Time:</span> <span>${eventTimestamp}</span></div>
             <div class="audit-row"><span class="audit-label">Risk Level:</span> <span style="color:${getStrokeColor(level)};font-weight:600">${level.toUpperCase()} (${risk.risk_score})</span></div>
             <div class="audit-row"><span class="audit-label">Driver:</span> <span>${fmt(risk.primary_driver)}</span></div>
-            <div class="audit-row"><span class="audit-label">Model:</span> <span>Risk Model v2.1</span></div>
+            <div class="audit-row"><span class="audit-label">Model:</span> <span>Power Outage Risk Model v2.1</span></div>
             <div class="audit-row"><span class="audit-label">Decision ID:</span> <span>${decisionId}</span></div>
         `;
     }
@@ -155,7 +156,7 @@ function updateRightPanel(risk: RiskSignal, countyName: string) {
     const narrative = document.getElementById('rec-narrative');
     if (primaryRoute) primaryRoute.innerHTML = rec.primary;
     if (altRoute) altRoute.innerHTML = rec.alt;
-    if (narrative) narrative.textContent = rec.narrative;
+    if (narrative) narrative.textContent = risk.recommendation || rec.narrative;
 
     // Action buttons
     const buttons = document.querySelectorAll('.action-btn');

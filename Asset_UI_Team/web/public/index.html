@@ -101,6 +101,7 @@
         .ev-card.warn { border-color: #ca8a04; }
         .ev-card.decision { border-color: #dc2626; }
         .ev-icon { font-size: 1rem; }
+        .ev-head { display: flex; align-items: center; gap: 6px; }
         .ev-title { font-size: 0.7rem; font-weight: 700; color: #1f2328; text-transform: uppercase; }
         .ev-body { font-size: 0.72rem; color: #656d76; line-height: 1.4; flex: 1; }
         .ev-source { font-size: 0.62rem; color: #8b949e; }
@@ -122,6 +123,41 @@
             background: rgba(255,255,255,0.9); color: #2563eb; font-size: 0.65rem; font-weight: 700;
             padding: 2px 6px; border-radius: 3px; border: 1px solid #d0d7de;
             white-space: nowrap; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* === RESPONSIVE: phones & small tablets === */
+        @media (max-width: 768px) {
+            .app { height: auto; min-height: 100vh; overflow: auto; }
+            .header { padding: 10px 14px; }
+            .header h1 { font-size: 0.85rem; letter-spacing: 0.5px; }
+
+            /* Stack map + side panel vertically */
+            .main-content { flex-direction: column; overflow: visible; }
+            .map-section { height: 55vh; min-height: 320px; flex: none; }
+            .map-legend { bottom: 12px; right: 12px; padding: 8px 10px; }
+            .map-legend h4 { font-size: 0.65rem; margin-bottom: 5px; }
+            .legend-item { font-size: 0.7rem; }
+
+            .right-panel {
+                width: 100%; border-left: none; border-top: 1px solid #d0d7de;
+                padding: 12px; gap: 10px;
+            }
+            .panel-section { padding: 12px; }
+
+            /* Bottom panels stack */
+            .bottom-panels { flex-direction: column; height: auto; }
+            .bottom-left { border-right: none; border-bottom: 1px solid #d0d7de; padding: 12px; }
+            .evidence-cards { height: auto; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+            .ev-card { min-width: 180px; }
+            .bottom-right { width: 100%; padding: 12px; }
+        }
+
+        /* Extra-tight phones */
+        @media (max-width: 420px) {
+            .map-section { height: 50vh; min-height: 280px; }
+            .score-ring { width: 64px; height: 64px; }
+            .score-num { font-size: 1.3rem; }
+            .action-buttons { flex-wrap: wrap; }
         }
 </style>
 </head>
@@ -169,12 +205,12 @@
                 </div>
 
                 <div class="rec-detail">
-                    <div class="rec-label">PRIMARY ROUTE:</div>
-                    <div class="rec-value" id="primary-route">US-101 (Current Status: <span class="text-red">High Risk</span>)</div>
+                    <div class="rec-label">GRID STATUS:</div>
+                    <div class="rec-value" id="primary-route">Grid: <span class="text-red">Critical Outage</span></div>
                 </div>
                 <div class="rec-detail">
-                    <div class="rec-label">ALTERNATIVE:</div>
-                    <div class="rec-value" id="alt-route">I-5 (Current Status: <span class="text-yellow">Moderate Risk</span>)</div>
+                    <div class="rec-label">BACKUP:</div>
+                    <div class="rec-value" id="alt-route">Backup: <span class="text-yellow">Limited</span></div>
                 </div>
 
                 <div class="rec-detail">
@@ -187,7 +223,7 @@
                 </div>
 
                 <p class="rec-narrative" id="rec-narrative">
-                    Based on imminent flood closure risk for US-101 at Salinas River, immediate rerouting via I-5 is advised. Stage assets at Fresno and Bakersfield.
+                    Activate backup generators. Reroute operations away from affected zones.
                 </p>
             </div>
 
@@ -202,37 +238,32 @@
     <!-- Bottom Panels -->
     <div class="bottom-panels">
         <div class="bottom-left">
-            <h3>AGENT CHAIN-OF-EVIDENCE <span class="sub">(Map → Monitor → Model)</span></h3>
+            <h3>POWER OUTAGE CHAIN-OF-EVIDENCE <span class="sub">(Detect → Analyze → Recommend)</span></h3>
             <div class="evidence-cards" id="evidence-cards">
                 <div class="ev-card">
-                    <div class="ev-icon">📊</div>
-                    <div class="ev-title">USGS GAGE HEIGHT</div>
-                    <div class="ev-body">Gage #112233 (Salinas R.) above flood stage at 35ft.</div>
-                    <div class="ev-source">(Source: USGS Water Data, Jan 19, 13:45 PST)</div>
+                    <div class="ev-head"><div class="ev-icon">⚡</div><div class="ev-title">OUTAGE DETECTION</div></div>
+                    <div class="ev-body">Atmospheric-river winds down trees onto lines.</div>
+                    <div class="ev-source">(Source: Grid Monitor, Jan 7, 2023)</div>
                 </div>
                 <div class="ev-card">
-                    <div class="ev-icon">🛰️</div>
-                    <div class="ev-title">SMAP SOIL MOISTURE</div>
-                    <div class="ev-body">Satellite data indicates >95% saturation in key central coast counties.</div>
-                    <div class="ev-source">(Source: NASA SMAP, Jan 19, 10:00 PST)</div>
+                    <div class="ev-head"><div class="ev-icon">📊</div><div class="ev-title">IMPACT ANALYSIS</div></div>
+                    <div class="ev-body">Widespread customer outages. Prolonged outage likely.</div>
+                    <div class="ev-source">(Source: Impact Model v2.1, Jan 7, 2023)</div>
                 </div>
                 <div class="ev-card">
-                    <div class="ev-icon">🌧️</div>
-                    <div class="ev-title">RAINFALL FORECAST</div>
-                    <div class="ev-body">Sustained heavy rain forecasted for next 24h (>4 inches).</div>
-                    <div class="ev-source">(Source: NWS, Jan 19, 14:00 PST)</div>
+                    <div class="ev-head"><div class="ev-icon">🔌</div><div class="ev-title">GRID STATUS</div></div>
+                    <div class="ev-body">Distribution feeders down. Cascading risk in storm zone.</div>
+                    <div class="ev-source">(Source: Utility SCADA, Jan 7, 2023)</div>
                 </div>
                 <div class="ev-card warn">
-                    <div class="ev-icon">⚠️</div>
-                    <div class="ev-title">OUTAGE REPORT</div>
-                    <div class="ev-body">Confirmed utility & road closures reported by local authorities.</div>
-                    <div class="ev-source">(Source: Local Reports, Jan 20, 08:15 PST)</div>
+                    <div class="ev-head"><div class="ev-icon">🏭</div><div class="ev-title">SUPPLY CHAIN IMPACT</div></div>
+                    <div class="ev-body">Cold-chain & manufacturing at risk. Reroute loads.</div>
+                    <div class="ev-source">(Source: Supply Chain Analyzer, Jan 7, 2023)</div>
                 </div>
                 <div class="ev-card decision">
-                    <div class="ev-icon">🧠</div>
-                    <div class="ev-title">DECISION (MODEL OUTPUT)</div>
-                    <div class="ev-body">AI Model predicts >90% probability of prolonged supply chain disruption at Hwy 68</div>
-                    <div class="ev-source">(Source: Risk Model v2.1, Jan 20, 08:30 PST)</div>
+                    <div class="ev-head"><div class="ev-icon">🧠</div><div class="ev-title">RECOMMENDATION</div></div>
+                    <div class="ev-body">Dispatch crews to clear fallen trees; coordinate mutual aid.</div>
+                    <div class="ev-source">(Source: Decision Engine v2.1, Jan 7, 2023)</div>
                 </div>
             </div>
         </div>
@@ -240,9 +271,9 @@
         <div class="bottom-right">
             <h3>EVIDENCE BUNDLE <span class="sub">(AUDIT TRAIL)</span></h3>
             <div class="audit-list" id="audit-list">
-                <div class="audit-row"><span class="audit-label">Timestamp:</span> <span id="audit-ts">2026-01-20 08:37:16 PST</span></div>
-                <div class="audit-row"><span class="audit-label">Sources:</span> <span>USGS, NASA SMAP, NWS, Local Reports</span></div>
-                <div class="audit-row"><span class="audit-label">Model Version:</span> <span>Risk Model v2.1</span></div>
+                <div class="audit-row"><span class="audit-label">Event Time:</span> <span id="audit-ts">2023-01-07</span></div>
+                <div class="audit-row"><span class="audit-label">Sources:</span> <span>Grid Monitor, Utility SCADA, Impact Model</span></div>
+                <div class="audit-row"><span class="audit-label">Model Version:</span> <span>Power Outage Risk Model v2.1</span></div>
                 <div class="audit-row"><span class="audit-label">Decision ID:</span> <span>#550021</span></div>
             </div>
         </div>
@@ -251,7 +282,7 @@
 
     <script>
         (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-          key: "YOUR_API_KEY",
+          key: "AIzaSyAJpZMWKBxfWid99xrQjhhJVc-K-l6h600",
           v: "weekly",
         });
     </script>

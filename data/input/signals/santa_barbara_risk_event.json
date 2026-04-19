@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.98,
+  "risk_score": 0.84,
   "location": "Santa_Barbara_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Transmission_Line_Down",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T18:00:00Z",
   "geo_center": {
-    "lat": 34.7083,
-    "lon": -120.0339,
-    "impact_radius_km": 30
+    "lat": 34.5361,
+    "lon": -120.0386,
+    "impact_radius_km": 15
   }
 }

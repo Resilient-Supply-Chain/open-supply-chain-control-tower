@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.87,
+  "risk_score": 0.53,
   "location": "Alpine_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T01:00:00Z",
   "geo_center": {
-    "lat": 38.5941,
+    "lat": 38.5974,
     "lon": -119.8207,
-    "impact_radius_km": 30
+    "impact_radius_km": 15
   }
 }

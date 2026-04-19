@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.96,
+  "risk_score": 0.86,
   "location": "Monterey_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Atmospheric_River_Winds",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T11:00:00Z",
   "geo_center": {
-    "lat": 36.24,
+    "lat": 36.2404,
     "lon": -121.31,
-    "impact_radius_km": 30
+    "impact_radius_km": 15
   }
 }

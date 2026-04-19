@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.19,
+  "risk_score": 0.14,
   "location": "Modoc_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Scheduled_Maintenance",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Continue routine monitoring",
+  "timestamp": "2023-01-07T18:00:00Z",
   "geo_center": {
-    "lat": 41.5888,
-    "lon": -120.7254,
-    "impact_radius_km": 8
+    "lat": 41.5892,
+    "lon": -120.7233,
+    "impact_radius_km": 15
   }
 }

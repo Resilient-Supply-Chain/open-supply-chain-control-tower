@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.2,
+  "risk_score": 0.47,
   "location": "Orange_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T04:00:00Z",
   "geo_center": {
     "lat": 33.7175,
     "lon": -117.8311,
-    "impact_radius_km": 8
+    "impact_radius_km": 15
   }
 }

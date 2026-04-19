@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.47,
+  "risk_score": 0.82,
   "location": "Santa_Cruz_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Downed_Trees_on_Lines",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Isolate flooded substations; reroute load",
+  "timestamp": "2023-01-07T19:00:00Z",
   "geo_center": {
     "lat": 37.0454,
-    "lon": -122.058,
+    "lon": -121.95,
     "impact_radius_km": 15
   }
 }

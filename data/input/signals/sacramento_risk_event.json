@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.47,
+  "risk_score": 0.48,
   "location": "Sacramento_County",
-  "primary_driver": "Storm_Damage",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Localized_Flooding",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T05:00:00Z",
   "geo_center": {
-    "lat": 38.5816,
-    "lon": -121.4944,
+    "lat": 38.4747,
+    "lon": -121.3542,
     "impact_radius_km": 15
   }
 }

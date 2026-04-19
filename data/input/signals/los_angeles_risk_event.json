@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.27,
+  "risk_score": 0.48,
   "location": "Los_Angeles_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Localized_Flooding",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T05:00:00Z",
   "geo_center": {
     "lat": 34.0522,
     "lon": -118.2437,
-    "impact_radius_km": 8
+    "impact_radius_km": 20
   }
 }

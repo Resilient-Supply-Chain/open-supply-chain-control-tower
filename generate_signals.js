@@ -74,9 +74,29 @@ const riskScoreRange = {
 };
 const radiusMap = { "high": 30, "moderate": 15, "low": 8 };
 const impactMap = { "high": "$25M_Day", "moderate": "$8M_Day", "low": "$1M_Day" };
+
 const driverMap = {
-  "Power Outage": ["Grid_Overload", "Transmission_Failure", "Wildfire_Shutoff", "Storm_Damage", "Equipment_Aging"],
-  "No Risk": ["Stable_Operations"]
+  "high": ["Grid_Overload", "Transmission_Line_Failure", "Substation_Explosion", "Cascading_Blackout"],
+  "moderate": ["Equipment_Aging", "Wildfire_PSPS_Shutoff", "Storm_Damage", "Transformer_Overload"],
+  "low": ["Scheduled_Maintenance", "Minor_Distribution_Fault", "Vegetation_Contact"]
+};
+
+const recommendationMap = {
+  "high": [
+    "Activate backup generators immediately",
+    "Initiate load-shedding protocol",
+    "Deploy mobile substations now"
+  ],
+  "moderate": [
+    "Pre-position repair crews",
+    "Increase monitoring frequency",
+    "Inspect aging equipment"
+  ],
+  "low": [
+    "Continue routine monitoring",
+    "Schedule preventive maintenance",
+    "No action required"
+  ]
 };
 
 // Use a date with good distribution of risk levels
@@ -94,15 +114,19 @@ for (const c of counties) {
   const range = riskScoreRange[level] || riskScoreRange["low"];
   const score = Math.round((range[0] + Math.random() * (range[1] - range[0])) * 100) / 100;
 
-  const rType = c.riskType || "No Risk";
-  const drivers = driverMap[rType] || ["Unknown"];
+  const drivers = driverMap[level] || ["Unknown"];
   const driver = drivers[Math.floor(Math.random() * drivers.length)];
+
+  const recommendations = recommendationMap[level] || recommendationMap["low"];
+  const recommendation = recommendations[Math.floor(Math.random() * recommendations.length)];
 
   const signal = {
     risk_score: score,
     location: c.name.replace(/ /g, "_") + "_County",
     primary_driver: driver,
     estimated_impact: impactMap[level] || "$1M_Day",
+    recommendation: recommendation,
+    timestamp: targetDate + "T00:00:00Z",
     geo_center: { lat: coords.lat, lon: coords.lon, impact_radius_km: radiusMap[level] || 10 }
   };
 

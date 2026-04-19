@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.72,
+  "risk_score": 0.18,
   "location": "Merced_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Isolated_Feeder_Fault",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Schedule preventive maintenance",
+  "timestamp": "2023-01-07T16:00:00Z",
   "geo_center": {
-    "lat": 37.1948,
-    "lon": -120.722,
+    "lat": 37.192,
+    "lon": -120.712,
     "impact_radius_km": 15
   }
 }

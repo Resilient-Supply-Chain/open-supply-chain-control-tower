@@ -1,8 +1,10 @@
 {
-  "risk_score": 0.62,
+  "risk_score": 0.87,
   "location": "Napa_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T00:00:00Z",
   "geo_center": {
     "lat": 38.5025,
     "lon": -122.2654,

@@ -1,8 +1,10 @@
 {
-  "risk_score": 0.67,
+  "risk_score": 0.49,
   "location": "Ventura_County",
-  "primary_driver": "Storm_Damage",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Pre-position tree-trimming crews",
+  "timestamp": "2023-01-07T21:00:00Z",
   "geo_center": {
     "lat": 34.3705,
     "lon": -119.1391,

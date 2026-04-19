@@ -1,8 +1,10 @@
 {
-  "risk_score": 0.51,
+  "risk_score": 0.83,
   "location": "Alameda_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Flood_Damaged_Substation",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T05:00:00Z",
   "geo_center": {
     "lat": 37.6017,
     "lon": -121.7195,

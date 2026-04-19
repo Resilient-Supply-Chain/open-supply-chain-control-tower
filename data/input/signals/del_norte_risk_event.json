@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.42,
+  "risk_score": 0.82,
   "location": "Del_Norte_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Isolate flooded substations; reroute load",
+  "timestamp": "2023-01-07T13:00:00Z",
   "geo_center": {
-    "lat": 41.7558,
-    "lon": -124.2026,
+    "lat": 41.7405,
+    "lon": -123.8956,
     "impact_radius_km": 15
   }
 }

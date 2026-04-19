@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.83,
+  "risk_score": 0.5,
   "location": "San_Benito_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T19:00:00Z",
   "geo_center": {
-    "lat": 36.6058,
+    "lat": 36.6062,
     "lon": -121.075,
-    "impact_radius_km": 30
+    "impact_radius_km": 15
   }
 }

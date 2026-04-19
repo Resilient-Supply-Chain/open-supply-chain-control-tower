@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.52,
+  "risk_score": 0.5,
   "location": "Kings_County",
-  "primary_driver": "Storm_Damage",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Distribution_Line_Fault",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T04:00:00Z",
   "geo_center": {
-    "lat": 36.0988,
-    "lon": -119.8815,
+    "lat": 36.0753,
+    "lon": -119.8155,
     "impact_radius_km": 15
   }
 }

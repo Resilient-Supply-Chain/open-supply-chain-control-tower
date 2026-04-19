@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.26,
+  "risk_score": 0.19,
   "location": "Sutter_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Routine_Inspection",
+  "estimated_impact": "Nominal service",
+  "recommendation": "No action required",
+  "timestamp": "2023-01-07T23:00:00Z",
   "geo_center": {
     "lat": 39.0346,
-    "lon": -121.6947,
-    "impact_radius_km": 8
+    "lon": -121.6948,
+    "impact_radius_km": 15
   }
 }

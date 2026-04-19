@@ -33,6 +33,8 @@ interface RiskSignal {
     location: string;
     primary_driver: string;
     estimated_impact: string;
+    recommendation: string;
+    timestamp: string;
     geo_center: GeoCenter;
 }
 

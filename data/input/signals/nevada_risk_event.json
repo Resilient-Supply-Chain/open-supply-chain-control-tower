@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.9,
+  "risk_score": 0.87,
   "location": "Nevada_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Atmospheric_River_Winds",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T15:00:00Z",
   "geo_center": {
-    "lat": 39.3013,
-    "lon": -120.7688,
-    "impact_radius_km": 30
+    "lat": 39.3012,
+    "lon": -120.769,
+    "impact_radius_km": 15
   }
 }

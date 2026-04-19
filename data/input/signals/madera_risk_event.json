@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.88,
+  "risk_score": 0.47,
   "location": "Madera_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Increase line patrols ahead of next cell",
+  "timestamp": "2023-01-07T10:00:00Z",
   "geo_center": {
-    "lat": 37.2519,
-    "lon": -119.7627,
-    "impact_radius_km": 30
+    "lat": 37.21,
+    "lon": -119.7659,
+    "impact_radius_km": 15
   }
 }

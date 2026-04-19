@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.19,
+  "risk_score": 0.46,
   "location": "Imperial_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Pre-position tree-trimming crews",
+  "timestamp": "2023-01-07T03:00:00Z",
   "geo_center": {
-    "lat": 33.0114,
-    "lon": -115.4734,
-    "impact_radius_km": 8
+    "lat": 33.0389,
+    "lon": -115.3654,
+    "impact_radius_km": 15
   }
 }

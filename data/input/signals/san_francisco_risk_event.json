@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.56,
+  "risk_score": 0.81,
   "location": "San_Francisco_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Flood_Damaged_Substation",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T18:00:00Z",
   "geo_center": {
     "lat": 37.7749,
     "lon": -122.4194,
-    "impact_radius_km": 15
+    "impact_radius_km": 10
   }
 }

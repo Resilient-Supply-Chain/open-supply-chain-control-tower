@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.66,
+  "risk_score": 0.51,
   "location": "San_Joaquin_County",
-  "primary_driver": "Grid_Overload",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T17:00:00Z",
   "geo_center": {
-    "lat": 37.9349,
-    "lon": -121.2713,
+    "lat": 37.9351,
+    "lon": -121.2719,
     "impact_radius_km": 15
   }
 }

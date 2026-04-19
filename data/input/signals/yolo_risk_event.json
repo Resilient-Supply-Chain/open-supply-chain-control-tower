@@ -1,10 +1,12 @@
 {
-  "risk_score": 0.42,
+  "risk_score": 0.86,
   "location": "Yolo_County",
-  "primary_driver": "Equipment_Aging",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Activate mutual-aid from neighboring utilities",
+  "timestamp": "2023-01-07T11:00:00Z",
   "geo_center": {
-    "lat": 38.6864,
+    "lat": 38.7646,
     "lon": -121.9018,
     "impact_radius_km": 15
   }

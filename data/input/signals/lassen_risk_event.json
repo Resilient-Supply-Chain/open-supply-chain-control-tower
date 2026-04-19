@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.1,
+  "risk_score": 0.48,
   "location": "Lassen_County",
-  "primary_driver": "Stable_Operations",
-  "estimated_impact": "$1M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T14:00:00Z",
   "geo_center": {
-    "lat": 40.6736,
-    "lon": -120.5917,
-    "impact_radius_km": 8
+    "lat": 40.6741,
+    "lon": -120.5945,
+    "impact_radius_km": 15
   }
 }

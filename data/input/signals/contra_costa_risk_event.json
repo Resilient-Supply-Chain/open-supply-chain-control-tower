@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.65,
+  "risk_score": 0.82,
   "location": "Contra_Costa_County",
-  "primary_driver": "Grid_Overload",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Transmission_Line_Down",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Isolate flooded substations; reroute load",
+  "timestamp": "2023-01-07T01:00:00Z",
   "geo_center": {
-    "lat": 37.9535,
-    "lon": -121.95,
+    "lat": 37.9194,
+    "lon": -121.9517,
     "impact_radius_km": 15
   }
 }

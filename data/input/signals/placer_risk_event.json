@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.95,
+  "risk_score": 0.51,
   "location": "Placer_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Mudslide_Risk",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T23:00:00Z",
   "geo_center": {
-    "lat": 39.0916,
-    "lon": -120.718,
-    "impact_radius_km": 30
+    "lat": 39.063,
+    "lon": -120.7177,
+    "impact_radius_km": 15
   }
 }

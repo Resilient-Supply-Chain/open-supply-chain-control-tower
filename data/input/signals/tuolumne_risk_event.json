@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.9,
+  "risk_score": 0.48,
   "location": "Tuolumne_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Localized_Flooding",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T17:00:00Z",
   "geo_center": {
-    "lat": 38.0282,
-    "lon": -119.9537,
-    "impact_radius_km": 30
+    "lat": 38.0297,
+    "lon": -119.9543,
+    "impact_radius_km": 15
   }
 }

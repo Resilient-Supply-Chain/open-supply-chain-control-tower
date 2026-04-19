@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.94,
+  "risk_score": 0.48,
   "location": "Amador_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Vegetation_Contact",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Harden vegetation management zones",
+  "timestamp": "2023-01-07T20:00:00Z",
   "geo_center": {
-    "lat": 38.4466,
-    "lon": -120.6533,
-    "impact_radius_km": 30
+    "lat": 38.4464,
+    "lon": -120.6535,
+    "impact_radius_km": 15
   }
 }

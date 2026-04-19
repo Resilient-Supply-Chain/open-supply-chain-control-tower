@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.59,
+  "risk_score": 0.81,
   "location": "Shasta_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Flood_Damaged_Substation",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T12:00:00Z",
   "geo_center": {
-    "lat": 40.5865,
-    "lon": -122.3917,
+    "lat": 40.7909,
+    "lon": -121.8474,
     "impact_radius_km": 15
   }
 }

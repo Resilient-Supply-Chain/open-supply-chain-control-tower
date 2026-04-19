@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.63,
+  "risk_score": 0.87,
   "location": "Mendocino_County",
-  "primary_driver": "Transmission_Failure",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Saturated_Soil_Pole_Failure",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Dispatch crews to clear fallen trees",
+  "timestamp": "2023-01-07T12:00:00Z",
   "geo_center": {
-    "lat": 39.438,
-    "lon": -123.3907,
+    "lat": 39.4457,
+    "lon": -123.3425,
     "impact_radius_km": 15
   }
 }

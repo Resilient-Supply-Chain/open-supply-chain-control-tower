@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.84,
+  "risk_score": 0.46,
   "location": "El_Dorado_County",
-  "primary_driver": "Equipment_Aging",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Gusty_Winds",
+  "estimated_impact": "Scattered outages possible",
+  "recommendation": "Pre-position tree-trimming crews",
+  "timestamp": "2023-01-07T18:00:00Z",
   "geo_center": {
-    "lat": 38.7786,
-    "lon": -120.5246,
-    "impact_radius_km": 30
+    "lat": 38.7787,
+    "lon": -120.5239,
+    "impact_radius_km": 15
   }
 }

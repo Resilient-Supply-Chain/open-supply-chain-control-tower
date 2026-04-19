@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.56,
+  "risk_score": 0.12,
   "location": "Stanislaus_County",
-  "primary_driver": "Storm_Damage",
-  "estimated_impact": "$8M_Day",
+  "primary_driver": "Isolated_Feeder_Fault",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Schedule preventive maintenance",
+  "timestamp": "2023-01-07T07:00:00Z",
   "geo_center": {
     "lat": 37.5591,
-    "lon": -120.9876,
+    "lon": -120.9977,
     "impact_radius_km": 15
   }
 }

@@ -1,11 +1,13 @@
 {
-  "risk_score": 0.95,
+  "risk_score": 0.82,
   "location": "Santa_Clara_County",
-  "primary_driver": "Wildfire_Shutoff",
-  "estimated_impact": "$25M_Day",
+  "primary_driver": "Transmission_Line_Down",
+  "estimated_impact": "Widespread customer outages",
+  "recommendation": "Isolate flooded substations; reroute load",
+  "timestamp": "2023-01-07T10:00:00Z",
   "geo_center": {
-    "lat": 37.3541,
-    "lon": -121.9552,
-    "impact_radius_km": 30
+    "lat": 37.2333,
+    "lon": -121.6907,
+    "impact_radius_km": 15
   }
 }
