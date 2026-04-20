@@ -4,6 +4,7 @@
   --ink: #102a43;
   --muted: #486581;
   --accent: #0f5fa8;
+  --accent-dark: #0b4d88;
   --border: #d9e2ec;
 }
 
@@ -14,17 +15,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .wrap {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .hero {
-  padding: 8px 0 12px;
+  padding: 10px 0 14px;
 }
 
 .eyebrow {
@@ -34,15 +35,21 @@ body {
 }
 
 h1 {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-size: clamp(2rem, 6vw, 3rem);
   line-height: 1.1;
 }
 
 .subhead {
-  margin: 0;
+  margin: 0 0 10px;
   color: var(--muted);
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+}
+
+.summary {
+  margin: 0;
+  max-width: 760px;
+  font-size: 1rem;
 }
 
 .status-grid,
@@ -61,10 +68,12 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px;
+  box-shadow: 0 1px 2px rgba(16, 42, 67, 0.04);
 }
 
 .card h2 {
   margin-top: 0;
+  margin-bottom: 10px;
   font-size: 1.2rem;
 }
 
@@ -81,16 +90,27 @@ h1 {
   padding: 14px 16px;
   border-radius: 12px;
   font-weight: 700;
+  transition: background 0.2s ease;
 }
 
 .btn:hover,
 .btn:focus {
-  opacity: 0.92;
+  background: var(--accent-dark);
 }
 
 ul {
   padding-left: 20px;
-  margin-bottom: 0;
+  margin: 0;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 8px;
 }
 
 @media (min-width: 700px) {
