@@ -20,6 +20,14 @@
         }
         .header-icon { font-size: 1.2rem; color: #656d76; }
         .header h1 { font-size: 0.95rem; font-weight: 600; color: #1f2328; letter-spacing: 1px; text-transform: uppercase; }
+        .header-spacer { flex: 1; }
+        .date-picker { display: flex; align-items: center; gap: 8px; }
+        .date-picker label { font-size: 0.72rem; font-weight: 600; color: #656d76; text-transform: uppercase; letter-spacing: 0.5px; }
+        .date-picker select {
+            font-size: 0.82rem; color: #1f2328; background: #ffffff; border: 1px solid #d0d7de;
+            border-radius: 6px; padding: 5px 10px; cursor: pointer;
+        }
+        .date-picker select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
 
         /* === MAIN CONTENT === */
         .main-content { display: flex; flex: 1; overflow: hidden; }
@@ -166,6 +174,11 @@
     <!-- Header -->
     <div class="header">
         <h1>Open Supply Chain Control Tower</h1>
+        <div class="header-spacer"></div>
+        <div class="date-picker">
+            <label for="event-date">Event Time:</label>
+            <select id="event-date" aria-label="Select event date"></select>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -271,7 +284,7 @@
         <div class="bottom-right">
             <h3>EVIDENCE BUNDLE <span class="sub">(AUDIT TRAIL)</span></h3>
             <div class="audit-list" id="audit-list">
-                <div class="audit-row"><span class="audit-label">Event Time:</span> <span id="audit-ts">2023-01-07</span></div>
+                <div class="audit-row"><span class="audit-label">Event Time:</span> <span id="audit-ts">—</span></div>
                 <div class="audit-row"><span class="audit-label">Sources:</span> <span>Grid Monitor, Utility SCADA, Impact Model</span></div>
                 <div class="audit-row"><span class="audit-label">Model Version:</span> <span>Power Outage Risk Model v2.1</span></div>
                 <div class="audit-row"><span class="audit-label">Decision ID:</span> <span>#550021</span></div>

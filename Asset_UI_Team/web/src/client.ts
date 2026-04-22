@@ -427,22 +427,51 @@ function updateHighwayPanel(hwy: Highway, overallLevel: string, risks: RiskSigna
 }
 
 async function init() {
-    try {
-        const response = await fetch('/api/risks');
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const risks: RiskSignal[] = await response.json();
-        await initMap(risks);
+    const select = document.getElementById('event-date') as HTMLSelectElement | null;
 
-        // Default: select highest risk county
-        const sorted = [...risks].sort((a, b) => b.risk_score - a.risk_score);
-        if (sorted.length > 0) {
-            const top = sorted[0];
-            const name = top.location.replace(/_County$/, '').replace(/_/g, ' ');
-            updateRightPanel(top, name);
+    async function loadForDate(date: string) {
+        try {
+            const url = date ? `/api/risks?date=${encodeURIComponent(date)}` : '/api/risks';
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const risks: RiskSignal[] = await response.json();
+
+            // Rebuild the map on date change (clears previous overlays).
+            const mapEl = document.getElementById('map');
+            if (mapEl) mapEl.innerHTML = '';
+            await initMap(risks);
+
+            // Default: select highest risk county
+            const sorted = [...risks].sort((a, b) => b.risk_score - a.risk_score);
+            if (sorted.length > 0) {
+                const top = sorted[0];
+                const name = top.location.replace(/_County$/, '').replace(/_/g, ' ');
+                updateRightPanel(top, name);
+            }
+        } catch (error) {
+            console.error("Failed to load application data:", error);
         }
-    } catch (error) {
-        console.error("Failed to load application data:", error);
     }
+
+    // Populate date picker from available dates in the model data.
+    let defaultDate = '';
+    try {
+        const res = await fetch('/api/dates');
+        if (res.ok) {
+            const { dates, default: def } = await res.json() as { dates: string[]; default: string };
+            defaultDate = dates.includes(def) ? def : (dates[0] || '');
+            if (select) {
+                select.innerHTML = dates.map(d =>
+                    `<option value="${d}"${d === defaultDate ? ' selected' : ''}>${new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</option>`
+                ).join('');
+                select.addEventListener('change', () => loadForDate(select.value));
+            }
+        }
+    } catch (e) {
+        console.error('Failed to load date list:', e);
+    }
+
+    await loadForDate(defaultDate);
 }
 
 window.addEventListener('DOMContentLoaded', init);
