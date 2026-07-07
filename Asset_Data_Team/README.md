@@ -11,11 +11,11 @@ Asset_Data_Team/
 ├── risk_model/                          # 停电风险（概率）模型
 │   ├── risk_model_score.ipynb           # 模型训练与评估主脚本
 │   ├── risk_model_y.ipynb               # 构建目标变量 (Y) 的脚本
-│   ├── california_risk_model_data_dec2022_mar2023.csv  # 特征数据 (X)
+│   ├── california_risk_model_data_dec2022_mar2023.csv  # 原始训练数据 (X)
 │   ├── risk_model_y.csv                 # 目标变量数据
 │   ├── risk_model_score_predictions.csv # 模型预测输出
-│   ├── Risk Model Training Data.xlsx    # 原始训练数据
-│   └── eaglei_outage/                   # EAGLE-I 停电原始数据
+│   ├── Risk Model Training Data.xlsx    # 原始训练数据feature guideline
+│   └── eaglei_outage/                   # EAGLE-I 停电原始数据 （Y）
 │       ├── eaglei_outages_with_events_2022.csv
 │       ├── eaglei_outages_with_events_2023.csv
 │       └── Guideline_OEDI_Updated.docx
@@ -26,7 +26,7 @@ Asset_Data_Team/
     ├── cleaned_primary_table/
     │   └── conditional_impact_primary_table.csv  # 清洗后的建模数据
     ├── raw_data/                            # 原始数据
-    │   ├── california_risk_model_data_dec2022_mar2023.csv  # 天气特征数据
+    │   ├── california_risk_model_data_dec2022_mar2023.csv  # 原始训练数据 (X)
     │   ├── california_risk_model_data_dec2022_mar2023.parquet
     │   ├── eaglei_outages_with_events_2022.csv
     │   └── eaglei_outages_with_events_2023.csv
