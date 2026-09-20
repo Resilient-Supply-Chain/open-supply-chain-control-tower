@@ -2,7 +2,8 @@ name: Deploy to AWS App Runner
 
 on:
   push:
-    branches: [open-demo]
+    branches: [main, open-demo]
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
@@ -31,12 +32,15 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push Docker image
-        working-directory: Asset_UI_Team/web
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          # Build context must be the repository root: the Dockerfile pulls in
+          # both Asset_UI_Team/web/ and the data/ files the server reads.
+          docker build -f Asset_UI_Team/web/Dockerfile \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
