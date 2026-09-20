@@ -1,0 +1,13 @@
+{
+  "risk_score": 0.16,
+  "location": "Riverside_County",
+  "primary_driver": "Routine_Inspection",
+  "estimated_impact": "Nominal service",
+  "recommendation": "No action required",
+  "timestamp": "2023-01-07T05:00:00Z",
+  "geo_center": {
+    "lat": 33.7175,
+    "lon": -116.2023,
+    "impact_radius_km": 15
+  }
+}
