@@ -1,0 +1,29 @@
+graph LR
+    classDef client fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a5f
+    classDef aws fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12
+    classDef data fill:#d1fae5,stroke:#059669,stroke-width:2px,color:#064e3b
+    classDef external fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    classDef cicd fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#831843
+
+    USER["Browser 🖥"]
+    GAPI["Google Maps API 🌍"]
+    GH["GitHub 🔧"]
+    GA["GitHub Actions ⚡"]
+
+    subgraph AWS["☁ AWS Cloud"]
+        ECR["ECR 📦"]
+        AR["App Runner\nExpress :3000"]
+        DATA["Risk Data 💿\nSignals + Highways\n+ GeoJSON"]
+        AR -->|"read"| DATA
+        ECR -->|"deploy"| AR
+    end
+
+    USER -->|"HTTPS"| AR
+    USER <-->|"tiles"| GAPI
+    GH -->|"push"| GA
+    GA -->|"build + push"| ECR
+
+    class USER client
+    class AR,ECR,DATA aws
+    class GAPI external
+    class GH,GA cicd

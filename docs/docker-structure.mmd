@@ -1,0 +1,20 @@
+graph TB
+    subgraph Docker_Container["Docker Container"]
+        subgraph Web["/app/Asset_UI_Team/web/"]
+            DIST["dist/\nserver.js + client.js"]
+            PUB["public/\nindex.html + geojson"]
+            PKG["node_modules/"]
+        end
+        subgraph Data["/app/data/"]
+            SIG["input/signals/\n58 JSON files"]
+            HWYF["input/highways.json"]
+            OUT["output/ui_output_template.json"]
+        end
+    end
+
+    DIST -->|"serves"| PUB
+    DIST -->|"reads"| SIG
+    DIST -->|"reads"| HWYF
+    DIST -->|"reads"| OUT
+
+    EXT[":3000"] --> DIST

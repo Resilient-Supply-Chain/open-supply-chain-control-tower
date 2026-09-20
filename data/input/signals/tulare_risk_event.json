@@ -1,0 +1,13 @@
+{
+  "risk_score": 0.11,
+  "location": "Tulare_County",
+  "primary_driver": "Scheduled_Maintenance",
+  "estimated_impact": "Nominal service",
+  "recommendation": "Continue routine monitoring",
+  "timestamp": "2023-01-07T21:00:00Z",
+  "geo_center": {
+    "lat": 36.2077,
+    "lon": -118.7815,
+    "impact_radius_km": 15
+  }
+}

@@ -1,0 +1,25 @@
+sequenceDiagram
+    participant B as Browser
+    participant S as Express Server
+    participant D as Data Files
+
+    B->>S: GET /api/risks
+    S->>D: Read 58 signal JSONs
+    D-->>S: Risk scores + locations
+    S-->>B: JSON array
+
+    B->>S: GET /api/highways
+    S->>D: Read highways.json
+    D-->>S: 8 highway routes
+    S-->>B: JSON object
+
+    B->>S: GET /ca-counties.geojson
+    S-->>B: GeoJSON boundaries
+
+    Note over B: Render map with county polygons + highways
+
+    B->>B: User clicks county
+    Note over B: Update right panel and evidence chain
+
+    B->>B: User clicks highway
+    Note over B: Show segment risk and county breakdown
