@@ -11,7 +11,7 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]  # apps/dashboard/tools/ -> repo root
 SERIES_PATH = ROOT / "data" / "output" / "data_series.json"
 SIGNALS_DIR = ROOT / "data" / "input" / "signals"
 TARGET_DATE = "2023-01-07"

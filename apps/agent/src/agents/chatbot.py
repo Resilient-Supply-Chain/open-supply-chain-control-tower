@@ -13,6 +13,10 @@ from src.agents.refactor_agent import run_demo_conversion
 from src.tools.ses_mailer import broadcast_risk_alert_ses
 from src.tools.pseudo_company_rag import PseudoCompanyRAG, PseudoCompanyRAGConfig
 
+# apps/agent/ — config/ travels with the agent, while data/ stays at the repo
+# root and is reached through the project_root argument.
+AGENT_ROOT = Path(__file__).resolve().parents[2]
+
 
 @dataclass(frozen=True)
 class ChatbotConfig:
@@ -29,8 +33,8 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def load_chatbot_config(project_root: Path) -> ChatbotConfig:
-    settings = _load_yaml(project_root / "config" / "settings.yaml")
-    prompts = _load_yaml(project_root / "config" / "prompts.yaml")
+    settings = _load_yaml(AGENT_ROOT / "config" / "settings.yaml")
+    prompts = _load_yaml(AGENT_ROOT / "config" / "prompts.yaml")
     llm = settings.get("llm", {})
     local = llm.get("local", {})
     return ChatbotConfig(

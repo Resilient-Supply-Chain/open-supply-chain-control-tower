@@ -33,7 +33,7 @@ def get_alerts():
         return []
 
 def launch_app() -> None:
-    project_root = Path(__file__).resolve().parents[2]
+    project_root = Path(__file__).resolve().parents[4]  # apps/agent/src/ui/app.py -> repo root
     persona_intro = (
         "Hello. I am an AI Control Tower agent aligned with the S.257 proposal to "
         "strengthen U.S. supply-chain resilience.\n\n"
