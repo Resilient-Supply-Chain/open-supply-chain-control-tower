@@ -2,18 +2,9 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18530096.svg)](https://doi.org/10.5281/zenodo.18530096)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Node 20](https://img.shields.io/badge/node-20-green.svg)](https://nodejs.org/)
 
-**Open-data decision support for supply-chain disruption risk.**
-
-OACT turns public extreme-weather and infrastructure signals into explainable,
-county-level disruption-risk assessments for logistics operators and government
-emergency planners. Unlike routing tools that display closures after they
-happen, OACT models *compound* risk — storm sequencing, antecedent soil
-saturation, hydrologic stress — to anticipate disruption before it occurs.
-
-Every output is designed to be auditable: each risk score carries an evidence
-bundle with source provenance, timestamps and model versions.
+**Public-interest decision support for supply-chain disruption risk, built
+entirely on open data.**
 
 | | |
 |---|---|
@@ -25,45 +16,69 @@ bundle with source provenance, timestamps and model versions.
 
 ---
 
-## Quick start
+## The problem
 
-The dashboard runs from a clean checkout in two commands. **The build context is
-the repository root** — the image needs both the app and the `data/` files the
-server reads.
+Supply-chain disruption is no longer driven mainly by single, discrete events.
+It is driven by **compound risk** — storm sequencing, antecedent soil
+saturation, hydrologic stress and infrastructure fragility interacting over
+days. A single atmospheric river rarely takes down a corridor; the third one in
+two weeks, arriving on saturated ground, does.
 
-```bash
-docker build -f apps/dashboard/Dockerfile -t osct-web .
-docker run --rm -p 3000:3000 osct-web
-```
+Forecasting systems and consumer routing tools are not built for this. They
+report closures after they happen, and they treat hazards independently.
+Operators and public agencies therefore learn about a disruption when it is
+already a disruption, which is far too late to reroute freight, pre-position
+crews or protect cold-chain inventory.
 
-Open http://localhost:3000.
+The January 2023 California atmospheric-river cluster is the reference case:
+compounding conditions across weeks drove cascading power and transport failure
+that discrete-event monitoring did not anticipate.
 
-Without Docker (Node 20):
+## Why this matters at national scale
 
-```bash
-cd apps/dashboard && npm ci && npm run build && npm start
-```
+Supply-chain resilience is a stated U.S. national priority. The **Promoting
+Resilient Supply Chains Act** ([S.257, 119th Congress](https://www.congress.gov/bill/119th-congress/senate-bill/257))
+directs attention to early-warning capability and vulnerability mapping for
+critical supply chains. **Executive Order 14017, *America's Supply Chains***,
+sets the broader mandate to strengthen resilience across critical sectors.
 
-> The map renders with "development purposes only" watermarks unless you supply
-> your own billing-enabled Google Maps key in `apps/dashboard/public/index.html`.
-> Everything else — risk scoring, the evidence chain, the API — works regardless.
+The capability gap those instruments describe is concentrated in a specific
+place. Large logistics firms build proprietary risk analytics in-house. Federal
+agencies have their own modelling capacity. Between them sits what this project
+calls the **"Missing Middle"** — mid-sized carriers, regional shippers, county
+and municipal emergency planners, and rural utilities. They carry real exposure
+and have no access to compound-risk analytics.
 
----
+That gap is an information asymmetry, not a data availability problem. The
+underlying signals are already public: NOAA storm events, USGS hydrology, ERA5
+reanalysis, DOE outage records. What is missing is the work of turning them into
+decisions that a non-specialist can act on and a public body can audit.
 
-## What it does
+## What OACT contributes
 
-The reference implementation scores **county-level power disruption risk in
-California** and replays the **January 2023 atmospheric-river event cluster**
-end to end: ingestion → scoring → explanation → UI.
+**Open data end to end.** No proprietary feeds, no licensed datasets, no vendor
+lock-in. Any agency or operator can run the full stack, inspect every input and
+reproduce every score.
 
-The dashboard shows a county risk choropleth, highway corridor overlays, a
-Go / Monitor / No-Go decision panel, a five-step chain of evidence
-(detect → analyze → recommend), and an audit-trail evidence bundle, across
-2022-11-30 to 2023-03-30.
+**Auditable by construction.** Each risk assessment carries an evidence bundle:
+source provenance, timestamps, model versions and a decision ID. The risk
+formulation follows the likelihood × consequence structure used in
+[NIST SP 800-37](https://csrc.nist.gov/projects/risk-management), so outputs map
+onto risk-management practice agencies already use rather than presenting an
+opaque score.
 
-### The model
+**Decisions, not dashboards.** Model output is translated into operator-ready
+Go / Monitor / No-Go states with a stated driver and recommended action, backed
+by a five-step chain of evidence from detection through analysis to
+recommendation.
 
-Risk is a standard likelihood × consequence formulation:
+**Local-first and governance-ready.** The stack is containerized and deployable
+on an organization's own infrastructure, which matters for public bodies with
+data-residency and auditability obligations.
+
+## How it works
+
+Risk is a likelihood × consequence formulation:
 
 ```
 Risk = P̂(x) × I(x)
@@ -73,31 +88,36 @@ Risk = P̂(x) × I(x)
 power outage from atmospheric-river intensity, precipitation, antecedent
 precipitation indices, streamflow and gage-height percentiles, snow water
 equivalent and wind extremes. Trained on 7,018 county-days with 36 features and
-224 positive cases, using SMOTE for class imbalance. Six classifiers were
-compared, optimizing recall on the rare positive class.
+224 positive cases, using SMOTE for class imbalance.
 
 **I(x) — conditional impact.** Given an outage occurred, predicts customers
 affected. Log-transformed target with TimeSeriesSplit validation; XGBoost
 (MAE 2,194, RMSLE 1.158) outperforms a Ridge baseline.
 
-Multiplying the two gives the unconditional expected impact used to rank
-counties for emergency response.
+Their product gives the unconditional expected impact used to rank counties for
+emergency response. Full methodology, feature list, per-model metrics and stated
+limitations: [`Asset_Data_Team/README.md`](Asset_Data_Team/README.md).
 
-Full methodology, feature list, per-model metrics and stated limitations:
-[`Asset_Data_Team/README.md`](Asset_Data_Team/README.md).
+## Current state
 
-### API
+The reference implementation scores county-level power disruption risk in
+California and replays the January 2023 atmospheric-river cluster end to end:
+ingestion → scoring → explanation → UI. Both models are trained and evaluated,
+and the dashboard is deployed and publicly reachable.
 
-| Route | Returns |
-|---|---|
-| `/api/dates` | Available replay dates |
-| `/api/risks?date=` | Per-county risk records for that date |
-| `/api/highways` | Highway corridor overlay |
-| `/api/evidence` | Evidence-chain template |
+**Scope limits, stated plainly.** OACT is a research prototype, not production
+software. Coverage is California, December 2022 – March 2023; the models are
+trained on one state and one season, and generalization beyond that is untested.
+The demo is a historical replay, not a live feed. The multi-agent component in
+`apps/agent` is an unfinished prototype and is not part of the deployed demo.
+There is no test suite.
+
+Roadmap: corridor-specific route actions, expanded transportation overlays,
+economic consequence modules, and broader multi-domain resilience workflows.
 
 ---
 
-## Repository layout
+## Repository
 
 ```
 apps/dashboard/     Web UI and API (TypeScript, Node 20) — the deployed demo
@@ -109,40 +129,16 @@ infra/              AWS provisioning and deployment scripts
 paper.md            Manuscript draft
 ```
 
-Maintainer notes — deployment, conventions and the open issue list — are in
-[`MAINTAINERS.md`](MAINTAINERS.md).
-
----
-
-## Scope and maturity
-
-OACT is a **research prototype**, not production software. What that means
-concretely:
-
-- The **dashboard and both models work** and are what the preprint and poster
-  describe. The demo is a historical replay, not a live feed.
-- Coverage is **California, December 2022 – March 2023**. The models are trained
-  on one state and one season; generalization beyond that is untested.
-- The **agent in `apps/agent` is an unfinished prototype**. It is not part of the
-  deployed demo and is not expected to run end to end yet.
-- There is **no test suite** and no automated test CI.
-
-Roadmap: corridor-specific route actions, expanded transportation overlays,
-economic consequence modules, broader multi-domain resilience workflows.
-
----
+**Running it locally, the API surface, deployment and repository conventions are
+documented in [`MAINTAINERS.md`](MAINTAINERS.md).**
 
 ## Contributing
 
-Issues and Discussions are open, and outside contributions are welcome.
-Bug reports that include the failing route and the container logs are the most
+Issues and Discussions are open, and outside contributions are welcome. Bug
+reports that include the failing route and the container logs are the most
 useful. For questions about the research direction, contact the PI below.
 
----
-
 ## Citation
-
-If you use OACT, please cite the archived release:
 
 ```bibtex
 @software{oact,
@@ -156,8 +152,6 @@ If you use OACT, please cite the archived release:
 }
 ```
 
----
-
 ## Contributors
 
 **Principal Investigator:** Yuan-Jiun (David) Sung
@@ -166,8 +160,6 @@ If you use OACT, please cite the archived release:
 Houyu (Harry) Jiang, Xiaochong Jiang, Yu Zhang
 
 Contact: yuanjius@alumni.cmu.edu
-
----
 
 ## License
 
