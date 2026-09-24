@@ -57,13 +57,13 @@ apps/
     main.py             entrypoint
 
 Asset_Data_Team/        Risk model + conditional impact model (notebooks, data)
-Asset_Impact_Team/      DOE OE-417 annual outage summaries, 2010-2023
 
 data/                   Shared by both apps — keep at the repository root
   input/signals/        58 per-county risk event JSONs (dashboard reads these)
   input/highways.json   Highway corridor overlay
   input/registered_provider/   Risk-model predictions consumed by the dashboard
   output/               Generated artifacts (data_series.json, alerts.json)
+  raw/oe-417/           DOE OE-417 annual outage summaries, 2010-2023
 
 docs/                   GitHub Pages site (source: main branch, /docs) + diagrams
 infra/                  AWS setup and manual deployment scripts
@@ -74,6 +74,11 @@ paper.md, paper.bib     JOSS submission draft
 **`data/` must stay at the repository root.** `apps/dashboard/src/server.ts`
 resolves it as `../../../data/...` relative to `dist/server.js`, and the agent
 resolves it from the repository root too.
+
+`input/` and `output/` are what the applications read and write at runtime;
+`raw/` holds source datasets that feed model training and analysis but that
+nothing reads at runtime. Only `input/` and `output/` files are copied into the
+dashboard image.
 
 ---
 
