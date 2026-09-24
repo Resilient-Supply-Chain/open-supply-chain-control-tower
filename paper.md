@@ -13,19 +13,15 @@ authors:
     affiliation: 1
   - name: Yidan (Lena) Hu
     affiliation: 2
-  - name: Celia Wen
-    affiliation: 2
-  - name: Houyu (Harry) Jiang
-    affiliation: 2
-  - name: Yu (Sebastian) Sun
-    affiliation: 2
-  - name: Xiaochong Jiang
+  - name: Hao He
     affiliation: 2
   - name: Laisi (Maggie) Ma
     affiliation: 2
-  - name: Hao He
+  - name: Yu (Sebastian) Sun
     affiliation: 2
-  - name: Yue (Phoebe) Han
+  - name: Houyu (Harry) Jiang
+    affiliation: 2
+  - name: Xiaochong Jiang
     affiliation: 2
   - name: Yu Zhang
     affiliation: 2
