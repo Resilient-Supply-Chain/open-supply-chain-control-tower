@@ -228,10 +228,11 @@ tramp
 # ------------------------------------------------------------------------------
 # Project-Specific Outputs
 # ------------------------------------------------------------------------------
-# Generated resilience reports (Markdown alerts)
+# Generated resilience reports (Markdown alerts).
+# Scoped to where the agent actually writes them. A blanket *.md rule used to
+# live here and silently swallowed every new documentation file.
 outputs/
-*.md
-!README.md
+data/output/**/*.md
 
 # Local vector store for legislative RAG (can be rebuilt)
 .vector_store/
