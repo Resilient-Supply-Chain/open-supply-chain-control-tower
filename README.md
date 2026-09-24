@@ -98,22 +98,28 @@ Their product gives the unconditional expected impact used to rank counties for
 emergency response. Full methodology, feature list, per-model metrics and stated
 limitations: [`Asset_Data_Team/README.md`](Asset_Data_Team/README.md).
 
-## Current state
+## What the demonstration covers
 
-The reference implementation scores county-level power disruption risk in
-California and replays the January 2023 atmospheric-river cluster end to end:
-ingestion → scoring → explanation → UI. Both models are trained and evaluated,
-and the dashboard is deployed and publicly reachable.
+The [live demo](https://avtmbfenap.us-east-1.awsapprunner.com/) replays the
+January 2023 California atmospheric-river cluster end to end. It includes:
 
-**Scope limits, stated plainly.** OACT is a research prototype, not production
-software. Coverage is California, December 2022 – March 2023; the models are
-trained on one state and one season, and generalization beyond that is untested.
-The demo is a historical replay, not a live feed. The multi-agent component in
-`apps/agent` is an unfinished prototype and is not part of the deployed demo.
-There is no test suite.
+- **County-level power disruption risk** across California, scored daily over
+  December 2022 – March 2023
+- **A risk map** with highway corridor overlays
+- **Go / Monitor / No-Go recommendations** with the driver behind each state and
+  a recommended action
+- **A five-step chain of evidence** — detection, impact analysis, grid status,
+  supply-chain impact, recommendation — each step attributed to a source and
+  timestamp
+- **An audit-trail evidence bundle** carrying region, event time, risk level,
+  driver, model version and a decision ID
 
-Roadmap: corridor-specific route actions, expanded transportation overlays,
-economic consequence modules, and broader multi-domain resilience workflows.
+**In progress:** live data ingestion, coverage beyond one state and one season,
+the multi-agent explanation layer in `apps/agent`, corridor-specific route
+actions, expanded transportation overlays, and economic consequence modules.
+
+OACT is a research prototype. Scope boundaries, model limitations and what each
+roadmap item requires are documented in [`MAINTAINERS.md`](MAINTAINERS.md).
 
 ---
 

@@ -25,6 +25,57 @@ this file is for the people working on it.
 
 ---
 
+## Scope and limitations
+
+**What is deployed is a demonstration, not an operating system.** It replays one
+historical event — the January 2023 California atmospheric-river cluster. The
+specifics below are verifiable from the code, and the README deliberately keeps
+them out of the front page.
+
+**A fixed window.** `/api/dates` returns 121 days, December 2022 through March
+2023. There is nothing outside that range to select.
+
+**Precomputed, not live.** `apps/dashboard/src/server.ts` does nothing but
+`fs.readFile`. It serves 58 committed per-county signal files and a predictions
+CSV, runs no inference at request time, and connects to no live weather,
+hydrology or outage feed. `server.ts` calls them "the demo signal files" in its
+own comments.
+
+**One state, one season.** Both models are trained on California, December 2022
+– March 2023, on 224 positive cases out of 7,018 county-days. Generalization to
+other geographies or seasons is untested.
+
+**The risk model is not probability-calibrated.** This matters when reading the
+`P̂(x) × I(x)` product: the expected-impact figure is usable for ranking
+counties against each other, but not as an absolute number of customers.
+
+**The agent is not part of the demo.** `apps/agent` does not run in the deployed
+service. See *Known issues* for what is unfinished in it.
+
+**No test suite**, and no CI running one.
+
+### Why a replay
+
+The replay is a deliberate choice at this stage rather than a shortcut. It
+exercises the entire path — ingestion, scoring, explanation, interface —
+against an event whose actual outcome is known, without requiring production
+data agreements or real-time integrations. What it establishes is that the
+method runs end to end and that its outputs are auditable. What it does not
+establish is behaviour under live conditions, which is a separate claim this
+project does not make.
+
+### What each roadmap item requires
+
+| Item | Requires |
+|---|---|
+| Live data ingestion | Scheduled ETL against NOAA, USGS and ERA5; a feature store; inference at request time rather than committed predictions |
+| Coverage beyond CA / one season | Retraining on more states and seasons; EAGLE-I outage labels for those regions |
+| Trustworthy absolute risk numbers | Probability calibration on the risk model |
+| Multi-agent explanation layer | Finishing `apps/agent` — see *Known issues* |
+| Corridor route actions, transport overlays, economic modules | Not started |
+
+---
+
 ## Running it locally
 
 The dashboard runs from a clean checkout in two commands. **The build context is
