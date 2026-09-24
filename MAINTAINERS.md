@@ -25,6 +25,57 @@ this file is for the people working on it.
 
 ---
 
+## Running it locally
+
+The dashboard runs from a clean checkout in two commands. **The build context is
+the repository root** — the image needs both the app and the `data/` files the
+server reads.
+
+```bash
+docker build -f apps/dashboard/Dockerfile -t osct-web .
+docker run --rm -p 3000:3000 osct-web
+```
+
+Open http://localhost:3000.
+
+Without Docker (Node 20):
+
+```bash
+cd apps/dashboard && npm ci && npm run build && npm start
+```
+
+The map renders with "For development purposes only" watermarks until a
+billing-enabled Google Maps key is supplied — see *Known issues*. Risk scoring,
+the evidence chain and the API all work regardless.
+
+The agent, which is unfinished, runs from the repository root:
+
+```bash
+pip install -r apps/agent/requirements.txt
+cp apps/agent/.env.example apps/agent/.env    # then fill in keys
+python apps/agent/main.py
+```
+
+### API
+
+| Route | Serves | Reads |
+|---|---|---|
+| `/api/dates` | Available replay dates | `data/input/registered_provider/.../OSCCT_risk_predict_model.csv` |
+| `/api/risks?date=` | Per-county risk records | `data/input/signals/*.json` |
+| `/api/highways` | Corridor overlay | `data/input/highways.json` |
+| `/api/evidence` | Evidence-chain template | `data/output/ui_output_template.json` |
+
+### Regenerating signals
+
+```bash
+node apps/dashboard/tools/generate_signals.js
+python apps/dashboard/tools/regenerate_signals.py
+```
+
+Both read `data/output/data_series.json` and write `data/input/signals/`.
+
+---
+
 ## Repository conventions
 
 **`data/` must stay at the repository root.** `apps/dashboard/src/server.ts`
@@ -39,23 +90,14 @@ training and analysis but that nothing reads at runtime. Only specific `input/`
 and `output/` paths are copied into the dashboard image, which keeps the
 archives out of it.
 
-**The Docker build context is the repository root**, not `apps/dashboard/`:
-
-```bash
-docker build -f apps/dashboard/Dockerfile -t osct-web .
-```
-
+**The Docker build context is the repository root**, not `apps/dashboard/`.
 Building from inside `apps/dashboard/` fails — the Dockerfile references both
 `apps/dashboard/` and `data/` by repository-relative path.
 
 **Agent path roots are split.** `config/` travels with the agent, so
 `chatbot.py` loads it from `AGENT_ROOT`. `data/` lives at the repository root,
 so `app.py`'s `project_root` resolves there. `main.py` puts `apps/agent/` on
-`sys.path`, so run it from the repository root:
-
-```bash
-python apps/agent/main.py
-```
+`sys.path`, which is why it must be run from the repository root.
 
 ---
 
