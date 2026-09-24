@@ -37,8 +37,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build context must be the repository root: the Dockerfile pulls in
-          # both Asset_UI_Team/web/ and the data/ files the server reads.
-          docker build -f Asset_UI_Team/web/Dockerfile \
+          # both apps/dashboard/ and the data/ files the server reads.
+          docker build -f apps/dashboard/Dockerfile \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

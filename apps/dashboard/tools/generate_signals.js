@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const data = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "data/output/data_series.json"), "utf-8")
+  fs.readFileSync(path.join(__dirname, "../../..", "data/output/data_series.json"), "utf-8")
 );
 
 const countyCoords = {
@@ -103,7 +103,7 @@ const recommendationMap = {
 const targetDate = "2022-12-04";
 const counties = data[targetDate];
 
-const outDir = path.join(__dirname, "data/input/signals");
+const outDir = path.join(__dirname, "../../..", "data/input/signals");
 
 let count = 0;
 for (const c of counties) {

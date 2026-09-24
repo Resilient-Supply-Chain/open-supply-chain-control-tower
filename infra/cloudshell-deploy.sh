@@ -45,10 +45,10 @@ ECR_PUBLIC_URI=$(aws ecr-public describe-repositories \
 echo "ECR Public URI: $ECR_PUBLIC_URI"
 
 # Step 3: Build Docker image
-# Context is the repository root; the Dockerfile needs both Asset_UI_Team/web/
+# Context is the repository root; the Dockerfile needs both apps/dashboard/
 # and the data/ files the server reads at runtime.
 echo ">>> Building Docker image..."
-docker build -f Asset_UI_Team/web/Dockerfile -t $ECR_PUBLIC_REPO:latest .
+docker build -f apps/dashboard/Dockerfile -t $ECR_PUBLIC_REPO:latest .
 
 # Step 4: Login to ECR Public and push
 echo ">>> Pushing to ECR Public..."
