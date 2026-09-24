@@ -255,8 +255,8 @@ Archived release: [10.5281/zenodo.18530096](https://doi.org/10.5281/zenodo.18530
 
 **Principal Investigator:** Yuan-Jiun (David) Sung
 
-**Contributors:** Yidan (Lena) Hu, Celia Wen, Houyu (Harry) Jiang, Yu (Sebastian)
-Sun, Xiaochong Jiang, Laisi (Maggie) Ma, Hao He, Yue (Phoebe) Han, Yu Zhang
+**Contributors:** Yidan (Lena) Hu, Hao He, Laisi (Maggie) Ma, Yu (Sebastian) Sun,
+Houyu (Harry) Jiang, Xiaochong Jiang, Yu Zhang
 
 See [`NOTICE`](NOTICE) and [`paper.md`](paper.md) for attribution details.
 
