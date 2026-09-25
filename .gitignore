@@ -304,3 +304,6 @@ web/.parcel-cache/
 node_modules/
 **/node_modules/
 **/dist/
+
+# Local drafts that should never be published
+.github/*_DRAFT.md

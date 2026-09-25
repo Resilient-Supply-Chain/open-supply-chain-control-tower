@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use OACT in your work, please cite it using these metadata."
+title: >-
+  Open Analytics Control Tower (OACT): A Public-Interest Infrastructure
+  Resilience System
+abstract: >-
+  OACT is an open-source, reproducible decision-support system that turns public
+  extreme-weather and infrastructure signals into explainable, county-level
+  supply-chain disruption risk assessments. It models compound risk — storm
+  sequencing, antecedent soil saturation and hydrologic stress — and translates
+  model output into auditable Go / Monitor / No-Go decision support. The
+  reference implementation scores county-level power disruption risk in
+  California and replays the January 2023 atmospheric-river event cluster.
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/Resilient-Supply-Chain/open-supply-chain-control-tower"
+url: "https://resilient-supply-chain.github.io/open-supply-chain-control-tower/"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.18530095
+    description: >-
+      Concept DOI on Zenodo; always resolves to the latest archived release
+authors:
+  - family-names: Sung
+    given-names: Yuan-Jiun
+    alias: David
+  - family-names: Hu
+    given-names: Yidan
+    alias: Lena
+  - family-names: He
+    given-names: Hao
+  - family-names: Ma
+    given-names: Laisi
+    alias: Maggie
+  - family-names: Sun
+    given-names: Yu
+    alias: Sebastian
+  - family-names: Jiang
+    given-names: Houyu
+    alias: Harry
+  - family-names: Jiang
+    given-names: Xiaochong
+  - family-names: Zhang
+    given-names: Yu
+keywords:
+  - supply chain resilience
+  - infrastructure risk
+  - compound risk
+  - power outage prediction
+  - open data
+  - public interest technology
+  - emergency management

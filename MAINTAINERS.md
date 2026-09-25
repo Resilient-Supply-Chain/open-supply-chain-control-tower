@@ -248,9 +248,43 @@ abandoned, deleting the branches is cheaper than resolving conflicts later.
 
 ### Versioning is inconsistent
 
-`paper.md` describes a v0.1 reference implementation. Earlier README revisions
-described a v2.3.0 release. These describe the same repository. A single version
-scheme should be agreed before submission.
+Four different version claims describe the same repository:
+
+| Source | Claims |
+|---|---|
+| `paper.md` | v0.1 reference implementation |
+| Earlier README revisions | v2.3.0 release |
+| Zenodo record 10.5281/zenodo.18530096 | v2.1.1 |
+| Git tags | `v2.1.1`, `reorg_v210`, `v2_route`, `v1_geo`, `v0.1-data`, `agent_v0.0.1` |
+
+The tags mix whole-project releases with per-component markers, so they do not
+form a sequence. A single scheme should be agreed before submission, and
+`CITATION.cff` deliberately carries no `version` field until then.
+
+### Zenodo metadata is wrong
+
+The published record lists five creators, two of them as raw GitHub handles:
+
+> Sebastian (Yu) Sun, davidsung-tech, Jxcup, Lena Hu, Maggie Ma
+
+Three contributors are missing and the Principal Investigator appears third.
+Zenodo derived this from GitHub contributor data because no `CITATION.cff`
+existed when the release was archived. That file now exists, so future releases
+will pick up the intended metadata — but the published record does not update
+itself.
+
+**Metadata on a published Zenodo record can be edited without affecting the
+DOI.** Files cannot be changed without contacting Zenodo support, but only the
+metadata is wrong here. The record owner — whoever connected this repository to
+Zenodo — opens the record, clicks *Edit*, corrects the creator list, and clicks
+*Publish*.
+
+The record has two DOIs. **10.5281/zenodo.18530095** is the concept DOI, which
+always resolves to the latest version; **10.5281/zenodo.18530096** is the v2.1.1
+version specifically. The README, `CITATION.cff`, `paper.bib` and the project
+site all cite the concept DOI, so a citation keeps pointing at the current
+release rather than freezing on v2.1.1. Cite the version DOI only when a
+specific release matters, such as reproducing a published result.
 
 ---
 
@@ -260,8 +294,8 @@ Gaps that reviewers check for:
 
 - [ ] Test suite — none exists
 - [ ] CI running those tests — none exists
-- [ ] `CONTRIBUTING.md`
-- [ ] `CITATION.cff`
+- [x] `CONTRIBUTING.md`
+- [x] `CITATION.cff`
 - [ ] API documentation
 - [ ] Single agreed version number
 - [x] Open license with `LICENSE` and `NOTICE`
