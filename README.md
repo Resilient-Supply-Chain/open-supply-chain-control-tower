@@ -1,6 +1,6 @@
 # Open Analytics Control Tower (OACT)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18530096.svg)](https://doi.org/10.5281/zenodo.18530096)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18530095.svg)](https://doi.org/10.5281/zenodo.18530095)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 **Public-interest decision support for supply-chain disruption risk, built
@@ -11,7 +11,7 @@ entirely on open data.**
 | **Live demo** | https://avtmbfenap.us-east-1.awsapprunner.com/ |
 | **Project site** | https://resilient-supply-chain.github.io/open-supply-chain-control-tower/ |
 | **Preprint** | [SSRN 6256558](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6256558) |
-| **Archive** | [10.5281/zenodo.18530096](https://doi.org/10.5281/zenodo.18530096) |
+| **Archive** | [10.5281/zenodo.18530095](https://doi.org/10.5281/zenodo.18530095) |
 | **Poster** | [UC Open 2026](docs/OACT_UCOpen_2026_Poster_v3.pdf) |
 
 ---
@@ -140,9 +140,10 @@ documented in [`MAINTAINERS.md`](MAINTAINERS.md).**
 
 ## Contributing
 
-Issues and Discussions are open, and outside contributions are welcome. Bug
-reports that include the failing route and the container logs are the most
-useful. For questions about the research direction, contact the PI below.
+Issues and Discussions are open, and outside contributions are welcome. See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) for how to report a bug, propose a change,
+or contribute data and model work. For questions about the research direction,
+contact the PI below.
 
 ## Citation
 
@@ -153,7 +154,7 @@ useful. For questions about the research direction, contact the PI below.
   author = {Sung, Yuan-Jiun and Hu, Yidan and He, Hao and Ma, Laisi and
             Sun, Yu and Jiang, Houyu and Jiang, Xiaochong and Zhang, Yu},
   year   = {2026},
-  doi    = {10.5281/zenodo.18530096},
+  doi    = {10.5281/zenodo.18530095},
   url    = {https://github.com/Resilient-Supply-Chain/open-supply-chain-control-tower}
 }
 ```
