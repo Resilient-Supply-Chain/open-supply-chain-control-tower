@@ -24,7 +24,9 @@ Nothing in the dashboard or agent reads these files at runtime (see
 | `chp_incidents_sr99_2023-01-09_16.csv` | 464 | 1 row per incident | All CHP incidents on SR-99 in the storm window, with incident type, location, lat/lon and postmiles |
 | `chp_incident_detail_sr99_flood_closure_2023-01-09_16.csv` | 327 | 1 row per dispatcher log entry | Free-text log for the 22 flood/closure incidents only (phone numbers and plates redacted) |
 | `tmg_trucks_sr99_2021-06.csv` | 2,700 | 1 row per station per day per vehicle class | Truck classification counts on SR-99, June 2021 |
-| `build_extracts.py` | — | — | Rebuilds every file above from the raw PeMS downloads |
+| `truck_aadt_sr99_2021-2024.csv` | 501 | 1 row per count location per year | Caltrans Truck AADT for SR-99, 2021–2024, with estimated absolute postmile (`abs_pm_est`) |
+| `build_extracts.py` | — | — | Rebuilds the PeMS and CHP files from the raw PeMS downloads |
+| `build_truck_aadt.py` | — | — | Downloads the Caltrans Truck AADT workbooks and rebuilds `truck_aadt_sr99_2021-2024.csv` |
 
 ## Key fields
 
@@ -46,6 +48,15 @@ postmile** (spatial) and **timestamp** (temporal). The weather layer
   (two spellings exist), plus `SLIDE-Mud/Dirt/Rock`.
 - TMG `vehicle_class` — `0` is the total truck count for the station-day;
   classes `2..N` are axle classes that sum to the total.
+- Truck AADT `POSTMILE` — county-relative, with `CNTY` as a Caltrans county
+  abbreviation (`SJ`, `SAC`). `abs_pm_est` converts it to absolute postmile by
+  interpolating within each county from the PeMS stations in
+  `station_metadata_sr99.csv`; leave-one-out error is a median 0.02 mi. Rows
+  outside the PeMS station range in their county (Tehama, and a few rural Butte,
+  Sutter and Tulare points) are left blank.
+- Truck AADT `EST_YEAR` / `EST_CODE` — two-digit year of the underlying count
+  and `E` / `V` code. The 2022 workbook names these `EST/VER_YEAR` and
+  `EST/VER_CODE`; the builder renames them.
 
 ## What the extracts show
 
@@ -56,7 +67,9 @@ postmile** (spatial) and **timestamp** (temporal). The weather layer
   Road` at abs PM 267.6 at 12:20 on Jan 16. The Woodbridge Rd PeMS stations
   dropped from about 65 mph to a minimum of 4.3 mph that midday.
 - **Freight exposure.** SR-99 truck-census stations average about 3,090 trucks
-  per day (I-5: about 2,913).
+  per day (I-5: about 2,913). Caltrans Truck AADT gives far wider coverage
+  (125–126 SR-99 locations per year); around Lodi–Acampo it is about
+  11,300–11,500 trucks/day, roughly 13.4% of all traffic (2024).
 
 ## Reproducing
 
@@ -76,6 +89,13 @@ Then run:
 python data/raw/sr99_jan2023/build_extracts.py --raw-dir /path/to/downloads
 ```
 
+Truck AADT is downloaded directly from the
+[Caltrans Traffic Census Program](https://dot.ca.gov/programs/traffic-operations/census):
+
+```bash
+python data/raw/sr99_jan2023/build_truck_aadt.py
+```
+
 ## Known limitations
 
 - **Detector gaps.** Roughly a third of rural mainline stations were offline
@@ -93,6 +113,12 @@ python data/raw/sr99_jan2023/build_extracts.py --raw-dir /path/to/downloads
 - **Truck data is 2021.** PeMS truck census data ends in 2021 and is used as a
   stable proxy. Census stations are sparse (2–4 per corridor), enough to rank
   corridors but not individual segments.
+- **Truck AADT is mostly estimated.** In the 2024 workbook only 54 of 126 SR-99
+  locations have a count year of 2020 or later; 63 date from before 2010.
+  Values are updated every year even where the count is old, so 2021–2024 are
+  annual updates of one snapshot, not four independent measurements. Truck AADT
+  (annual average location totals) and the PeMS truck census (daily counts at a
+  few stations) measure different things and should not be combined.
 - **One event.** These extracts cover a single storm. Stage 2 out-of-time
   validation needs additional events.
 
@@ -101,3 +127,6 @@ python data/raw/sr99_jan2023/build_extracts.py --raw-dir /path/to/downloads
 Source: California Department of Transportation, Performance Measurement System
 (PeMS), https://pems.dot.ca.gov/. CHP incident records are distributed through
 PeMS. Downloaded September 2026 by Hao He for the OACT feasibility study.
+
+Truck AADT: California Department of Transportation, Traffic Census Program,
+https://dot.ca.gov/programs/traffic-operations/census. Downloaded November 2026.
